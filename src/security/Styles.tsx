@@ -1,0 +1,82 @@
+import {StyleSheet} from 'react-native';
+const styles = StyleSheet.create({
+  powered: {
+    color: 'grey',
+    textAlign: 'right',
+    marginRight: 10,
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    marginTop: '100%',
+  },
+  button: {
+    backgroundColor: '#17e9d7',
+    borderWidth: 1,
+    borderRadius: 12,
+    marginHorizontal: 30,
+  },
+  buttonOlvide: {
+    backgroundColor: 'grey',
+    borderWidth: 1,
+    borderRadius: 12,
+    marginHorizontal: 30,
+    marginTop: 40,
+  },
+  buttonRegistrarse: {
+    backgroundColor: 'yellow',
+    borderWidth: 1,
+    borderRadius: 12,
+    marginHorizontal: 30,
+    marginTop: 12,
+  },
+  title: {
+    fontSize: 32,
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: '700',
+    marginTop: '20%',
+  },
+  inputText: {
+    borderColor: 'white',
+    borderWidth: 1,
+    borderRadius: 12,
+    height: 40,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: 'white',
+  },
+  background: {
+    backgroundColor: '#24253d',
+    height: '100%',
+  },
+  textButton: {
+    color: 'black',
+    textAlign: 'center',
+    height: 40,
+    fontWeight: '800',
+    fontSize: 20,
+    marginTop: 10,
+  },
+  googleButton: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    paddingHorizontal: 34,
+    paddingVertical: 16,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 12,
+    marginHorizontal: 30,
+  },
+  googleButtonText: {
+    marginLeft: 16,
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  googleIcon: {
+    height: 24,
+    width: 24,
+  },
+});
+export {styles};
