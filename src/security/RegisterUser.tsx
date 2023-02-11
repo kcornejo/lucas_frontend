@@ -7,10 +7,12 @@ import {
   Modal,
   SafeAreaView,
   Alert,
+  View,
 } from 'react-native';
 import {styles} from './Styles';
 import {BASE_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome';
 const RegisterUser = ({visible = false, setModalVisible}) => {
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
@@ -67,25 +69,39 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
       <SafeAreaView style={styles.background}>
         <ModalLoad viewed={modalLoadVisible} />
         <Text style={styles.title}>Nuevo Usuario</Text>
-        <TextInput
-          value={correo}
-          onChangeText={setCorreo}
-          style={styles.inputText}
-          placeholder="Correo"
-        />
-        <TextInput
-          secureTextEntry={true}
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Clave"
-          style={styles.inputText}></TextInput>
-        <TextInput
-          secureTextEntry={true}
-          value={passwordConfirmation}
-          onChangeText={setPasswordConfirmation}
-          placeholder="Repita su clave"
-          style={styles.inputText}></TextInput>
-        <Pressable onPress={RegistrarUsuario} style={styles.buttonRegistrarse}>
+        <View style={styles.inputComplete}>
+          <Icon name="user" size={30} color="grey" style={styles.inputIcon} />
+          <TextInput
+            value={correo}
+            onChangeText={setCorreo}
+            style={styles.inputTextIcon}
+            placeholder="Correo"
+          />
+        </View>
+        <View style={styles.inputComplete}>
+          <Icon name="lock" size={30} color="grey" style={styles.inputIcon} />
+          <TextInput
+            secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Clave"
+            style={styles.inputTextIcon}></TextInput>
+        </View>
+        <View style={styles.inputComplete}>
+          <Icon
+            name="refresh"
+            size={30}
+            color="grey"
+            style={styles.inputIcon}
+          />
+          <TextInput
+            secureTextEntry={true}
+            value={passwordConfirmation}
+            onChangeText={setPasswordConfirmation}
+            placeholder="Repita su clave"
+            style={styles.inputTextIcon}></TextInput>
+        </View>
+        <Pressable onPress={RegistrarUsuario} style={styles.button}>
           <Text style={styles.textButton}>Registrar</Text>
         </Pressable>
         <Pressable onPress={funRegresar} style={styles.buttonOlvide}>

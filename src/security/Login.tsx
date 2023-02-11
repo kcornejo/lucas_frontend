@@ -8,11 +8,15 @@ import {
   TextInput,
   View,
   Alert,
+  StyleSheet,
 } from 'react-native';
+
 import {BASE_URL} from '@env';
 import RecoverPassword from './RecoverPassword';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RegisterUser from './RegisterUser';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 let token = '';
 async function validate_jwt() {
   var myHeaders = new Headers();
@@ -59,7 +63,7 @@ async function login_api(usuario, password) {
     });
   return retorno;
 }
-const Login = () => {
+const Login = ({setLogueado}) => {
   const [usuario, setUsuario] = useState('');
   const [password, setPassword] = useState('');
   const [bloqueo, setBloqueo] = useState(false);
@@ -90,7 +94,7 @@ const Login = () => {
           'Usuario no validado, por favor revise su email',
         );
       } else {
-        AsyncStorage.setItem('@login', '1');
+        setLogueado(true);
       }
       setModalVisible(false);
       setBloqueo(false);
@@ -122,38 +126,55 @@ const Login = () => {
       />
       <ModalLoad viewed={modalVisible} />
       <Text style={styles.title}>Acceso</Text>
-      <TextInput
-        placeholder="Correo"
-        value={usuario}
-        onChangeText={setUsuario}
-        style={styles.inputText}></TextInput>
-      <TextInput
-        secureTextEntry={true}
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Clave"
-        style={styles.inputText}></TextInput>
+
+      <View style={styles.inputComplete}>
+        <Icon name="user" size={30} color="grey" style={styles.inputIcon} />
+        <TextInput
+          placeholder="Correo"
+          value={usuario}
+          onChangeText={setUsuario}
+          style={styles.inputTextIcon}></TextInput>
+      </View>
+      <View style={styles.inputComplete}>
+        <Icon name="lock" size={30} color="grey" style={styles.inputIcon} />
+        <TextInput
+          secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Clave"
+          style={styles.inputTextIcon}></TextInput>
+      </View>
       <Pressable
         style={styles.button}
         onPressIn={ValidateLogin}
         disabled={bloqueo}>
         <Text style={styles.textButton}>Acceder</Text>
       </Pressable>
-
-      <Pressable
-        style={styles.buttonOlvide}
-        onPressIn={RecuperarClave}
-        disabled={bloqueo}>
-        <Text style={styles.textButton}>Recuperar clave</Text>
-      </Pressable>
-      <Pressable
-        style={styles.buttonRegistrarse}
-        onPressIn={Registrarse}
-        disabled={bloqueo}>
-        <Text style={styles.textButton}>Registrarse</Text>
-      </Pressable>
-      <View>
-        <Text style={styles.powered}>Powered by KC</Text>
+      <View
+        style={{
+          borderBottomColor: 'grey',
+          borderBottomWidth: StyleSheet.hairlineWidth,
+          marginTop: 20,
+        }}
+      />
+      <View style={{flexDirection: 'row'}}>
+        <View style={{flex: 1}}></View>
+        <View style={{flex: 1}}>
+          <Pressable onPressIn={RecuperarClave} disabled={bloqueo}>
+            <Text style={styles.textForgotPassword}>Olvide mi contraseña</Text>
+          </Pressable>
+        </View>
+      </View>
+      <View style={styles.bottom}>
+        <Pressable
+          style={styles.buttonRegistry}
+          onPressIn={Registrarse}
+          disabled={bloqueo}>
+          <Text style={styles.textButton}>Registrarse</Text>
+        </Pressable>
+        <View>
+          <Text style={styles.powered}>Powered by KC</Text>
+        </View>
       </View>
     </SafeAreaView>
   );

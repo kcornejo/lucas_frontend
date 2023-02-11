@@ -1,5 +1,29 @@
 import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
+  //Buttons
+  button: {
+    backgroundColor: '#17e9d7',
+    borderWidth: 1,
+    borderRadius: 12,
+    height: 50,
+    margin: 20,
+  },
+  buttonRegistry: {
+    backgroundColor: 'yellow',
+    borderWidth: 1,
+    borderRadius: 12,
+    margin: 70,
+  },
+  buttonForgot: {
+    backgroundColor: 'red',
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-end',
+    width: '10%',
+    margin: 10,
+  },
+  //Texts
   powered: {
     color: 'grey',
     textAlign: 'right',
@@ -8,47 +32,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginTop: '100%',
   },
-  button: {
-    backgroundColor: '#17e9d7',
-    borderWidth: 1,
-    borderRadius: 12,
-    marginHorizontal: 30,
-  },
-  buttonOlvide: {
-    backgroundColor: 'grey',
-    borderWidth: 1,
-    borderRadius: 12,
-    marginHorizontal: 30,
-    marginTop: 40,
-  },
-  buttonRegistrarse: {
-    backgroundColor: 'yellow',
-    borderWidth: 1,
-    borderRadius: 12,
-    marginHorizontal: 30,
-    marginTop: 12,
-  },
-  title: {
-    fontSize: 32,
-    textAlign: 'center',
+  textForgotPassword: {
+    textAlign: 'right',
     color: 'white',
-    fontWeight: '700',
-    marginTop: '20%',
-  },
-  inputText: {
-    borderColor: 'white',
-    borderWidth: 1,
-    borderRadius: 12,
-    height: 40,
-    marginLeft: 20,
-    marginRight: 20,
+    fontSize: 16,
+    fontWeight: '600',
     marginTop: 20,
-    marginBottom: 20,
-    backgroundColor: 'white',
-  },
-  background: {
-    backgroundColor: '#24253d',
-    height: '100%',
+    marginRight: 30,
   },
   textButton: {
     color: 'black',
@@ -58,25 +48,50 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 10,
   },
-  googleButton: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    paddingHorizontal: 34,
-    paddingVertical: 16,
+  title: {
+    fontSize: 32,
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: '700',
+    marginTop: '30%',
+  },
+  //Inputs
+  inputComplete: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 12,
-    marginHorizontal: 30,
+    flexWrap: 'wrap',
   },
-  googleButtonText: {
-    marginLeft: 16,
-    fontSize: 18,
-    fontWeight: '600',
+  inputTextIcon: {
+    borderColor: 'white',
+    borderWidth: 1,
+    borderTopEndRadius: 12,
+    borderBottomEndRadius: 12,
+    height: 50,
+    width: 50,
+    marginTop: 20,
+    marginRight: 20,
+    backgroundColor: 'white',
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
   },
-  googleIcon: {
-    height: 24,
-    width: 24,
+  inputIcon: {
+    marginLeft: 20,
+    marginTop: 20,
+    width: 50,
+    height: 50,
+    textAlign: 'center',
+    backgroundColor: 'white',
+    paddingTop: 10,
+  },
+  //Views
+  background: {
+    backgroundColor: '#24253d',
+    height: '100%',
+    flex: 1,
+  },
+  bottom: {
+    alignContent: 'flex-end',
   },
 });
 export {styles};
