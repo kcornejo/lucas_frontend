@@ -62,6 +62,7 @@ const RecoverPassword = ({visible = false, setModalVisible}) => {
             onChangeText={setCorreo}
             style={styles.inputTextIcon}
             placeholder="Correo"
+            placeholderTextColor="grey"
           />
         </View>
         <Pressable onPress={RecuperarClave} style={styles.button}>

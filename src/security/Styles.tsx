@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'flex-start',
+    color: 'black',
   },
   inputIcon: {
     marginLeft: 20,

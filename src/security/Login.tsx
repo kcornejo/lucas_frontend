@@ -133,6 +133,7 @@ const Login = ({setLogueado}) => {
           placeholder="Correo"
           value={usuario}
           onChangeText={setUsuario}
+          placeholderTextColor="grey"
           style={styles.inputTextIcon}></TextInput>
       </View>
       <View style={styles.inputComplete}>
@@ -142,6 +143,7 @@ const Login = ({setLogueado}) => {
           value={password}
           onChangeText={setPassword}
           placeholder="Clave"
+          placeholderTextColor="grey"
           style={styles.inputTextIcon}></TextInput>
       </View>
       <Pressable

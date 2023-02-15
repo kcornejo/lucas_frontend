@@ -75,6 +75,7 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
             value={correo}
             onChangeText={setCorreo}
             style={styles.inputTextIcon}
+            placeholderTextColor="grey"
             placeholder="Correo"
           />
         </View>
@@ -85,6 +86,7 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
             value={password}
             onChangeText={setPassword}
             placeholder="Clave"
+            placeholderTextColor="grey"
             style={styles.inputTextIcon}></TextInput>
         </View>
         <View style={styles.inputComplete}>
