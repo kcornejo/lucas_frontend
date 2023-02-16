@@ -101,6 +101,7 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
             value={passwordConfirmation}
             onChangeText={setPasswordConfirmation}
             placeholder="Repita su clave"
+            placeholderTextColor="grey"
             style={styles.inputTextIcon}></TextInput>
         </View>
         <Pressable onPress={RegistrarUsuario} style={styles.button}>

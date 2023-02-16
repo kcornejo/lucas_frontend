@@ -63,7 +63,7 @@ async function login_api(usuario, password) {
     });
   return retorno;
 }
-const Login = ({setLogueado}) => {
+const Login = ({setLogueado, setEmail}) => {
   const [usuario, setUsuario] = useState('');
   const [password, setPassword] = useState('');
   const [bloqueo, setBloqueo] = useState(false);
@@ -95,6 +95,7 @@ const Login = ({setLogueado}) => {
         );
       } else {
         setLogueado(true);
+        setEmail(usuario.toString().toLowerCase());
       }
       setModalVisible(false);
       setBloqueo(false);

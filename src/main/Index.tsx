@@ -6,6 +6,7 @@ import SettingsScreen from './SettingsScreen';
 import UserDetail from './UserDetail';
 const Tab = createBottomTabNavigator();
 let setLogueado = null;
+let isFillInformation = false;
 const Historial = () => {
   return (
     <View

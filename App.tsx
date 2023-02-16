@@ -1,19 +1,62 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Login from './src/security/Login';
-import {View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import Index from './src/main/Index';
+import {BASE_URL} from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import FillInformation from './src/user/FillInformation';
 const App = () => {
   var [logueado, setLogueado] = useState(false);
-  return (
-    <NavigationContainer>
-      {logueado ? (
-        <Index setLogueado={setLogueado} />
-      ) : (
-        <Login setLogueado={setLogueado} />
-      )}
-    </NavigationContainer>
-  );
+  var [infoLlena, setInfoLlena] = useState(false);
+  var [email, setEmail] = useState('');
+
+  useEffect(() => {
+    console.log('entr');
+    if (logueado == true && email.toString().length > 0) {
+      const obtenciontoken = async () => {
+        const token = await AsyncStorage.getItem('@token');
+        return token;
+      };
+      obtenciontoken().then(token => {
+        var myHeaders = new Headers();
+        myHeaders.append('Authorization', 'Bearer ' + token);
+
+        var requestOptions = {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow',
+        };
+
+        fetch(
+          BASE_URL + '/api/user/getUserByEmail?email=' + email,
+          requestOptions,
+        )
+          .then(response => response.text())
+          .then(result => {
+            const data = JSON.parse(result);
+            if (Object.keys(data.userDetail).length == 0) {
+              setInfoLlena(false);
+            } else {
+              setInfoLlena(true);
+            }
+          })
+          .catch(error => console.log('error', error));
+      });
+    }
+  });
+  if (logueado) {
+    if (infoLlena) {
+      return (
+        <NavigationContainer>
+          <Index setLogueado={setLogueado} />
+        </NavigationContainer>
+      );
+    } else {
+      return <FillInformation />;
+    }
+  } else {
+    return <Login setLogueado={setLogueado} setEmail={setEmail} />;
+  }
 };
 
 export default App;
