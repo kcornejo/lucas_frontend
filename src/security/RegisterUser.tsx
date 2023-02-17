@@ -13,27 +13,38 @@ import {styles} from './Styles';
 import {BASE_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import InputKC from '../support/InputKC';
+import {useForm} from 'react-hook-form';
 const RegisterUser = ({visible = false, setModalVisible}) => {
-  const [correo, setCorreo] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+    reset,
+  } = useForm({
+    defaultValues: {
+      Usuario: '',
+      Clave: '',
+    },
+  });
   const [modalLoadVisible, setModalLoadVisible] = useState(false);
   const funRegresar = () => {
     setModalVisible(false);
   };
-  const RegistrarUsuario = async () => {
+  const RegistrarUsuario = async (data: any) => {
     setModalLoadVisible(true);
     let token = await AsyncStorage.getItem('@token');
     var myHeaders = new Headers();
     myHeaders.append('Authorization', 'Bearer ' + token);
     myHeaders.append('Content-Type', 'application/json');
-    if (password.toString() != passwordConfirmation.toString()) {
+    if (data.Clave.toString() != data.Repita.toString()) {
       Alert.alert('Error', 'Las claves ingresadas no coinciden');
+      setModalLoadVisible(false);
       return 0;
     }
     var raw = JSON.stringify({
-      email: correo,
-      password: password,
+      email: data.Correo.toString().toLowerCase(),
+      password: data.Clave.toString(),
     });
     var requestOptions = {
       method: 'POST',
@@ -48,9 +59,7 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
         if (json_resp['code'] == '999') {
           Alert.alert('Error con registro', json_resp['message']);
         } else if (json_resp['code'] == '000') {
-          setCorreo('');
-          setPassword('');
-          setPasswordConfirmation('');
+          reset();
           Alert.alert(
             'Usuario registrado',
             'Usuario registrado, por favor valide su email.',
@@ -69,42 +78,51 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
       <SafeAreaView style={styles.background}>
         <ModalLoad viewed={modalLoadVisible} />
         <Text style={styles.title}>Nuevo Usuario</Text>
-        <View style={styles.inputComplete}>
-          <Icon name="user" size={30} color="grey" style={styles.inputIcon} />
-          <TextInput
-            value={correo}
-            onChangeText={setCorreo}
-            style={styles.inputTextIcon}
-            placeholderTextColor="grey"
-            placeholder="Correo"
-          />
-        </View>
-        <View style={styles.inputComplete}>
-          <Icon name="lock" size={30} color="grey" style={styles.inputIcon} />
-          <TextInput
-            secureTextEntry={true}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Clave"
-            placeholderTextColor="grey"
-            style={styles.inputTextIcon}></TextInput>
-        </View>
-        <View style={styles.inputComplete}>
-          <Icon
-            name="refresh"
-            size={30}
-            color="grey"
-            style={styles.inputIcon}
-          />
-          <TextInput
-            secureTextEntry={true}
-            value={passwordConfirmation}
-            onChangeText={setPasswordConfirmation}
-            placeholder="Repita su clave"
-            placeholderTextColor="grey"
-            style={styles.inputTextIcon}></TextInput>
-        </View>
-        <Pressable onPress={RegistrarUsuario} style={styles.button}>
+        <InputKC
+          control={control}
+          icon="user"
+          rules={{
+            required: {value: true, message: 'Correo requerido'},
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: 'Ingrese un correo valido',
+            },
+          }}
+          placeholder="Correo"
+          name="Correo"
+          secureTextEntry={false}
+          error={errors.Correo}></InputKC>
+        <InputKC
+          control={control}
+          icon="lock"
+          rules={{
+            required: {value: true, message: 'Clave requerida'},
+            pattern: {
+              value: /[0-9a-zA-Z]{6,}/,
+              message: 'Ingrese una clave segura',
+            },
+          }}
+          placeholder="Clave"
+          name="Clave"
+          secureTextEntry={true}
+          error={errors.Clave}></InputKC>
+        <InputKC
+          control={control}
+          icon="refresh"
+          rules={{
+            required: {value: true, message: 'Clave de confirmación requerido'},
+            pattern: {
+              value: /[0-9a-zA-Z]{6,}/,
+              message: 'Ingrese una clave segura',
+            },
+          }}
+          placeholder="Repita su clave"
+          name="Repita"
+          secureTextEntry={true}
+          error={errors.Repita}></InputKC>
+        <Pressable
+          onPress={handleSubmit(RegistrarUsuario)}
+          style={styles.button}>
           <Text style={styles.textButton}>Registrar</Text>
         </Pressable>
         <Pressable onPress={funRegresar} style={styles.buttonOlvide}>

@@ -5,18 +5,18 @@ import {
   Pressable,
   SafeAreaView,
   Text,
-  TextInput,
   View,
   Alert,
   StyleSheet,
+  Image,
 } from 'react-native';
 
 import {BASE_URL} from '@env';
 import RecoverPassword from './RecoverPassword';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RegisterUser from './RegisterUser';
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import {useForm} from 'react-hook-form';
+import InputKC from '../support/InputKC';
 let token = '';
 async function validate_jwt() {
   var myHeaders = new Headers();
@@ -36,7 +36,7 @@ async function validate_jwt() {
       Alert.alert('Error', 'Error de comunicación' + error.toString());
     });
 }
-async function login_api(usuario, password) {
+async function login_api(usuario: string, password: string) {
   var myHeaders = new Headers();
   let retorno = null;
   myHeaders.append('Authorization', 'Bearer ' + token.toString());
@@ -64,8 +64,17 @@ async function login_api(usuario, password) {
   return retorno;
 }
 const Login = ({setLogueado, setEmail}) => {
-  const [usuario, setUsuario] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+    reset,
+  } = useForm({
+    defaultValues: {
+      Usuario: '',
+      Clave: '',
+    },
+  });
   const [bloqueo, setBloqueo] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleRecuperar, setModalVisibleRecuperar] = useState(false);
@@ -77,10 +86,10 @@ const Login = ({setLogueado, setEmail}) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const ValidateLogin = async () => {
+  const ValidateLogin = async (data: any) => {
     setBloqueo(true);
     setModalVisible(true);
-    const retorno = await login_api(usuario, password);
+    const retorno = await login_api(data.Usuario, data.Clave);
     try {
       let json_resp = JSON.parse(retorno);
       if (json_resp['code'] == '999') {
@@ -95,7 +104,7 @@ const Login = ({setLogueado, setEmail}) => {
         );
       } else {
         setLogueado(true);
-        setEmail(usuario.toString().toLowerCase());
+        setEmail(data.Usuario.toString().toLowerCase());
       }
       setModalVisible(false);
       setBloqueo(false);
@@ -106,13 +115,11 @@ const Login = ({setLogueado, setEmail}) => {
     }
   };
   const RecuperarClave = () => {
-    setUsuario('');
-    setPassword('');
+    reset();
     setModalVisibleRecuperar(true);
   };
   const Registrarse = () => {
-    setUsuario('');
-    setPassword('');
+    reset();
     setModalVisibleRegister(true);
   };
   return (
@@ -126,30 +133,44 @@ const Login = ({setLogueado, setEmail}) => {
         setModalVisible={setModalVisibleRegister}
       />
       <ModalLoad viewed={modalVisible} />
-      <Text style={styles.title}>Acceso</Text>
-
-      <View style={styles.inputComplete}>
-        <Icon name="user" size={30} color="grey" style={styles.inputIcon} />
-        <TextInput
-          placeholder="Correo"
-          value={usuario}
-          onChangeText={setUsuario}
-          placeholderTextColor="grey"
-          style={styles.inputTextIcon}></TextInput>
+      <View style={{alignItems: 'center'}}>
+        <Image
+          style={{width: 150, height: 130, resizeMode: 'stretch'}}
+          source={require('../resources/images/logo-invertido.png')}
+        />
       </View>
-      <View style={styles.inputComplete}>
-        <Icon name="lock" size={30} color="grey" style={styles.inputIcon} />
-        <TextInput
-          secureTextEntry={true}
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Clave"
-          placeholderTextColor="grey"
-          style={styles.inputTextIcon}></TextInput>
-      </View>
+      <Text style={styles.titleLogo}>Acceso</Text>
+      <InputKC
+        control={control}
+        icon="user"
+        rules={{
+          required: {value: true, message: 'Correo requerido'},
+          pattern: {
+            value: /\S+@\S+\.\S+/,
+            message: 'Ingrese un correo valido',
+          },
+        }}
+        placeholder="Correo"
+        name="Usuario"
+        secureTextEntry={false}
+        error={errors.Usuario}></InputKC>
+      <InputKC
+        control={control}
+        icon="lock"
+        rules={{
+          required: {value: true, message: 'Clave requerida.'},
+          pattern: {
+            value: /[0-9a-zA-Z]{6,}/,
+            message: 'Ingrese una clave segura',
+          },
+        }}
+        placeholder="Clave"
+        name="Clave"
+        secureTextEntry={true}
+        error={errors.Clave}></InputKC>
       <Pressable
         style={styles.button}
-        onPressIn={ValidateLogin}
+        onPress={handleSubmit(ValidateLogin)}
         disabled={bloqueo}>
         <Text style={styles.textButton}>Acceder</Text>
       </Pressable>

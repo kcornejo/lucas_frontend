@@ -55,6 +55,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginTop: '30%',
   },
+  titleLogo: {
+    fontSize: 32,
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: '700',
+    marginTop: '10%',
+  },
   //Inputs
   inputComplete: {
     flexDirection: 'row',

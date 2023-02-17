@@ -6,6 +6,7 @@ import SettingsScreen from './SettingsScreen';
 import UserDetail from './UserDetail';
 const Tab = createBottomTabNavigator();
 let setLogueado = null;
+let selfUsuario = '';
 let isFillInformation = false;
 const Historial = () => {
   return (
@@ -17,7 +18,7 @@ const Historial = () => {
         backgroundColor: 'white',
         marginTop: 15,
       }}>
-      <UserDetail />
+      <UserDetail usuario={selfUsuario} />
       <View style={{width: '100%', flex: 5}}></View>
     </View>
   );
@@ -32,7 +33,7 @@ const HomeScreen = () => {
         backgroundColor: 'white',
         marginTop: 15,
       }}>
-      <UserDetail />
+      <UserDetail usuario={selfUsuario} />
       <View
         style={{
           width: '100%',
@@ -77,14 +78,15 @@ const SettingsScreenIndex = () => {
         backgroundColor: 'white',
         marginTop: 15,
       }}>
-      <UserDetail />
+      <UserDetail usuario={selfUsuario} />
       <View style={{width: '100%', flex: 5}}>
         <SettingsScreen setLogueado={setLogueado} />
       </View>
     </View>
   );
 };
-const Index = ({setLogueado: setLoqueadoSet}) => {
+const Index = ({setLogueado: setLoqueadoSet, usuario}) => {
+  selfUsuario = usuario;
   setLogueado = setLoqueadoSet;
   return (
     <Tab.Navigator
