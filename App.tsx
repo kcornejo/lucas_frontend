@@ -9,9 +9,8 @@ const App = () => {
   var [logueado, setLogueado] = useState(false);
   var [infoLlena, setInfoLlena] = useState(false);
   var [email, setEmail] = useState('');
-
+  var [usuario, setUsuario] = useState('');
   useEffect(() => {
-    console.log('entr');
     if (logueado == true && email.toString().length > 0) {
       const obtenciontoken = async () => {
         const token = await AsyncStorage.getItem('@token');
@@ -38,6 +37,11 @@ const App = () => {
               setInfoLlena(false);
             } else {
               setInfoLlena(true);
+              setUsuario(
+                data.userDetail.firstName.toString() +
+                  ' ' +
+                  data.userDetail.lastName.toString(),
+              );
             }
           })
           .catch(error => console.log('error', error));
@@ -48,11 +52,17 @@ const App = () => {
     if (infoLlena) {
       return (
         <NavigationContainer>
-          <Index setLogueado={setLogueado} />
+          <Index setLogueado={setLogueado} usuario={usuario} />
         </NavigationContainer>
       );
     } else {
-      return <FillInformation />;
+      return (
+        <FillInformation
+          email={email}
+          setUsuario={setUsuario}
+          setInfoLlena={setInfoLlena}
+        />
+      );
     }
   } else {
     return <Login setLogueado={setLogueado} setEmail={setEmail} />;

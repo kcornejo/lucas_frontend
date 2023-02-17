@@ -43,7 +43,7 @@ const FillInformation = ({email, setInfoLlena, setUsuario}) => {
       redirect: 'follow',
     };
 
-    fetch(BASE_URL + '/api/user/updateUser', requestOptions)
+    await fetch(BASE_URL + '/api/user/updateUser', requestOptions)
       .then(response => response.text())
       .then(result => {
         let json_resp = JSON.parse(result);
