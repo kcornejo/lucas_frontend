@@ -3,7 +3,7 @@ import {View, Text, SafeAreaView} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingsScreen from './SettingsScreen';
-const UserDetail = ({usuario}) => {
+const UserDetail = ({userLucas}) => {
   return (
     <View
       style={{
@@ -31,7 +31,7 @@ const UserDetail = ({usuario}) => {
                   textAlignVertical: 'center',
                   color: 'black',
                 }}>
-                {usuario}
+                {userLucas.firstName + ' ' + userLucas.lastName}
               </Text>
             </View>
             <View style={{flex: 1}}></View>

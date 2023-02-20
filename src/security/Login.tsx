@@ -11,59 +11,12 @@ import {
   Image,
 } from 'react-native';
 
-import {BASE_URL} from '@env';
 import RecoverPassword from './RecoverPassword';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import RegisterUser from './RegisterUser';
 import {useForm} from 'react-hook-form';
 import InputKC from '../support/InputKC';
-let token = '';
-async function validate_jwt() {
-  var myHeaders = new Headers();
-  myHeaders.append('Content-Type', 'application/json');
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow',
-  };
-  fetch(BASE_URL + '/auth/new?username=123', requestOptions)
-    .then(response => response.text())
-    .then(result => {
-      token = result.toString().slice(1, -1);
-      AsyncStorage.setItem('@token', token);
-    })
-    .catch(error => {
-      Alert.alert('Error', 'Error de comunicación' + error.toString());
-    });
-}
-async function login_api(usuario: string, password: string) {
-  var myHeaders = new Headers();
-  let retorno = null;
-  myHeaders.append('Authorization', 'Bearer ' + token.toString());
-  myHeaders.append('Content-Type', 'application/json');
-
-  var raw = JSON.stringify({
-    email: usuario,
-    password: password,
-  });
-
-  var requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow',
-  };
-  await fetch(BASE_URL + '/api/validateUser', requestOptions)
-    .then(response => response.text())
-    .then(result => {
-      retorno = result;
-    })
-    .catch(error => {
-      Alert.alert('Error', 'Error de comunicación' + error.toString());
-    });
-  return retorno;
-}
-const Login = ({setLogueado, setEmail}) => {
+import {BASE_URL} from '@env';
+const Login = ({setUserLucas}) => {
   const {
     control,
     handleSubmit,
@@ -79,17 +32,41 @@ const Login = ({setLogueado, setEmail}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleRecuperar, setModalVisibleRecuperar] = useState(false);
   const [modalVisibleRegister, setModalVisibleRegister] = useState(false);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      validate_jwt();
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
+  const login_api = async (user: string, password: string) => {
+    var myHeaders = new Headers();
+    let retorno = null;
+    myHeaders.append('Content-Type', 'application/json');
 
+    var raw = JSON.stringify({
+      email: user.toLowerCase().toString(),
+      password: password,
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+    await fetch(BASE_URL + '/api/login', requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        retorno = result;
+      })
+      .catch(error => {
+        return {code: '999', message: error.message};
+      });
+    return retorno;
+  };
   const ValidateLogin = async (data: any) => {
     setBloqueo(true);
     setModalVisible(true);
+
+    //Login
     const retorno = await login_api(data.Usuario, data.Clave);
+    LoginApiScreen(retorno, data);
+  };
+  const LoginApiScreen = (retorno: any, data: any) => {
     try {
       let json_resp = JSON.parse(retorno);
       if (json_resp['code'] == '999') {
@@ -103,16 +80,55 @@ const Login = ({setLogueado, setEmail}) => {
           'Usuario no validado, por favor revise su email',
         );
       } else {
-        setLogueado(true);
-        setEmail(data.Usuario.toString().toLowerCase());
+        setUserLucas(userLucas => {
+          return {
+            ...userLucas,
+            auth: true,
+            email: data.Usuario.toString().toLowerCase(),
+            token: json_resp['token'],
+            firstName:
+              json_resp['data'] != null &&
+              Object.keys(json_resp['data']).length > 0
+                ? json_resp['data'].firstName
+                : '',
+            lastName:
+              json_resp['data'] != null &&
+              Object.keys(json_resp['data']).length > 0
+                ? json_resp['data'].lastName
+                : '',
+            weight:
+              json_resp['data'] != null &&
+              Object.keys(json_resp['data']).length > 0
+                ? json_resp['data'].weight
+                : '',
+            birthday:
+              json_resp['data'] != null &&
+              Object.keys(json_resp['data']).length > 0
+                ? json_resp['data'].birthday
+                : '',
+            active:
+              json_resp['data'] != null &&
+              Object.keys(json_resp['data']).length > 0
+                ? json_resp['data'].active
+                : false,
+            phone:
+              json_resp['data'] != null &&
+              Object.keys(json_resp['data']).length > 0
+                ? json_resp['data'].phone
+                : true,
+            infoComplete:
+              json_resp['data'] != null &&
+              Object.keys(json_resp['data']).length > 0
+                ? true
+                : false,
+          };
+        });
       }
-      setModalVisible(false);
-      setBloqueo(false);
     } catch (e) {
-      setModalVisible(false);
-      setBloqueo(false);
       Alert.alert('Error', 'Error de comunicación');
     }
+    setModalVisible(false);
+    setBloqueo(false);
   };
   const RecuperarClave = () => {
     reset();

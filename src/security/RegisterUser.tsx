@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import {styles} from './Styles';
 import {BASE_URL} from '@env';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import InputKC from '../support/InputKC';
 import {useForm} from 'react-hook-form';
@@ -33,9 +32,7 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
   };
   const RegistrarUsuario = async (data: any) => {
     setModalLoadVisible(true);
-    let token = await AsyncStorage.getItem('@token');
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + token);
     myHeaders.append('Content-Type', 'application/json');
     if (data.Clave.toString() != data.Repita.toString()) {
       Alert.alert('Error', 'Las claves ingresadas no coinciden');

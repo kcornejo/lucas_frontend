@@ -5,10 +5,9 @@ import {useForm} from 'react-hook-form';
 import InputKC from '../support/InputKC';
 import ModalLoad from '../support/ModalLoad';
 import {useState} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
 import {BASE_URL} from '@env';
-const FillInformation = ({email, setInfoLlena, setUsuario}) => {
+const FillInformation = ({setUserLucas, userLucas}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const {
     control,
@@ -22,10 +21,9 @@ const FillInformation = ({email, setInfoLlena, setUsuario}) => {
     },
   });
   const guardarInfo = async (data: any) => {
-    let token = await AsyncStorage.getItem('@token');
     setModalVisible(true);
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + token);
+    myHeaders.append('Authorization', 'Bearer ' + userLucas.token);
     myHeaders.append('Content-Type', 'application/json');
 
     var raw = JSON.stringify({
@@ -34,8 +32,9 @@ const FillInformation = ({email, setInfoLlena, setUsuario}) => {
       birthday: data.FechaNacimiento.toString(),
       phone: data.Telefono.toString(),
       weight: data.Peso.toString(),
-      email: email.toString(),
+      email: userLucas.email.toString(),
     });
+    console.log(raw);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -50,14 +49,23 @@ const FillInformation = ({email, setInfoLlena, setUsuario}) => {
         if (json_resp['code'] == '999') {
           Alert.alert('Error con actualización', json_resp['message']);
         } else if (json_resp['code'] == '000') {
-          setUsuario(data.Nombre.toString() + ' ' + data.Apellido.toString());
           reset();
           Alert.alert(
             'Usuario actualizado',
             'Usuario actualizado correctamente.',
           );
           setModalVisible(false);
-          setInfoLlena(true);
+          setUserLucas(userLucas => {
+            return {
+              ...userLucas,
+              firstName: data.Nombre.toString(),
+              lastName: data.Apellido.toString(),
+              weight: data.Peso.toString(),
+              birthday: data.FechaNacimiento.toString(),
+              phone: data.Telefono.toString(),
+              infoComplete: true,
+            };
+          });
         }
       })
       .catch(error => {

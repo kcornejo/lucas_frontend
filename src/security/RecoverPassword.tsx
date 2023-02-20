@@ -3,7 +3,6 @@ import ModalLoad from '../support/ModalLoad';
 import {Pressable, Text, Modal, SafeAreaView, Alert} from 'react-native';
 import {styles} from './Styles';
 import {BASE_URL} from '@env';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from 'react-hook-form';
 import InputKC from '../support/InputKC';
 const RecoverPassword = ({visible = false, setModalVisible}) => {
@@ -24,9 +23,7 @@ const RecoverPassword = ({visible = false, setModalVisible}) => {
   const RecuperarClave = async (data: any) => {
     reset();
     setModalLoadVisible(true);
-    let token = await AsyncStorage.getItem('@token');
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + token);
     myHeaders.append('Content-Type', 'application/json');
     var raw = JSON.stringify({
       email: data.Correo,

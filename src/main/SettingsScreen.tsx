@@ -29,9 +29,20 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
-const SettingsScreen = ({setLogueado}) => {
+const SettingsScreen = ({setUserLucas, userLucas}) => {
   const logout = () => {
-    setLogueado(false);
+    setUserLucas({
+      firstName: '',
+      lastName: '',
+      email: '',
+      weight: '',
+      birthday: '',
+      active: false,
+      phone: '',
+      infoComplete: false,
+      auth: false,
+      token: '',
+    });
   };
   return (
     <View style={styles.container}>
