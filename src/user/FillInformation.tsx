@@ -14,12 +14,8 @@ const FillInformation = ({setUserLucas, userLucas}) => {
     handleSubmit,
     formState: {errors},
     reset,
-  } = useForm({
-    defaultValues: {
-      Usuario: '',
-      Clave: '',
-    },
-  });
+    setValue,
+  } = useForm();
   const guardarInfo = async (data: any) => {
     setModalVisible(true);
     var myHeaders = new Headers();
@@ -93,6 +89,7 @@ const FillInformation = ({setUserLucas, userLucas}) => {
               required: {value: true, message: 'Nombre requerido.'},
             },
             error: errors.Nombre,
+            setValue,
           },
           {
             icon: 'user',
@@ -109,8 +106,13 @@ const FillInformation = ({setUserLucas, userLucas}) => {
             name: 'Telefono',
             rule: {
               required: {value: true, message: 'Telefono requerido.'},
+              pattern: {
+                value: /[0-9]{8}/,
+                message: 'Ingrese un telefono valido',
+              },
             },
             error: errors.Telefono,
+            keyboardType: 'phone-pad',
           },
           {
             icon: 'calendar',
@@ -121,8 +123,14 @@ const FillInformation = ({setUserLucas, userLucas}) => {
                 value: true,
                 message: 'Fecha de Nacimiento requerido.',
               },
+              pattern: {
+                value: /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/,
+                message: 'Ingrese un peso valido',
+              },
             },
             error: errors.FechaNacimiento,
+            date: true,
+            setValue,
           },
           {
             icon: 'balance-scale',
@@ -130,8 +138,13 @@ const FillInformation = ({setUserLucas, userLucas}) => {
             name: 'Peso',
             rule: {
               required: {value: true, message: 'Peso requerido.'},
+              pattern: {
+                value: /^[0-9]{2,3}(\.[0-9]{1,2})?$/,
+                message: 'Ingrese un peso valido',
+              },
             },
             error: errors.Peso,
+            keyboardType: 'decimal-pad',
           },
         ]}
         renderItem={({item}) => (
@@ -141,7 +154,10 @@ const FillInformation = ({setUserLucas, userLucas}) => {
             rules={item.rule}
             placeholder={item.placeholder}
             name={item.name}
+            date={item.date}
+            setValue={item.setValue}
             secureTextEntry={false}
+            keyboardType={item.keyboardType}
             error={item.error}></InputKC>
         )}
       />

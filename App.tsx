@@ -3,6 +3,7 @@ import Login from './src/security/Login';
 import {NavigationContainer} from '@react-navigation/native';
 import Index from './src/main/Index';
 import FillInformation from './src/user/FillInformation';
+import HomeScreen from './src/main/HomeScreen';
 const App = () => {
   const [userLucas, setUserLucas] = useState({
     firstName: '',

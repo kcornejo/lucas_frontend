@@ -4,6 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingsScreen from './SettingsScreen';
 import UserDetail from './UserDetail';
+import HomeScreen from './HomeScreen';
 const Tab = createBottomTabNavigator();
 
 const Index = ({setUserLucas, userLucas}) => {
@@ -22,50 +23,8 @@ const Index = ({setUserLucas, userLucas}) => {
       </View>
     );
   };
-  const HomeScreen = () => {
-    return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          flexWrap: 'wrap',
-          backgroundColor: 'white',
-          marginTop: 15,
-        }}>
-        <UserDetail userLucas={userLucas} />
-        <View
-          style={{
-            width: '100%',
-            flex: 5,
-            alignItems: 'center',
-            borderTopStartRadius: 30,
-            borderTopEndRadius: 30,
-            backgroundColor: '#23263E',
-          }}>
-          <Pressable
-            style={{
-              width: '80%',
-              borderRadius: 10,
-              borderColor: 'black',
-              backgroundColor: '#17e9d7',
-              marginTop: 50,
-              height: 50,
-            }}>
-            <Text
-              style={{
-                color: 'black',
-                textAlign: 'center',
-                height: 40,
-                fontWeight: '800',
-                fontSize: 20,
-                marginTop: 10,
-              }}>
-              Agendar Entreno
-            </Text>
-          </Pressable>
-        </View>
-      </View>
-    );
+  const HomeScreenIndex = () => {
+    return <HomeScreen userLucas={userLucas} setUserLucas={setUserLucas} />;
   };
   const SettingsScreenIndex = () => {
     return (
@@ -132,7 +91,7 @@ const Index = ({setUserLucas, userLucas}) => {
         },
       })}>
       <Tab.Screen name="Historial" component={Historial} />
-      <Tab.Screen name="Inicio" component={HomeScreen} />
+      <Tab.Screen name="Inicio" component={HomeScreenIndex} />
       <Tab.Screen name="Configuración" component={SettingsScreenIndex} />
     </Tab.Navigator>
   );
