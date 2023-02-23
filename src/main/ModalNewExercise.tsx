@@ -41,13 +41,13 @@ const ModalNewExercise = ({
       setRetornoCalendary(list_dates);
     }
   }, [visible]);
-  const newExercise = async (TimeStart, TimeEnd, Date) => {
+  const deleteExercise = async (TimeStart, TimeEnd, Date) => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', 'Bearer ' + userLucas.token);
     myHeaders.append('Content-Type', 'application/json');
 
     var raw = JSON.stringify({
-      email: userLucas.email,
+      email: userLucas.email.toString().trim(),
       date: Date,
       timeStart: TimeStart,
       timeEnd: TimeEnd,
@@ -59,7 +59,45 @@ const ModalNewExercise = ({
       body: raw,
       redirect: 'follow',
     };
+    console.log(BASE_URL);
+    fetch(BASE_URL + '/api/user/calendar/delete', requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        const retorno = JSON.parse(result);
+        if (retorno['code'] != '000') {
+          console.warn(retorno['message']);
+        }
+        Alert.alert('Reserva liberada', 'La reserva fue liberada.', [
+          {
+            onPress: () => {
+              setVisible(false);
+            },
+          },
+        ]);
+      })
+      .catch(error => {
+        Support.ErrorToken({message: error.message, setUserLucas});
+      });
+  };
+  const newExercise = async (TimeStart, TimeEnd, Date) => {
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', 'Bearer ' + userLucas.token);
+    myHeaders.append('Content-Type', 'application/json');
 
+    var raw = JSON.stringify({
+      email: userLucas.email.toString().trim(),
+      date: Date,
+      timeStart: TimeStart,
+      timeEnd: TimeEnd,
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+    console.log(BASE_URL);
     fetch(BASE_URL + '/api/user/calendar', requestOptions)
       .then(response => response.text())
       .then(result => {
@@ -121,31 +159,56 @@ const ModalNewExercise = ({
               item.times[i].TimeStart.toString() +
               '-' +
               item.times[i].TimeEnd.toString();
+            const estatus = item.times[i].Scheduled ? 'Agendado' : 'Disponible';
             impresion.push(
               <Pressable
                 key={key + '_button'}
                 onPress={() => {
-                  Alert.alert(
-                    'Reservar horario',
-                    '¿Estas seguro que estas listo para el reto el dia ' +
-                      item.date +
-                      '?',
-                    [
-                      {
-                        text: 'Si',
-                        onPress: () => {
-                          newExercise(
-                            item.times[i].TimeStart.toString(),
-                            item.times[i].TimeEnd.toString(),
-                            item.date,
-                          );
+                  if (estatus == 'Disponible') {
+                    Alert.alert(
+                      'Reservar horario',
+                      '¿Estas seguro que estas listo para el reto el dia ' +
+                        item.date +
+                        '?',
+                      [
+                        {
+                          text: 'Si',
+                          onPress: () => {
+                            newExercise(
+                              item.times[i].TimeStart.toString(),
+                              item.times[i].TimeEnd.toString(),
+                              item.date,
+                            );
+                          },
                         },
-                      },
-                      {
-                        text: 'No',
-                      },
-                    ],
-                  );
+                        {
+                          text: 'No',
+                        },
+                      ],
+                    );
+                  } else {
+                    Alert.alert(
+                      'Eliminar reserva',
+                      '¿Estas seguro que quieres eliminar la reserva del dia ' +
+                        item.date +
+                        '?',
+                      [
+                        {
+                          text: 'Si',
+                          onPress: () => {
+                            deleteExercise(
+                              item.times[i].TimeStart.toString(),
+                              item.times[i].TimeEnd.toString(),
+                              item.date,
+                            );
+                          },
+                        },
+                        {
+                          text: 'No',
+                        },
+                      ],
+                    );
+                  }
                 }}>
                 <View
                   key={key + '_view'}
@@ -158,6 +221,7 @@ const ModalNewExercise = ({
                     marginTop: 5,
                     marginBottom: 5,
                     height: 80,
+                    flexDirection: 'row',
                   }}>
                   <Text
                     key={key + '_text'}
@@ -165,9 +229,35 @@ const ModalNewExercise = ({
                       color: 'black',
                       fontWeight: '500',
                       fontSize: 25,
+                      flex: 2,
+                      marginLeft: 15,
                     }}>
                     {retorno}
                   </Text>
+
+                  <View
+                    key={key + '_text_view_st'}
+                    style={{
+                      borderRadius: 100,
+                      backgroundColor:
+                        estatus == 'Disponible' ? 'green' : 'grey',
+                      flex: 1,
+                      marginRight: 10,
+                      marginLeft: 5,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Text
+                      key={key + '_text_ag'}
+                      style={{
+                        color: 'white',
+                        fontWeight: '500',
+                        fontSize: 15,
+                        borderRadius: 50,
+                      }}>
+                      {estatus}
+                    </Text>
+                  </View>
                 </View>
               </Pressable>,
             );
@@ -190,11 +280,29 @@ const ModalNewExercise = ({
               '11': 'Nov',
               '12': 'Dic',
             };
+            const day_spa = {
+              '1': 'Lun',
+              '2': 'Mar',
+              '3': 'Mie',
+              '4': 'Jue',
+              '5': 'Vie',
+              '6': 'Sab',
+              '0': 'Dom',
+            };
             const date = item.toISOString().split('T')[0].split('-')[2];
-
             const month_item = item.toISOString().split('T')[0].split('-')[1];
+            const day = item.getDay();
             return (
               <View style={{width: 60, alignItems: 'center'}}>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: 'grey',
+                    fontWeight: '800',
+                    marginTop: 5,
+                  }}>
+                  {day_spa[day]}
+                </Text>
                 <Text style={{fontSize: 30, color: 'grey'}}>{date}</Text>
                 <Text style={{color: 'grey', fontSize: 15}}>
                   {month[month_item]}

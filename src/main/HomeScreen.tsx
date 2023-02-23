@@ -18,7 +18,11 @@ const HomeScreen = ({userLucas, setUserLucas}) => {
       headers: myHeaders,
       redirect: 'follow',
     };
-    await fetch(BASE_URL + '/api/calendar/list', requestOptions)
+    console.log(BASE_URL);
+    await fetch(
+      BASE_URL + '/api/calendar/list?email=' + userLucas.email,
+      requestOptions,
+    )
       .then(response => response.text())
       .then(retorno => {
         setDatosAgenda(JSON.parse(retorno));

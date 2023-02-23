@@ -38,7 +38,7 @@ const Login = ({setUserLucas}) => {
     myHeaders.append('Content-Type', 'application/json');
 
     var raw = JSON.stringify({
-      email: user.toLowerCase().toString(),
+      email: user.toLowerCase().toString().trim(),
       password: password,
     });
 
@@ -48,13 +48,21 @@ const Login = ({setUserLucas}) => {
       body: raw,
       redirect: 'follow',
     };
+    console.log(BASE_URL);
     await fetch(BASE_URL + '/api/login', requestOptions)
       .then(response => response.text())
       .then(result => {
         retorno = result;
       })
       .catch(error => {
-        return {code: '999', message: error.message};
+        if (error.message.toString().search('request fail')) {
+          retorno = JSON.stringify({
+            code: '990',
+            message: 'Error de red. Por favor valide su conexión.',
+          });
+        } else {
+          retorno = JSON.stringify({code: '990', message: error.message});
+        }
       });
     return retorno;
   };
@@ -64,6 +72,7 @@ const Login = ({setUserLucas}) => {
 
     //Login
     const retorno = await login_api(data.Usuario, data.Clave);
+    console.log(retorno);
     LoginApiScreen(retorno, data);
   };
   const LoginApiScreen = (retorno: any, data: any) => {
@@ -79,12 +88,12 @@ const Login = ({setUserLucas}) => {
           'Error de usuario',
           'Usuario no validado, por favor revise su email',
         );
-      } else {
+      } else if (json_resp['code'] == '000') {
         setUserLucas(userLucas => {
           return {
             ...userLucas,
             auth: true,
-            email: data.Usuario.toString().toLowerCase(),
+            email: data.Usuario.toString().toLowerCase().trim(),
             token: json_resp['token'],
             firstName:
               json_resp['data'] != null &&
@@ -116,16 +125,14 @@ const Login = ({setUserLucas}) => {
               Object.keys(json_resp['data']).length > 0
                 ? json_resp['data'].phone
                 : true,
-            infoComplete:
-              json_resp['data'] != null &&
-              Object.keys(json_resp['data']).length > 0
-                ? true
-                : false,
+            infoComplete: json_resp['data'].infoComplete,
           };
         });
+      } else {
+        Alert.alert('Error', json_resp['message']);
       }
     } catch (e) {
-      Alert.alert('Error', 'Error de comunicación');
+      Alert.alert('Error', 'Error de comunicación ' + e.message);
     }
     setModalVisible(false);
     setBloqueo(false);

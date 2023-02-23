@@ -40,7 +40,7 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
       return 0;
     }
     var raw = JSON.stringify({
-      email: data.Correo.toString().toLowerCase(),
+      email: data.Correo.toString().toLowerCase().trim(),
       password: data.Clave.toString(),
     });
     var requestOptions = {
@@ -49,6 +49,7 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
       body: raw,
       redirect: 'follow',
     };
+    console.log(BASE_URL);
     fetch(BASE_URL + '/api/newUser', requestOptions)
       .then(response => response.text())
       .then(result => {
@@ -67,7 +68,7 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
       })
       .catch(error => {
         setModalLoadVisible(false);
-        Alert.alert('Error', error);
+        Alert.alert('Error', error.message);
       });
   };
   return (

@@ -28,16 +28,15 @@ const FillInformation = ({setUserLucas, userLucas}) => {
       birthday: data.FechaNacimiento.toString(),
       phone: data.Telefono.toString(),
       weight: data.Peso.toString(),
-      email: userLucas.email.toString(),
+      email: userLucas.email.toString().trim(),
     });
-    console.log(raw);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: raw,
       redirect: 'follow',
     };
-
+    console.log(BASE_URL);
     await fetch(BASE_URL + '/api/user/updateUser', requestOptions)
       .then(response => response.text())
       .then(result => {
@@ -124,8 +123,8 @@ const FillInformation = ({setUserLucas, userLucas}) => {
                 message: 'Fecha de Nacimiento requerido.',
               },
               pattern: {
-                value: /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/,
-                message: 'Ingrese un peso valido',
+                value: /^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/,
+                message: 'Ingrese una fecha de nacimiento valida',
               },
             },
             error: errors.FechaNacimiento,

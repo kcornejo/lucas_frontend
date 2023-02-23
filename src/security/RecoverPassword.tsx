@@ -26,7 +26,7 @@ const RecoverPassword = ({visible = false, setModalVisible}) => {
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     var raw = JSON.stringify({
-      email: data.Correo,
+      email: data.Correo.toString().trim(),
     });
     var requestOptions = {
       method: 'POST',
@@ -34,6 +34,7 @@ const RecoverPassword = ({visible = false, setModalVisible}) => {
       body: raw,
       redirect: 'follow',
     };
+    console.log(BASE_URL);
     fetch(BASE_URL + '/api/changePasswordReact', requestOptions)
       .then(response => response.text())
       .then(result => {
