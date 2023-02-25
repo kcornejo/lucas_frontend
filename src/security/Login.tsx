@@ -9,7 +9,9 @@ import {
   Alert,
   StyleSheet,
   Image,
+  TouchableHighlight,
 } from 'react-native';
+import {requestUserPermission} from '../support/Notification';
 
 import RecoverPassword from './RecoverPassword';
 import RegisterUser from './RegisterUser';
@@ -33,6 +35,7 @@ const Login = ({setUserLucas}) => {
   const [modalVisibleRecuperar, setModalVisibleRecuperar] = useState(false);
   const [modalVisibleRegister, setModalVisibleRegister] = useState(false);
   const login_api = async (user: string, password: string) => {
+    const tokenPhone = await requestUserPermission();
     var myHeaders = new Headers();
     let retorno = null;
     myHeaders.append('Content-Type', 'application/json');
@@ -40,8 +43,9 @@ const Login = ({setUserLucas}) => {
     var raw = JSON.stringify({
       email: user.toLowerCase().toString().trim(),
       password: password,
+      phoneToken: tokenPhone,
     });
-
+    console.log(raw);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -191,12 +195,14 @@ const Login = ({setUserLucas}) => {
         name="Clave"
         secureTextEntry={true}
         error={errors.Clave}></InputKC>
-      <Pressable
+      <TouchableHighlight
+        activeOpacity={0.85}
+        underlayColor={'#98FFF6'}
         style={styles.button}
         onPress={handleSubmit(ValidateLogin)}
         disabled={bloqueo}>
         <Text style={styles.textButton}>Acceder</Text>
-      </Pressable>
+      </TouchableHighlight>
       <View
         style={{
           borderBottomColor: 'grey',

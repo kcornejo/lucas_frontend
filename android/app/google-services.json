@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "216180111382",
+    "firebase_url": "https://lucasgym-779e2-default-rtdb.firebaseio.com",
+    "project_id": "lucasgym-779e2",
+    "storage_bucket": "lucasgym-779e2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216180111382:android:124bf09c5c905d60c71d37",
+        "android_client_info": {
+          "package_name": "com.frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216180111382-iup9kehbc7suisakfpc3nj3d7j8ujn2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu30njOJZ2MsCEynj-3liS6bQ_tjIJqaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216180111382-iup9kehbc7suisakfpc3nj3d7j8ujn2e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

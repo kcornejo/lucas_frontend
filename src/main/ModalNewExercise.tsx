@@ -1,6 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {Agenda} from 'react-native-calendars';
-import {Modal, View, Text, Pressable, Alert} from 'react-native';
+import {
+  Modal,
+  View,
+  Text,
+  Pressable,
+  Alert,
+  TouchableHighlight,
+} from 'react-native';
 import {styles} from './Styles';
 import {BASE_URL} from '@env';
 import Support from '../support/Support';
@@ -159,7 +166,11 @@ const ModalNewExercise = ({
               item.times[i].TimeStart.toString() +
               '-' +
               item.times[i].TimeEnd.toString();
-            const estatus = item.times[i].Scheduled ? 'Agendado' : 'Disponible';
+            const estatus = item.times[i].Scheduled
+              ? 'Agendado'
+              : item.times[i].Avail == true
+              ? 'Disponible'
+              : 'Cupo Lleno';
             impresion.push(
               <Pressable
                 key={key + '_button'}
@@ -186,7 +197,7 @@ const ModalNewExercise = ({
                         },
                       ],
                     );
-                  } else {
+                  } else if (estatus == 'Agendado') {
                     Alert.alert(
                       'Eliminar reserva',
                       '¿Estas seguro que quieres eliminar la reserva del dia ' +
@@ -208,6 +219,8 @@ const ModalNewExercise = ({
                         },
                       ],
                     );
+                  } else {
+                    Alert.alert('Cupo lleno', 'Por favor selecciona otra hora');
                   }
                 }}>
                 <View
@@ -240,7 +253,11 @@ const ModalNewExercise = ({
                     style={{
                       borderRadius: 100,
                       backgroundColor:
-                        estatus == 'Disponible' ? 'green' : 'grey',
+                        estatus == 'Disponible'
+                          ? 'green'
+                          : estatus == 'Agendado'
+                          ? 'grey'
+                          : 'red',
                       flex: 1,
                       marginRight: 10,
                       marginLeft: 5,

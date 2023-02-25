@@ -75,57 +75,71 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
     <Modal animationType="slide" visible={visible}>
       <SafeAreaView style={styles.background}>
         <ModalLoad viewed={modalLoadVisible} />
-        <Text style={styles.title}>Nuevo Usuario</Text>
-        <InputKC
-          control={control}
-          icon="user"
-          rules={{
-            required: {value: true, message: 'Correo requerido'},
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: 'Ingrese un correo valido',
-            },
-          }}
-          placeholder="Correo"
-          name="Correo"
-          secureTextEntry={false}
-          error={errors.Correo}></InputKC>
-        <InputKC
-          control={control}
-          icon="lock"
-          rules={{
-            required: {value: true, message: 'Clave requerida'},
-            pattern: {
-              value: /[0-9a-zA-Z]{6,}/,
-              message: 'Ingrese una clave segura',
-            },
-          }}
-          placeholder="Clave"
-          name="Clave"
-          secureTextEntry={true}
-          error={errors.Clave}></InputKC>
-        <InputKC
-          control={control}
-          icon="refresh"
-          rules={{
-            required: {value: true, message: 'Clave de confirmación requerido'},
-            pattern: {
-              value: /[0-9a-zA-Z]{6,}/,
-              message: 'Ingrese una clave segura',
-            },
-          }}
-          placeholder="Repita su clave"
-          name="Repita"
-          secureTextEntry={true}
-          error={errors.Repita}></InputKC>
-        <Pressable
-          onPress={handleSubmit(RegistrarUsuario)}
-          style={styles.button}>
-          <Text style={styles.textButton}>Registrar</Text>
-        </Pressable>
-        <Pressable onPress={funRegresar} style={styles.buttonOlvide}>
-          <Text style={styles.textButton}>Regresar</Text>
-        </Pressable>
+        <View style={{flex: 1, flexDirection: 'column'}}>
+          <View style={{flex: 1}}>
+            <Pressable onPress={funRegresar} style={{width: 12}}>
+              <Icon
+                name={'arrow-circle-left'}
+                size={70}
+                color="white"
+                style={styles.inputIconBack}
+              />
+            </Pressable>
+          </View>
+          <View style={{flex: 10}}>
+            <Text style={styles.title}>Nuevo Usuario</Text>
+            <InputKC
+              control={control}
+              icon="user"
+              rules={{
+                required: {value: true, message: 'Correo requerido'},
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: 'Ingrese un correo valido',
+                },
+              }}
+              placeholder="Correo"
+              name="Correo"
+              secureTextEntry={false}
+              error={errors.Correo}></InputKC>
+            <InputKC
+              control={control}
+              icon="lock"
+              rules={{
+                required: {value: true, message: 'Clave requerida'},
+                pattern: {
+                  value: /[0-9a-zA-Z]{6,}/,
+                  message: 'Ingrese una clave segura',
+                },
+              }}
+              placeholder="Clave"
+              name="Clave"
+              secureTextEntry={true}
+              error={errors.Clave}></InputKC>
+            <InputKC
+              control={control}
+              icon="refresh"
+              rules={{
+                required: {
+                  value: true,
+                  message: 'Clave de confirmación requerido',
+                },
+                pattern: {
+                  value: /[0-9a-zA-Z]{6,}/,
+                  message: 'Ingrese una clave segura',
+                },
+              }}
+              placeholder="Repita su clave"
+              name="Repita"
+              secureTextEntry={true}
+              error={errors.Repita}></InputKC>
+            <Pressable
+              onPress={handleSubmit(RegistrarUsuario)}
+              style={styles.button}>
+              <Text style={styles.textButton}>Registrar</Text>
+            </Pressable>
+          </View>
+        </View>
       </SafeAreaView>
     </Modal>
   );

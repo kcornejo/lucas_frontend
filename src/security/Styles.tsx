@@ -92,6 +92,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingTop: 10,
   },
+  inputIconBack: {
+    marginLeft: 10,
+    marginTop: 10,
+    width: 70,
+    height: 80,
+    textAlign: 'center',
+    paddingTop: 10,
+  },
   //Views
   background: {
     backgroundColor: '#24253d',

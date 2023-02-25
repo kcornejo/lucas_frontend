@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Pressable, Text, Modal} from 'react-native';
+import {View, TouchableHighlight, Text} from 'react-native';
 import UserDetail from './UserDetail';
 import ModalNewExercise from './ModalNewExercise';
 import {BASE_URL} from '@env';
@@ -60,7 +60,9 @@ const HomeScreen = ({userLucas, setUserLucas}) => {
           borderTopEndRadius: 30,
           backgroundColor: '#23263E',
         }}>
-        <Pressable
+        <TouchableHighlight
+          activeOpacity={0.85}
+          underlayColor={'#98FFF6'}
           onPress={newExercise}
           style={{
             width: '80%',
@@ -81,7 +83,7 @@ const HomeScreen = ({userLucas, setUserLucas}) => {
             }}>
             Agendar Entreno
           </Text>
-        </Pressable>
+        </TouchableHighlight>
       </View>
     </View>
   );

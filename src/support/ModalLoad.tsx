@@ -5,7 +5,13 @@ const ModalLoad = ({viewed = true}) => {
   return (
     <Modal transparent={true} animationType="fade" visible={viewed}>
       <SafeAreaView style={styles_modal.principal}>
-        <Image source={require('../resources/images/loading.gif')} />
+        <Image
+          style={{
+            width: 150,
+            height: 150,
+          }}
+          source={require('../resources/images/loading.gif')}
+        />
       </SafeAreaView>
     </Modal>
   );
