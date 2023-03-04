@@ -3,45 +3,19 @@ import {View, Text, SafeAreaView, Pressable} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingsScreen from './SettingsScreen';
-import UserDetail from './UserDetail';
 import HomeScreen from './HomeScreen';
+import History from './History';
 const Tab = createBottomTabNavigator();
 
 const Index = ({setUserLucas, userLucas}) => {
   const Historial = () => {
-    return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          flexWrap: 'wrap',
-          backgroundColor: 'white',
-          marginTop: 15,
-        }}>
-        <UserDetail userLucas={userLucas} />
-        <View style={{width: '100%', flex: 5}}></View>
-      </View>
-    );
+    return <History userLucas={userLucas} setUserLucas={setUserLucas} />;
   };
   const HomeScreenIndex = () => {
     return <HomeScreen userLucas={userLucas} setUserLucas={setUserLucas} />;
   };
   const SettingsScreenIndex = () => {
-    return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          flexWrap: 'wrap',
-          backgroundColor: 'white',
-          marginTop: 15,
-        }}>
-        <UserDetail userLucas={userLucas} />
-        <View style={{width: '100%', flex: 5}}>
-          <SettingsScreen userLucas={userLucas} setUserLucas={setUserLucas} />
-        </View>
-      </View>
-    );
+    return <SettingsScreen userLucas={userLucas} setUserLucas={setUserLucas} />;
   };
   return (
     <Tab.Navigator

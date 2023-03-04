@@ -1,13 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Agenda} from 'react-native-calendars';
-import {
-  Modal,
-  View,
-  Text,
-  Pressable,
-  Alert,
-  TouchableHighlight,
-} from 'react-native';
+import {Modal, View, Text, Pressable, Alert} from 'react-native';
 import {styles} from './Styles';
 import {BASE_URL} from '@env';
 import Support from '../support/Support';

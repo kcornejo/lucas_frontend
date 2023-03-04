@@ -1,9 +1,12 @@
-import React from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, {useEffect} from 'react';
+import {View, Text, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import SettingsScreen from './SettingsScreen';
-const UserDetail = ({userLucas}) => {
+const UserDetail = ({userLucas, setUserLucas}) => {
+  useEffect(() => {
+    setUserLucas(userLucas);
+    console.log('s');
+  });
+  console.log(userLucas.firstName);
   return (
     <View
       style={{
@@ -18,7 +21,16 @@ const UserDetail = ({userLucas}) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Icon name="user" size={80} color="black" />
+          {userLucas.photo !== undefined && userLucas.photo != '' ? (
+            <Image
+              source={{
+                uri: 'data:image/png;base64,' + userLucas.photo,
+              }}
+              style={{width: 80, height: 80}}
+            />
+          ) : (
+            <Icon name="user" size={80} color="black" />
+          )}
         </View>
         <View style={{flex: 3}}>
           <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap'}}>

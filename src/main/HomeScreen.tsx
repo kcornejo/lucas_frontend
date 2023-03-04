@@ -1,8 +1,15 @@
 import React, {useState} from 'react';
-import {View, TouchableHighlight, Text} from 'react-native';
+import {
+  View,
+  TouchableHighlight,
+  Text,
+  SafeAreaView,
+  Linking,
+} from 'react-native';
 import UserDetail from './UserDetail';
 import ModalNewExercise from './ModalNewExercise';
 import {BASE_URL} from '@env';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import ModalLoad from '../support/ModalLoad';
 import Support from '../support/Support';
 const HomeScreen = ({userLucas, setUserLucas}) => {
@@ -34,7 +41,7 @@ const HomeScreen = ({userLucas, setUserLucas}) => {
       });
   };
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
         flexDirection: 'column',
@@ -50,42 +57,132 @@ const HomeScreen = ({userLucas, setUserLucas}) => {
         userLucas={userLucas}
         setUserLucas={setUserLucas}
       />
-      <UserDetail userLucas={userLucas} />
+      <UserDetail setUserLucas={setUserLucas} userLucas={userLucas} />
       <View
         style={{
           width: '100%',
-          flex: 5,
+          flex: 6,
           alignItems: 'center',
           borderTopStartRadius: 30,
           borderTopEndRadius: 30,
           backgroundColor: '#23263E',
         }}>
-        <TouchableHighlight
-          activeOpacity={0.85}
-          underlayColor={'#98FFF6'}
-          onPress={newExercise}
-          style={{
-            width: '80%',
-            borderRadius: 10,
-            borderColor: 'black',
-            backgroundColor: '#17e9d7',
-            marginTop: 50,
-            height: 50,
-          }}>
-          <Text
-            style={{
-              color: 'black',
-              textAlign: 'center',
-              height: 40,
-              fontWeight: '800',
-              fontSize: 20,
-              marginTop: 10,
-            }}>
-            Agendar Entreno
-          </Text>
-        </TouchableHighlight>
+        <View style={{flex: 1, flexDirection: 'column', width: '100%'}}>
+          <View style={{flex: 1}}></View>
+          <View style={{flex: 1}}>
+            <TouchableHighlight
+              activeOpacity={0.85}
+              underlayColor={'#98FFF6'}
+              onPress={newExercise}
+              style={{
+                borderRadius: 10,
+                borderColor: 'black',
+                backgroundColor: '#17e9d7',
+                alignItems: 'center',
+                padding: 10,
+                marginLeft: 20,
+                marginRight: 20,
+              }}>
+              <>
+                <Icon name="plus" size={80} color="black" />
+                <Text
+                  style={{
+                    color: 'black',
+                    textAlign: 'center',
+                    height: 40,
+                    fontWeight: '800',
+                    fontSize: 15,
+                    padding: 20,
+                  }}>
+                  Nuevo Entreno
+                </Text>
+              </>
+            </TouchableHighlight>
+          </View>
+          <View style={{flex: 1}}>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <View style={{flex: 1}}>
+                <TouchableHighlight
+                  activeOpacity={0.85}
+                  underlayColor={'#444876'}
+                  onPress={async () => {
+                    const url = 'http://instagram.com';
+                    const supported = await Linking.canOpenURL(url);
+                    if (supported) {
+                      await Linking.openURL(url);
+                    } else {
+                      console.warn('Error con el link');
+                    }
+                  }}
+                  style={{
+                    borderRadius: 10,
+                    borderColor: 'black',
+                    backgroundColor: '#36395E',
+                    alignItems: 'center',
+                    padding: 10,
+                    width: '80%',
+                    marginLeft: 20,
+                  }}>
+                  <>
+                    <Icon name="instagram" size={80} color="#6459D7" />
+                    <Text
+                      style={{
+                        color: 'white',
+                        textAlign: 'center',
+                        height: 40,
+                        fontWeight: '800',
+                        fontSize: 15,
+                        padding: 20,
+                      }}>
+                      Instagram
+                    </Text>
+                  </>
+                </TouchableHighlight>
+              </View>
+              <View style={{flex: 1}}>
+                <TouchableHighlight
+                  activeOpacity={0.85}
+                  underlayColor={'#444876'}
+                  onPress={async () => {
+                    const url = 'http://instagram.com';
+                    const supported = await Linking.canOpenURL(url);
+                    if (supported) {
+                      await Linking.openURL(url);
+                    } else {
+                      console.warn('Error con el link');
+                    }
+                  }}
+                  style={{
+                    borderRadius: 10,
+                    borderColor: 'black',
+                    backgroundColor: '#36395E',
+                    alignItems: 'center',
+                    padding: 10,
+                    width: '80%',
+                    marginLeft: 20,
+                  }}>
+                  <>
+                    <Icon name="whatsapp" size={80} color="#39D555" />
+                    <Text
+                      style={{
+                        color: 'white',
+                        textAlign: 'center',
+                        height: 40,
+                        fontWeight: '800',
+                        fontSize: 15,
+                        padding: 20,
+                      }}>
+                      Whatsapp
+                    </Text>
+                  </>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </View>
+          <View style={{flex: 1}}></View>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 export default HomeScreen;

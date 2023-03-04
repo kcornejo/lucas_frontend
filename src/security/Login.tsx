@@ -45,7 +45,6 @@ const Login = ({setUserLucas}) => {
       password: password,
       phoneToken: tokenPhone,
     });
-    console.log(raw);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -76,7 +75,6 @@ const Login = ({setUserLucas}) => {
 
     //Login
     const retorno = await login_api(data.Usuario, data.Clave);
-    console.log(retorno);
     LoginApiScreen(retorno, data);
   };
   const LoginApiScreen = (retorno: any, data: any) => {
@@ -130,6 +128,8 @@ const Login = ({setUserLucas}) => {
                 ? json_resp['data'].phone
                 : true,
             infoComplete: json_resp['data'].infoComplete,
+            admin: json_resp['data'].admin,
+            photo: json_resp['data'].photo,
           };
         });
       } else {

@@ -8,6 +8,22 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 20,
   },
+  buttonNew: {
+    backgroundColor: '#23BEAF',
+    borderWidth: 1,
+    borderRadius: 12,
+    height: 50,
+    margin: 20,
+  },
+
+  inputIconBack: {
+    marginLeft: 10,
+    marginTop: 10,
+    width: 70,
+    height: 80,
+    textAlign: 'center',
+    paddingTop: 10,
+  },
   buttonRegistry: {
     backgroundColor: 'yellow',
     borderWidth: 1,
