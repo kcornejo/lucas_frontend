@@ -1,21 +1,21 @@
 import React from 'react';
-import {View, Text, SafeAreaView, Pressable} from 'react-native';
+import {View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import SettingsScreen from './SettingsScreen';
-import HomeScreen from './HomeScreen';
-import History from './History';
+import SettingsScreen from './setting/SettingsScreen';
+import HomeScreen from './home/HomeScreen';
+import History from './history/History';
 const Tab = createBottomTabNavigator();
 
-const Index = ({setUserLucas, userLucas}) => {
+const Index = () => {
   const Historial = () => {
-    return <History userLucas={userLucas} setUserLucas={setUserLucas} />;
+    return <History />;
   };
   const HomeScreenIndex = () => {
-    return <HomeScreen userLucas={userLucas} setUserLucas={setUserLucas} />;
+    return <HomeScreen />;
   };
   const SettingsScreenIndex = () => {
-    return <SettingsScreen userLucas={userLucas} setUserLucas={setUserLucas} />;
+    return <SettingsScreen />;
   };
   return (
     <Tab.Navigator

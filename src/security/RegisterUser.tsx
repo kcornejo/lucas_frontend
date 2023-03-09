@@ -1,19 +1,11 @@
 import React, {useState} from 'react';
 import ModalLoad from '../support/ModalLoad';
-import {
-  Pressable,
-  Text,
-  TextInput,
-  Modal,
-  SafeAreaView,
-  Alert,
-  View,
-} from 'react-native';
+import {Pressable, Text, Modal, SafeAreaView, Alert, View} from 'react-native';
 import {styles} from './Styles';
-import {BASE_URL} from '@env';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import InputKC from '../support/InputKC';
 import {useForm} from 'react-hook-form';
+import {RequestApiAsync} from '../support/Support';
 const RegisterUser = ({visible = false, setModalVisible}) => {
   const {
     control,
@@ -32,8 +24,6 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
   };
   const RegistrarUsuario = async (data: any) => {
     setModalLoadVisible(true);
-    var myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
     if (data.Clave.toString() != data.Repita.toString()) {
       Alert.alert('Error', 'Las claves ingresadas no coinciden');
       setModalLoadVisible(false);
@@ -43,33 +33,35 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
       email: data.Correo.toString().toLowerCase().trim(),
       password: data.Clave.toString(),
     });
-    var requestOptions = {
+    const retorno = await RequestApiAsync({
       method: 'POST',
-      headers: myHeaders,
+      url: '/api/newUser',
       body: raw,
-      redirect: 'follow',
-    };
-    console.log(BASE_URL);
-    fetch(BASE_URL + '/api/newUser', requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        let json_resp = JSON.parse(result);
-        if (json_resp['code'] == '999') {
+      login: false,
+      userLucas: {},
+      setUserLucas: null,
+    });
+    try {
+      let json_resp = JSON.parse(retorno);
+      if (json_resp['code'] == '999') {
+        if (json_resp['message'].toString().search('already-in-use') >= 0) {
+          Alert.alert('Error con registro', 'Correo usado anteriormente');
+        } else {
           Alert.alert('Error con registro', json_resp['message']);
-        } else if (json_resp['code'] == '000') {
-          reset();
-          Alert.alert(
-            'Usuario registrado',
-            'Usuario registrado, por favor valide su email.',
-          );
-          setModalVisible(false);
         }
-        setModalLoadVisible(false);
-      })
-      .catch(error => {
-        setModalLoadVisible(false);
-        Alert.alert('Error', error.message);
-      });
+      } else if (json_resp['code'] == '000') {
+        setModalVisible(false);
+        reset();
+        Alert.alert(
+          'Usuario registrado',
+          'Usuario registrado, por favor valide su email.',
+        );
+      }
+      setModalLoadVisible(false);
+    } catch (e) {
+      setModalLoadVisible(false);
+      Alert.alert('Error con registro', 'Error de comunicación');
+    }
   };
   return (
     <Modal animationType="slide" visible={visible}>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   Modal,
   Pressable,
@@ -11,13 +11,15 @@ import {
   Alert,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
-import InputKC from '../support/InputKC';
+import InputKC from '../../support/InputKC';
 import {useForm} from 'react-hook-form';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {styles} from './Styles';
-import {BASE_URL} from '@env';
-import Support from '../support/Support';
-const UserDetail = ({visible, setVisible, userLucas, setUserLucas}) => {
+import {styles} from '../Styles';
+import Support from '../../support/Support';
+import {LucasContext} from '../../support/Contexts';
+import {RequestApiAsync} from '../../support/Support';
+const UserDetail = ({visible, setVisible}) => {
+  const [userLucas, setUserLucas] = useContext(LucasContext);
   const [photo, setPhoto] = useState(null);
   const {
     control,
@@ -46,10 +48,6 @@ const UserDetail = ({visible, setVisible, userLucas, setUserLucas}) => {
   };
   const guardar = async (data: any) => {
     const request_api = async () => {
-      var myHeaders = new Headers();
-      let retorno = null;
-      myHeaders.append('Content-Type', 'application/json');
-      myHeaders.append('Authorization', 'Bearer ' + userLucas.token);
       if (photo == null) {
         var raw = JSON.stringify({
           ...userLucas,
@@ -63,38 +61,36 @@ const UserDetail = ({visible, setVisible, userLucas, setUserLucas}) => {
           photoType: photo.type,
         });
       }
-
-      var requestOptions = {
+      const retorno = await RequestApiAsync({
         method: 'POST',
-        headers: myHeaders,
+        url: '/api/user/updateUser',
         body: raw,
-        redirect: 'follow',
-      };
-      console.log(BASE_URL);
-      await fetch(BASE_URL + '/api/user/updateUser', requestOptions)
-        .then(response => response.text())
-        .then(result => {
-          if (result == 'Forbidden') {
-            Support.ErrorToken({message: result, setUserLucas});
-          } else {
-            retorno = result;
-          }
-        })
-        .catch(error => {
-          Support.ErrorToken({message: error.message, setUserLucas});
-        });
+        login: true,
+        userLucas,
+        setUserLucas,
+      });
       return retorno;
     };
     const retorno = await request_api();
     if (retorno != null) {
       const resp_clean = JSON.parse(retorno);
       if (resp_clean.code == '000') {
-        userLucas.phone = data.Telefono;
         if (photo != null) {
-          userLucas.photo = photo.base64;
+          setUserLucas(userLucas => {
+            return {
+              ...userLucas,
+              photo: photo.base64,
+              phone: data.Telefono,
+            };
+          });
+        } else {
+          setUserLucas(userLucas => {
+            return {
+              ...userLucas,
+              phone: data.Telefono,
+            };
+          });
         }
-        userLucas.firstName = 'q';
-        setUserLucas(userLucas);
         reset();
         setPhoto(null);
         Alert.alert('Información cargada', 'Informacion cargada correctamente');
@@ -102,6 +98,8 @@ const UserDetail = ({visible, setVisible, userLucas, setUserLucas}) => {
       } else {
         Alert.alert('Error', 'Error ' + resp_clean.message);
       }
+    } else {
+      Alert.alert('Error', 'Error de comunicación.');
     }
   };
 
@@ -206,6 +204,16 @@ const UserDetail = ({visible, setVisible, userLucas, setUserLucas}) => {
                 <>
                   <Image
                     source={{uri: photo.uri}}
+                    style={{width: 150, height: 150}}
+                  />
+                </>
+              )}
+              {!photo && userLucas.photo != '' && (
+                <>
+                  <Image
+                    source={{
+                      uri: 'data:image/png;base64,' + userLucas.photo,
+                    }}
                     style={{width: 150, height: 150}}
                   />
                 </>

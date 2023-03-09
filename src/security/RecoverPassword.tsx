@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import ModalLoad from '../support/ModalLoad';
 import {Pressable, Text, Modal, SafeAreaView, Alert, View} from 'react-native';
 import {styles} from './Styles';
-import {BASE_URL} from '@env';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useForm} from 'react-hook-form';
 import InputKC from '../support/InputKC';
+import {RequestApiAsync} from '../support/Support';
 const RecoverPassword = ({visible = false, setModalVisible}) => {
   const {
     control,
@@ -24,32 +24,32 @@ const RecoverPassword = ({visible = false, setModalVisible}) => {
   const RecuperarClave = async (data: any) => {
     reset();
     setModalLoadVisible(true);
-    var myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
     var raw = JSON.stringify({
       email: data.Correo.toString().trim(),
     });
-    var requestOptions = {
+    const retorno = await RequestApiAsync({
       method: 'POST',
-      headers: myHeaders,
+      url: '/api/changePasswordReact',
       body: raw,
-      redirect: 'follow',
-    };
-    console.log(BASE_URL);
-    fetch(BASE_URL + '/api/changePasswordReact', requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        setModalLoadVisible(false);
+      login: false,
+      userLucas: {},
+      setUserLucas: null,
+    });
+    try {
+      setModalLoadVisible(false);
+      let json_resp = JSON.parse(retorno);
+      if (json_resp['code'] == '000' || json_resp['code'] == '999') {
         Alert.alert(
           'Clave enviada',
           'Clave enviada, por favor valide su email.',
         );
-        setModalVisible(false);
-      })
-      .catch(error => {
-        setModalLoadVisible(false);
-        Alert.alert('Error', error);
-      });
+      } else {
+        Alert.alert('Error', json_resp['message']);
+      }
+      setModalVisible(false);
+    } catch (e) {
+      Alert.alert('Error', 'Error de comunicación');
+    }
   };
   return (
     <Modal animationType="slide" visible={visible}>

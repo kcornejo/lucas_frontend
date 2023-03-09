@@ -7,8 +7,8 @@ const ModalLoad = ({viewed = true}) => {
       <SafeAreaView style={styles_modal.principal}>
         <Image
           style={{
-            width: 150,
-            height: 150,
+            width: 250,
+            height: 250,
           }}
           source={require('../resources/images/loading.gif')}
         />

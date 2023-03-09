@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, SafeAreaView, FlatList, Pressable} from 'react-native';
 import {styles} from './Styles';
 import {useForm} from 'react-hook-form';
@@ -6,8 +6,10 @@ import InputKC from '../support/InputKC';
 import ModalLoad from '../support/ModalLoad';
 import {useState} from 'react';
 import {Alert} from 'react-native';
-import {BASE_URL} from '@env';
-const FillInformation = ({setUserLucas, userLucas}) => {
+import {LucasContext} from '../support/Contexts';
+import {RequestApiAsync} from '../support/Support';
+const FillInformation = () => {
+  const [userLucas, setUserLucas] = useContext(LucasContext);
   const [modalVisible, setModalVisible] = useState(false);
   const {
     control,
@@ -18,10 +20,6 @@ const FillInformation = ({setUserLucas, userLucas}) => {
   } = useForm();
   const guardarInfo = async (data: any) => {
     setModalVisible(true);
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + userLucas.token);
-    myHeaders.append('Content-Type', 'application/json');
-
     var raw = JSON.stringify({
       firstName: data.Nombre.toString(),
       lastName: data.Apellido.toString(),
@@ -30,44 +28,41 @@ const FillInformation = ({setUserLucas, userLucas}) => {
       weight: data.Peso.toString(),
       email: userLucas.email.toString().trim(),
     });
-    var requestOptions = {
+    const result = await RequestApiAsync({
       method: 'POST',
-      headers: myHeaders,
+      url: '/api/user/updateUser',
       body: raw,
-      redirect: 'follow',
-    };
-    console.log(BASE_URL);
-    await fetch(BASE_URL + '/api/user/updateUser', requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        let json_resp = JSON.parse(result);
-        if (json_resp['code'] == '999') {
-          Alert.alert('Error con actualización', json_resp['message']);
-        } else if (json_resp['code'] == '000') {
-          reset();
-          Alert.alert(
-            'Usuario actualizado',
-            'Usuario actualizado correctamente.',
-          );
-          setModalVisible(false);
-          setUserLucas(userLucas => {
-            return {
-              ...userLucas,
-              firstName: data.Nombre.toString(),
-              lastName: data.Apellido.toString(),
-              weight: data.Peso.toString(),
-              birthday: data.FechaNacimiento.toString(),
-              phone: data.Telefono.toString(),
-              infoComplete: true,
-            };
-          });
-        }
-      })
-      .catch(error => {
-        setModalVisible(false);
-        Alert.alert('Error', error.message);
-      });
-    setModalVisible(false);
+      login: true,
+      userLucas,
+      setUserLucas,
+    });
+    try {
+      setModalVisible(false);
+      let json_resp = JSON.parse(result);
+
+      if (json_resp['code'] == '999') {
+        Alert.alert('Error con actualización', json_resp['message']);
+      } else if (json_resp['code'] == '000') {
+        reset();
+        Alert.alert(
+          'Usuario actualizado',
+          'Usuario actualizado correctamente.',
+        );
+        setUserLucas(userLucas => {
+          return {
+            ...userLucas,
+            firstName: data.Nombre.toString(),
+            lastName: data.Apellido.toString(),
+            weight: data.Peso.toString(),
+            birthday: data.FechaNacimiento.toString(),
+            phone: data.Telefono.toString(),
+            infoComplete: true,
+            photo: '',
+            admin: false,
+          };
+        });
+      }
+    } catch (e) {}
   };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#24253d'}}>

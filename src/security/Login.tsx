@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import ModalLoad from '../support/ModalLoad';
 import {styles} from './Styles';
 import {
@@ -12,13 +12,14 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import {requestUserPermission} from '../support/Notification';
-
+import {RequestApiAsync} from '../support/Support';
 import RecoverPassword from './RecoverPassword';
 import RegisterUser from './RegisterUser';
 import {useForm} from 'react-hook-form';
 import InputKC from '../support/InputKC';
-import {BASE_URL} from '@env';
-const Login = ({setUserLucas}) => {
+import {LucasContext} from '../support/Contexts';
+const Login = () => {
+  const [userLucas, setUserLucas] = useContext(LucasContext);
   const {
     control,
     handleSubmit,
@@ -36,37 +37,19 @@ const Login = ({setUserLucas}) => {
   const [modalVisibleRegister, setModalVisibleRegister] = useState(false);
   const login_api = async (user: string, password: string) => {
     const tokenPhone = await requestUserPermission();
-    var myHeaders = new Headers();
-    let retorno = null;
-    myHeaders.append('Content-Type', 'application/json');
-
     var raw = JSON.stringify({
       email: user.toLowerCase().toString().trim(),
       password: password,
       phoneToken: tokenPhone,
     });
-    var requestOptions = {
+    const retorno = await RequestApiAsync({
       method: 'POST',
-      headers: myHeaders,
+      url: '/api/login',
       body: raw,
-      redirect: 'follow',
-    };
-    console.log(BASE_URL);
-    await fetch(BASE_URL + '/api/login', requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        retorno = result;
-      })
-      .catch(error => {
-        if (error.message.toString().search('request fail')) {
-          retorno = JSON.stringify({
-            code: '990',
-            message: 'Error de red. Por favor valide su conexión.',
-          });
-        } else {
-          retorno = JSON.stringify({code: '990', message: error.message});
-        }
-      });
+      login: false,
+      userLucas: {},
+      setUserLucas: null,
+    });
     return retorno;
   };
   const ValidateLogin = async (data: any) => {
@@ -75,7 +58,13 @@ const Login = ({setUserLucas}) => {
 
     //Login
     const retorno = await login_api(data.Usuario, data.Clave);
-    LoginApiScreen(retorno, data);
+    setModalVisible(false);
+    setBloqueo(false);
+    if (retorno != null) {
+      LoginApiScreen(retorno, data);
+    } else {
+      Alert.alert('Error', 'Error de comunicación.');
+    }
   };
   const LoginApiScreen = (retorno: any, data: any) => {
     try {

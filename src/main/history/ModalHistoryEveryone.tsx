@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Modal, Pressable, Text, View} from 'react-native';
 import {Agenda} from 'react-native-calendars';
-import {styles} from './Styles';
+import {styles} from '../Styles';
 import moment from 'moment';
-const ModalHistoryEveryone = ({visible, setVisible, data}) => {
+const ModalHistoryEveryone = ({setVisible, data}) => {
   const [maxDate, setMaxDate] = useState(moment().toISOString().split('T')[0]);
   const [minDate, setMinDate] = useState(
     moment().subtract('8', 'days').toISOString().split('T')[0],
@@ -11,14 +11,18 @@ const ModalHistoryEveryone = ({visible, setVisible, data}) => {
   const [items, setItems] = useState({});
   const [marked, setMarked] = useState({});
   useEffect(() => {
-    if (visible) {
+    if (
+      data !== undefined &&
+      data.calendar !== undefined &&
+      data.calendar.length > 0
+    ) {
       let calendar = data.calendar;
       setMinDate(calendar[0].date);
       setMaxDate(calendar[calendar.length - 1].date);
-      let date = minDate;
+      let date = calendar[0].date;
       let itemsCons = {};
       let markedCons = {};
-      while (date <= maxDate) {
+      while (date <= calendar[calendar.length - 1].date) {
         let find = false;
         for (let i = 0; i < calendar.length; i++) {
           if (date.toString() == calendar[i].date.toString()) {
@@ -36,15 +40,24 @@ const ModalHistoryEveryone = ({visible, setVisible, data}) => {
       setItems(itemsCons);
       setMarked(markedCons);
     }
-  }, [visible]);
+  }, [1]);
   return (
-    <Modal animationType="slide" visible={visible}>
+    <>
       <Agenda
         minDate={minDate}
         items={items}
         maxDate={maxDate}
         selected={minDate}
         markedDates={marked}
+        renderEmptyData={() => {
+          return (
+            <View style={{alignItems: 'center'}}>
+              <Text style={{fontSize: 30, fontWeight: 'bold'}}>
+                ---SIN DATOS---
+              </Text>
+            </View>
+          );
+        }}
         renderDay={(item, firstItemInDay) => {
           if (item != undefined) {
             const month = {
@@ -192,7 +205,7 @@ const ModalHistoryEveryone = ({visible, setVisible, data}) => {
         }}>
         <Text style={styles.textButton}>Regresar</Text>
       </Pressable>
-    </Modal>
+    </>
   );
 };
 export default ModalHistoryEveryone;

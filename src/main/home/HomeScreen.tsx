@@ -1,44 +1,45 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   TouchableHighlight,
   Text,
   SafeAreaView,
   Linking,
+  Alert,
 } from 'react-native';
 import UserDetail from './UserDetail';
 import ModalNewExercise from './ModalNewExercise';
-import {BASE_URL} from '@env';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import ModalLoad from '../support/ModalLoad';
-import Support from '../support/Support';
-const HomeScreen = ({userLucas, setUserLucas}) => {
+import ModalLoad from '../../support/ModalLoad';
+import {LucasContext} from '../../support/Contexts';
+import {RequestApiAsync} from '../../support/Support';
+const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalLoadVisible, setModalLoadVisible] = useState(false);
   const [datosAgenda, setDatosAgenda] = useState([]);
+  const [userLucas, setUserLucas] = useContext(LucasContext);
+
   const newExercise = async () => {
     setModalLoadVisible(true);
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + userLucas.token);
-    var requestOptions = {
+    const retorno = await RequestApiAsync({
       method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    };
-    console.log(BASE_URL);
-    await fetch(
-      BASE_URL + '/api/calendar/list?email=' + userLucas.email,
-      requestOptions,
-    )
-      .then(response => response.text())
-      .then(retorno => {
+      url: '/api/calendar/list?email=' + userLucas.email,
+      body: {},
+      login: true,
+      userLucas,
+      setUserLucas,
+    });
+    try {
+      setModalLoadVisible(false);
+      if (retorno != null) {
         setDatosAgenda(JSON.parse(retorno));
-        setModalLoadVisible(false);
         setModalVisible(true);
-      })
-      .catch(error => {
-        Support.ErrorToken({message: error.message, setUserLucas});
-      });
+      } else {
+        Alert.alert('Error', 'Error de comunicación.');
+      }
+    } catch (e) {
+      console.warn(e.message);
+    }
   };
   return (
     <SafeAreaView
@@ -54,10 +55,8 @@ const HomeScreen = ({userLucas, setUserLucas}) => {
         visible={modalVisible}
         setVisible={setModalVisible}
         datosAgenda={datosAgenda}
-        userLucas={userLucas}
-        setUserLucas={setUserLucas}
       />
-      <UserDetail setUserLucas={setUserLucas} userLucas={userLucas} />
+      <UserDetail />
       <View
         style={{
           width: '100%',

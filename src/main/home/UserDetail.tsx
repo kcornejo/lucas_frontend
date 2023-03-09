@@ -1,12 +1,13 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {View, Text, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-const UserDetail = ({userLucas, setUserLucas}) => {
+import {LucasContext} from '../../support/Contexts';
+const UserDetail = () => {
+  const [userLucas, setUserLucas] = useContext(LucasContext);
   useEffect(() => {
     setUserLucas(userLucas);
-    console.log('s');
   });
-  console.log(userLucas.firstName);
+
   return (
     <View
       style={{

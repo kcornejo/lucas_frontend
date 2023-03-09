@@ -1,31 +1,38 @@
 import React, {useEffect, useState} from 'react';
 import {Modal, Pressable, Text, View} from 'react-native';
 import {Agenda} from 'react-native-calendars';
-import {styles} from './Styles';
+import {styles} from '../Styles';
 import moment from 'moment';
-const ModalHistory = ({visible, setVisible, data}) => {
+const ModalHistory = ({setVisible, data}) => {
   const [maxDate, setMaxDate] = useState(moment().toISOString().split('T')[0]);
   const [minDate, setMinDate] = useState(
     moment().subtract('8', 'days').toISOString().split('T')[0],
   );
   const [items, setItems] = useState({});
   const [marked, setMarked] = useState({});
+  const regresar = () => {
+    setVisible(false);
+  };
   useEffect(() => {
-    if (visible) {
+    let itemsCons = {};
+    let markedCons = {};
+    if (
+      data !== undefined &&
+      data.calendar !== undefined &&
+      data.calendar.length > 0
+    ) {
       let calendar = data.calendar;
       if (calendar.length > 0) {
         setMinDate(calendar[0].Date);
         setMaxDate(calendar[calendar.length - 1].Date);
-        let date = minDate;
-        let itemsCons = {};
-        let markedCons = {};
+        let date = calendar[0].Date;
 
-        while (date <= maxDate) {
+        while (date <= calendar[calendar.length - 1].Date) {
           let find = false;
           for (let i = 0; i < calendar.length; i++) {
             if (calendar[i].Date.toString() == date.toString()) {
-              itemsCons[calendar[i].Date.toString()] = [calendar[i]];
-              markedCons[calendar[i].Date.toString()] = {marked: true};
+              itemsCons[date.toString()] = [calendar[i]];
+              markedCons[date.toString()] = {marked: true};
               find = true;
             }
           }
@@ -38,9 +45,25 @@ const ModalHistory = ({visible, setVisible, data}) => {
         setMarked(markedCons);
       }
     }
-  }, [visible]);
+    if (
+      data !== undefined &&
+      data.calendar !== undefined &&
+      data.calendar.length == 0
+    ) {
+      const max_d = moment().toISOString().split('T')[0];
+      let date = moment().subtract('8', 'days').toISOString().split('T')[0];
+      setMinDate(date);
+      setMaxDate(max_d);
+      while (date <= max_d) {
+        markedCons[date.toString()] = {marked: false};
+        itemsCons[date] = [{}];
+        date = moment(date).add('1', 'day').toISOString().split('T')[0];
+      }
+      setItems(itemsCons);
+    }
+  }, [1]);
   return (
-    <Modal animationType="slide" visible={visible}>
+    <>
       <Agenda
         minDate={minDate}
         items={items}
@@ -178,14 +201,11 @@ const ModalHistory = ({visible, setVisible, data}) => {
           );
         }}
         refreshing={false}></Agenda>
-      <Pressable
-        style={styles.button}
-        onPress={() => {
-          setVisible(false);
-        }}>
+
+      <Pressable style={styles.button} onPress={regresar}>
         <Text style={styles.textButton}>Regresar</Text>
       </Pressable>
-    </Modal>
+    </>
   );
 };
 export default ModalHistory;

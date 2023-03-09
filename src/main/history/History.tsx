@@ -1,23 +1,26 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   TouchableHighlight,
   Text,
   SafeAreaView,
   Dimensions,
+  Modal,
+  Alert,
 } from 'react-native';
-import {BASE_URL} from '@env';
-import ModalLoad from '../support/ModalLoad';
+import ModalLoad from '../../support/ModalLoad';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Support from '../support/Support';
 import ModalHistory from './ModalHistory';
 import ModalHistoryEveryone from './ModalHistoryEveryone';
 import {LineChart} from 'react-native-chart-kit';
 import moment from 'moment';
-const History = ({userLucas, setUserLucas}) => {
+import {LucasContext} from '../../support/Contexts';
+import {RequestApiAsync} from '../../support/Support';
+const History = () => {
+  const [userLucas, setUserLucas] = useContext(LucasContext);
   const [modalLoadVisible, setModalLoadVisible] = useState(false);
-  const [datosAgendaHistory, setDatosAgendaHistory] = useState([]);
-  const [datosAgendaEveryone, setDatosAgendaEveryone] = useState([]);
+  const [datosAgendaHistory, setDatosAgendaHistory] = useState();
+  const [datosAgendaEveryone, setDatosAgendaEveryone] = useState();
   const [modalHistoryVisible, setModalHistoryVisible] = useState(false);
   const [modalHistoryEveryoneVisible, setModalHistoryEveryoneVisible] =
     useState(false);
@@ -26,100 +29,106 @@ const History = ({userLucas, setUserLucas}) => {
   useEffect(() => {
     if (admin) {
       funInfoHistoryEveryone().then(retorno => {
-        let new_array = [];
-        const calendar = retorno.calendar;
-        for (let i = 0; i < 12; i++) {
-          const date_inicio = moment([moment().format('Y'), i]).format(
-            'YYYY-MM-DD',
-          );
-          const date_final = moment([moment().format('Y'), i])
-            .endOf('month')
-            .format('YYYY-MM-DD');
-          let find = 0;
-          for (let j = 0; j < calendar.length; j++) {
-            if (
-              calendar[j].date >= date_inicio &&
-              calendar[j].date <= date_final
-            ) {
-              find += calendar[j].list_user.length;
+        if (retorno != null) {
+          let new_array = [];
+          const calendar = retorno.calendar;
+          for (let i = 0; i < 12; i++) {
+            const date_inicio = moment([moment().format('Y'), i]).format(
+              'YYYY-MM-DD',
+            );
+            const date_final = moment([moment().format('Y'), i])
+              .endOf('month')
+              .format('YYYY-MM-DD');
+            let find = 0;
+            for (let j = 0; j < calendar.length; j++) {
+              if (
+                calendar[j].date >= date_inicio &&
+                calendar[j].date <= date_final
+              ) {
+                find += calendar[j].list_user.length;
+              }
             }
+            new_array.push(find);
           }
-          new_array.push(find);
+          setDataG(new_array);
         }
-        setDataG(new_array);
       });
     } else {
       funInfoHistory().then(retorno => {
-        let new_array = [];
-        const calendar = retorno.calendar;
-        for (let i = 0; i < 12; i++) {
-          const date_inicio = moment([moment().format('Y'), i]).format(
-            'YYYY-MM-DD',
-          );
-          const date_final = moment([moment().format('Y'), i])
-            .endOf('month')
-            .format('YYYY-MM-DD');
-          let find = 0;
-          for (let j = 0; j < calendar.length; j++) {
-            if (
-              calendar[j].Date >= date_inicio &&
-              calendar[j].Date <= date_final
-            ) {
-              find++;
+        if (retorno != null) {
+          let new_array = [];
+          const calendar = retorno.calendar;
+          for (let i = 0; i < 12; i++) {
+            const date_inicio = moment([moment().format('Y'), i]).format(
+              'YYYY-MM-DD',
+            );
+            const date_final = moment([moment().format('Y'), i])
+              .endOf('month')
+              .format('YYYY-MM-DD');
+            let find = 0;
+            for (let j = 0; j < calendar.length; j++) {
+              if (
+                calendar[j].Date >= date_inicio &&
+                calendar[j].Date <= date_final
+              ) {
+                find++;
+              }
             }
+            new_array.push(find);
           }
-          new_array.push(find);
+          setDataG(new_array);
         }
-        setDataG(new_array);
       });
     }
-  }, [1]);
+  }, [userLucas]);
   const funInfoHistory = async () => {
     setModalLoadVisible(true);
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + userLucas.token);
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    };
-    console.log(BASE_URL);
     let ret = null;
-    await fetch(
-      BASE_URL + '/api/calendar/list/user?email=' + userLucas.email,
-      requestOptions,
-    )
-      .then(response => response.text())
-      .then(retorno => {
-        setDatosAgendaHistory(JSON.parse(retorno));
-        ret = JSON.parse(retorno);
-        setModalLoadVisible(false);
-      })
-      .catch(error => {
-        Support.ErrorToken({message: error.message, setUserLucas});
-      });
+    const result = await RequestApiAsync({
+      method: 'GET',
+      url: '/api/calendar/list/user?email=' + userLucas.email,
+      body: {},
+      login: true,
+      userLucas,
+      setUserLucas,
+    });
+    try {
+      setModalLoadVisible(false);
+      if (result != null) {
+        const ret_json = JSON.parse(result);
+        ret = ret_json;
+        setDatosAgendaHistory(ret_json);
+      } else {
+        Alert.alert('Error', 'Error de comunicación.');
+      }
+    } catch (e) {
+      //console.warn(e.message);
+    }
+
     return ret;
   };
   const funInfoHistoryEveryone = async () => {
     setModalLoadVisible(true);
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + userLucas.token);
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    };
     let ret = null;
-    await fetch(BASE_URL + '/api/calendar/history', requestOptions)
-      .then(response => response.text())
-      .then(async retorno => {
-        setDatosAgendaEveryone(JSON.parse(retorno));
-        setModalLoadVisible(false);
-        ret = JSON.parse(retorno);
-      })
-      .catch(error => {
-        Support.ErrorToken({message: error.message, setUserLucas});
-      });
+    const result = await RequestApiAsync({
+      method: 'GET',
+      url: '/api/calendar/history',
+      body: {},
+      login: true,
+      userLucas,
+      setUserLucas,
+    });
+    try {
+      setModalLoadVisible(false);
+      if (result != null) {
+        setDatosAgendaEveryone(JSON.parse(result));
+        ret = JSON.parse(result);
+      } else {
+        Alert.alert('Error', 'Error de comunicación.');
+      }
+    } catch (e) {
+      //console.warn(e.message);
+    }
     return ret;
   };
   const funHistory = async () => {
@@ -127,13 +136,9 @@ const History = ({userLucas, setUserLucas}) => {
       await funInfoHistory();
     }
     setModalHistoryVisible(true);
-    setModalHistoryVisible(false);
-    setModalHistoryVisible(true);
   };
   const funHistoryEveryone = async () => {
     await funInfoHistoryEveryone();
-    setModalHistoryEveryoneVisible(true);
-    setModalHistoryEveryoneVisible(false);
     setModalHistoryEveryoneVisible(true);
   };
 
@@ -175,16 +180,19 @@ const History = ({userLucas, setUserLucas}) => {
     <>
       <SafeAreaView style={{backgroundColor: '#23263E', height: '100%'}}>
         <ModalLoad viewed={modalLoadVisible} />
-        <ModalHistory
-          visible={modalHistoryVisible}
-          setVisible={setModalHistoryVisible}
-          data={datosAgendaHistory}
-        />
-        <ModalHistoryEveryone
-          visible={modalHistoryEveryoneVisible}
-          setVisible={setModalHistoryEveryoneVisible}
-          data={datosAgendaEveryone}
-        />
+        <Modal visible={modalHistoryVisible} animationType="slide">
+          <ModalHistory
+            setVisible={setModalHistoryVisible}
+            data={datosAgendaHistory}
+          />
+        </Modal>
+
+        <Modal visible={modalHistoryEveryoneVisible} animationType="slide">
+          <ModalHistoryEveryone
+            setVisible={setModalHistoryEveryoneVisible}
+            data={datosAgendaEveryone}
+          />
+        </Modal>
         <View style={{margin: 30, flex: 1, flexDirection: 'column'}}>
           <View style={{flex: 2}}>
             <Text style={{fontWeight: '600', color: 'white', fontSize: 40}}>

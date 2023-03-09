@@ -1,17 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Agenda} from 'react-native-calendars';
 import {Modal, View, Text, Pressable, Alert} from 'react-native';
-import {styles} from './Styles';
-import {BASE_URL} from '@env';
-import Support from '../support/Support';
-
-const ModalNewExercise = ({
-  visible,
-  datosAgenda,
-  setVisible,
-  userLucas,
-  setUserLucas,
-}) => {
+import {styles} from '../Styles';
+import {LucasContext} from '../../support/Contexts';
+import {RequestApiAsync} from '../../support/Support';
+const ModalNewExercise = ({visible, datosAgenda, setVisible}) => {
+  const [userLucas, setUserLucas] = useContext(LucasContext);
   const [retornoCalendary, setRetornoCalendary] = useState({});
   const [marked, setMarked] = useState({});
   const [maxDate, setMaxDate] = useState(
@@ -42,27 +36,22 @@ const ModalNewExercise = ({
     }
   }, [visible]);
   const deleteExercise = async (TimeStart, TimeEnd, Date) => {
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + userLucas.token);
-    myHeaders.append('Content-Type', 'application/json');
-
     var raw = JSON.stringify({
       email: userLucas.email.toString().trim(),
       date: Date,
       timeStart: TimeStart,
       timeEnd: TimeEnd,
     });
-
-    var requestOptions = {
+    const result = await RequestApiAsync({
       method: 'POST',
-      headers: myHeaders,
+      url: '/api/user/calendar/delete',
       body: raw,
-      redirect: 'follow',
-    };
-    console.log(BASE_URL);
-    fetch(BASE_URL + '/api/user/calendar/delete', requestOptions)
-      .then(response => response.text())
-      .then(result => {
+      login: true,
+      userLucas,
+      setUserLucas,
+    });
+    try {
+      if (result != null) {
         const retorno = JSON.parse(result);
         if (retorno['code'] != '000') {
           console.warn(retorno['message']);
@@ -70,52 +59,64 @@ const ModalNewExercise = ({
         Alert.alert('Reserva liberada', 'La reserva fue liberada.', [
           {
             onPress: () => {
+              setUserLucas(userLucas => {
+                return {
+                  ...userLucas,
+                  historial: 'new',
+                };
+              });
               setVisible(false);
             },
           },
         ]);
-      })
-      .catch(error => {
-        Support.ErrorToken({message: error.message, setUserLucas});
-      });
+      } else {
+        Alert.alert('Error', 'Error de comunicación.');
+      }
+    } catch (e) {
+      //console.warn(e.message);
+    }
   };
   const newExercise = async (TimeStart, TimeEnd, Date) => {
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Bearer ' + userLucas.token);
-    myHeaders.append('Content-Type', 'application/json');
-
     var raw = JSON.stringify({
       email: userLucas.email.toString().trim(),
       date: Date,
       timeStart: TimeStart,
       timeEnd: TimeEnd,
     });
-
-    var requestOptions = {
+    const result = await RequestApiAsync({
       method: 'POST',
-      headers: myHeaders,
+      url: '/api/user/calendar',
       body: raw,
-      redirect: 'follow',
-    };
-    console.log(BASE_URL);
-    fetch(BASE_URL + '/api/user/calendar', requestOptions)
-      .then(response => response.text())
-      .then(result => {
+      login: true,
+      userLucas,
+      setUserLucas,
+    });
+    try {
+      if (result != null) {
         const retorno = JSON.parse(result);
         if (retorno['code'] != '000') {
           console.warn(retorno['message']);
-        }
-        Alert.alert('Horario Reservado', 'El horario fue reservado', [
-          {
-            onPress: () => {
-              setVisible(false);
+        } else {
+          Alert.alert('Horario Reservado', 'El horario fue reservado', [
+            {
+              onPress: () => {
+                setUserLucas(userLucas => {
+                  return {
+                    ...userLucas,
+                    historial: 'new',
+                  };
+                });
+                setVisible(false);
+              },
             },
-          },
-        ]);
-      })
-      .catch(error => {
-        Support.ErrorToken({message: error.message, setUserLucas});
-      });
+          ]);
+        }
+      } else {
+        Alert.alert('Error', 'Error de comunicación.');
+      }
+    } catch (e) {
+      //console.warn(e.message);
+    }
   };
   return (
     <Modal visible={visible} animationType="slide">

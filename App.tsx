@@ -4,6 +4,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import Index from './src/main/Index';
 import FillInformation from './src/user/FillInformation';
 import {requestUserPermission, Listener} from './src/support/Notification';
+
+import {LucasContext} from './src/support/Contexts';
 const App = () => {
   useEffect(() => {
     requestUserPermission();
@@ -21,21 +23,23 @@ const App = () => {
     auth: false,
     token: '',
   });
-  if (userLucas.auth) {
-    if (userLucas.infoComplete) {
-      return (
-        <NavigationContainer>
-          <Index setUserLucas={setUserLucas} userLucas={userLucas} />
-        </NavigationContainer>
-      );
-    } else {
-      return (
-        <FillInformation setUserLucas={setUserLucas} userLucas={userLucas} />
-      );
-    }
-  } else {
-    return <Login setUserLucas={setUserLucas} />;
-  }
+  return (
+    <LucasContext.Provider value={[userLucas, setUserLucas]}>
+      {userLucas.auth ? (
+        <>
+          {userLucas.infoComplete ? (
+            <NavigationContainer>
+              <Index />
+            </NavigationContainer>
+          ) : (
+            <FillInformation />
+          )}
+        </>
+      ) : (
+        <Login />
+      )}
+    </LucasContext.Provider>
+  );
 };
 
 export default App;
