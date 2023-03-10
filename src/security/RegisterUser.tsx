@@ -78,8 +78,8 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
               />
             </Pressable>
           </View>
-          <View style={{flex: 10}}>
-            <Text style={styles.title}>Nuevo Usuario</Text>
+          <View style={{flex: 4}}>
+            <Text style={[styles.title, {marginTop: '2%'}]}>Nuevo Usuario</Text>
             <InputKC
               control={control}
               icon="user"

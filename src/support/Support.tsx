@@ -56,9 +56,9 @@ const RequestApiAsync = async ({
   }
 
   let ret = null;
-  //let base_url = 'http://44.197.240.18:3000';
-  //await fetch(base_url + url, requestOptions)
-  await fetch(BASE_URL + url, requestOptions)
+  let base_url = 'http://44.197.240.18:3000';
+  await fetch(base_url + url, requestOptions)
+    //await fetch(BASE_URL + url, requestOptions)
     .then(response => response.text())
     .then(retorno => {
       ret = retorno;

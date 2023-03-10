@@ -91,7 +91,7 @@ const HomeScreen = () => {
                     height: 40,
                     fontWeight: '800',
                     fontSize: 15,
-                    padding: 20,
+                    padding: 12,
                   }}>
                   Nuevo Entreno
                 </Text>
@@ -105,12 +105,15 @@ const HomeScreen = () => {
                   activeOpacity={0.85}
                   underlayColor={'#444876'}
                   onPress={async () => {
-                    const url = 'http://instagram.com';
+                    const url = 'https://www.instagram.com/lucasgymgt/';
                     const supported = await Linking.canOpenURL(url);
                     if (supported) {
                       await Linking.openURL(url);
                     } else {
-                      console.warn('Error con el link');
+                      Alert.alert(
+                        'Error',
+                        'Error al momento de abrir el enlace',
+                      );
                     }
                   }}
                   style={{
@@ -131,7 +134,7 @@ const HomeScreen = () => {
                         height: 40,
                         fontWeight: '800',
                         fontSize: 15,
-                        padding: 20,
+                        padding: 8,
                       }}>
                       Instagram
                     </Text>
@@ -143,12 +146,16 @@ const HomeScreen = () => {
                   activeOpacity={0.85}
                   underlayColor={'#444876'}
                   onPress={async () => {
-                    const url = 'http://instagram.com';
+                    const url =
+                      'https://chat.whatsapp.com/FeTvB3EUnPG7QA8YUi7rpi';
                     const supported = await Linking.canOpenURL(url);
                     if (supported) {
                       await Linking.openURL(url);
                     } else {
-                      console.warn('Error con el link');
+                      Alert.alert(
+                        'Error',
+                        'Error al momento de abrir el enlace',
+                      );
                     }
                   }}
                   style={{
@@ -169,7 +176,7 @@ const HomeScreen = () => {
                         height: 40,
                         fontWeight: '800',
                         fontSize: 15,
-                        padding: 20,
+                        padding: 8,
                       }}>
                       Whatsapp
                     </Text>

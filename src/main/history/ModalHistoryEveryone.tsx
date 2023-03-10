@@ -52,7 +52,7 @@ const ModalHistoryEveryone = ({setVisible, data}) => {
         renderEmptyData={() => {
           return (
             <View style={{alignItems: 'center'}}>
-              <Text style={{fontSize: 30, fontWeight: 'bold'}}>
+              <Text style={{fontSize: 30, fontWeight: 'bold', color: 'black'}}>
                 ---SIN DATOS---
               </Text>
             </View>

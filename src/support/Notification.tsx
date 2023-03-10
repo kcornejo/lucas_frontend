@@ -20,8 +20,8 @@ async function getFCMToken() {
 const Listener = () => {
   messaging().onNotificationOpenedApp(async remoteMessage => {
     await onDisplayNotification(
-      remoteMessage.data.head.toString(),
-      remoteMessage.data.body.toString(),
+      remoteMessage.notification?.title?.toString(),
+      remoteMessage.notification?.body?.toString(),
     );
   });
   messaging()
@@ -29,15 +29,15 @@ const Listener = () => {
     .then(async remoteMessage => {
       if (remoteMessage) {
         await onDisplayNotification(
-          remoteMessage.data.head.toString(),
-          remoteMessage.data.body.toString(),
+          remoteMessage.notification?.title?.toString(),
+          remoteMessage.notification?.body?.toString(),
         );
       }
     });
   messaging().onMessage(async remoteMessage => {
     await onDisplayNotification(
-      remoteMessage.data.head.toString(),
-      remoteMessage.data.body.toString(),
+      remoteMessage?.notification?.title?.toString(),
+      remoteMessage?.notification?.body?.toString(),
     );
   });
 };
