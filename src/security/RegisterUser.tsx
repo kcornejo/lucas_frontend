@@ -69,7 +69,7 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
         <ModalLoad viewed={modalLoadVisible} />
         <View style={{flex: 1, flexDirection: 'column'}}>
           <View style={{flex: 1}}>
-            <Pressable onPress={funRegresar} style={{width: 12}}>
+            <Pressable onPress={funRegresar} style={{width: '20%'}}>
               <Icon
                 name={'arrow-circle-left'}
                 size={70}

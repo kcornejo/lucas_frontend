@@ -8,6 +8,7 @@ import {
   View,
   Alert,
   StyleSheet,
+  Linking,
   Image,
   TouchableHighlight,
 } from 'react-native';

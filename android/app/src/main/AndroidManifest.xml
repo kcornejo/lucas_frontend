@@ -11,8 +11,8 @@
       <data android:scheme="https"/>
     </intent>
     <intent>
-      <action android:name="android.intent.action.VIEW" />
-      <data android:scheme="google.navigation" />
+      <action android:name="android.intent.action.ACTION_VIEW" />
+      <data android:scheme="https"/>
     </intent>
   </queries>
     <application

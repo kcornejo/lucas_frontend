@@ -106,15 +106,9 @@ const HomeScreen = () => {
                   underlayColor={'#444876'}
                   onPress={async () => {
                     const url = 'https://www.instagram.com/lucasgymgt/';
-                    const supported = await Linking.canOpenURL(url);
-                    if (supported) {
-                      await Linking.openURL(url);
-                    } else {
-                      Alert.alert(
-                        'Error',
-                        'Error al momento de abrir el enlace',
-                      );
-                    }
+                    await Linking.openURL(url).catch(e => {
+                      Alert.alert('Error', 'Error al abrir instagram.');
+                    });
                   }}
                   style={{
                     borderRadius: 10,
@@ -148,15 +142,12 @@ const HomeScreen = () => {
                   onPress={async () => {
                     const url =
                       'https://chat.whatsapp.com/FeTvB3EUnPG7QA8YUi7rpi';
-                    const supported = await Linking.canOpenURL(url);
-                    if (supported) {
-                      await Linking.openURL(url);
-                    } else {
+                    await Linking.openURL(url).catch(e => {
                       Alert.alert(
                         'Error',
-                        'Error al momento de abrir el enlace',
+                        'Error al buscar el grupo de whatsapp.',
                       );
-                    }
+                    });
                   }}
                   style={{
                     borderRadius: 10,

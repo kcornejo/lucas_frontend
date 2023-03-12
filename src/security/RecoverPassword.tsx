@@ -56,7 +56,7 @@ const RecoverPassword = ({visible = false, setModalVisible}) => {
       <SafeAreaView style={styles.background}>
         <View style={{flex: 1, flexDirection: 'column'}}>
           <View style={{flex: 1}}>
-            <Pressable onPress={funRegresar} style={{width: 70}}>
+            <Pressable onPress={funRegresar} style={{width: '20%'}}>
               <Icon
                 name={'arrow-circle-left'}
                 size={70}
