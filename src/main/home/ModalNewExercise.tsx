@@ -76,7 +76,6 @@ const ModalNewExercise = ({visible, datosAgenda, setVisible}) => {
       timeEnd: TimeEnd,
     };
     const result = await new_exercise(raw);
-    console.log(result);
     try {
       if (result != null) {
         if (result['code'] != '000') {

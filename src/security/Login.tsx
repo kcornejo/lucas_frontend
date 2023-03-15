@@ -35,6 +35,7 @@ const Login = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleRecuperar, setModalVisibleRecuperar] = useState(false);
   const [modalVisibleRegister, setModalVisibleRegister] = useState(false);
+
   const login_api = async (user: string, password: string) => {
     const tokenPhone = await requestUserPermission();
     var raw = {

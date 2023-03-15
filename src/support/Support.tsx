@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import firestore from '@react-native-firebase/firestore';
-import messaging from '@react-native-firebase/messaging';
+import moment from 'moment';
 const ApiLog = (req, res, method) => {
   const event = new Date(Date.now());
   const collection = firestore().collection('log');
@@ -65,11 +65,55 @@ function sanitizationString(obj: any) {
     try {
       return obj.toString().trim();
     } catch (e) {
-      console.log(e);
       return '';
     }
   } else {
     return '';
   }
 }
-export {validationsObj, sanitizationString, SaveObjectKey, ApiLog};
+const sendNotification = (head, body, tokens) => {
+  if (tokens.length > 0) {
+    const message = {
+      notification: {
+        title: head,
+        body,
+      },
+      tokens: tokens,
+      sended: false,
+      time: moment().toISOString(),
+    };
+    firestore().collection('notification').add(message);
+  }
+};
+const sendNotificationAdmin = async (head, body) => {
+  firestore()
+    .collection('user')
+    .where('admin', '==', true)
+    .get()
+    .then(listado => {
+      let listado_tokens = [];
+      listado.forEach(item => {
+        if (item.get('phoneToken').toString() != '') {
+          listado_tokens.push(item.get('phoneToken').toString());
+        }
+      });
+      const message = {
+        notification: {
+          title: head,
+          body,
+        },
+        tokens: listado_tokens,
+        sended: false,
+        time: moment().toISOString(),
+      };
+      firestore().collection('notification').add(message);
+    });
+};
+export {
+  validationsObj,
+  sanitizationString,
+  SaveObjectKey,
+  ApiLog,
+  sendNotification,
+  sendNotificationAdmin,
+};

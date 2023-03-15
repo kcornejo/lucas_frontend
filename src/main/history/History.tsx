@@ -15,7 +15,7 @@ import ModalHistoryEveryone from './ModalHistoryEveryone';
 import {LineChart} from 'react-native-chart-kit';
 import moment from 'moment';
 import {LucasContext} from '../../support/Contexts';
-import {RequestApiAsync} from '../../support/Support';
+import {history_gym, history_gym_complete} from './Firebase';
 const History = () => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
   const [modalLoadVisible, setModalLoadVisible] = useState(false);
@@ -83,21 +83,13 @@ const History = () => {
   }, [userLucas]);
   const funInfoHistory = async () => {
     setModalLoadVisible(true);
-    let ret = null;
-    const result = await RequestApiAsync({
-      method: 'GET',
-      url: '/api/calendar/list/user?email=' + userLucas.email,
-      body: {},
-      login: true,
-      userLucas,
-      setUserLucas,
+    const result = await history_gym({
+      email: userLucas.email,
     });
     try {
       setModalLoadVisible(false);
       if (result != null) {
-        const ret_json = JSON.parse(result);
-        ret = ret_json;
-        setDatosAgendaHistory(ret_json);
+        setDatosAgendaHistory(result);
       } else {
         Alert.alert('Error', 'Error de comunicación.');
       }
@@ -105,31 +97,22 @@ const History = () => {
       //console.warn(e.message);
     }
 
-    return ret;
+    return result;
   };
   const funInfoHistoryEveryone = async () => {
     setModalLoadVisible(true);
-    let ret = null;
-    const result = await RequestApiAsync({
-      method: 'GET',
-      url: '/api/calendar/history',
-      body: {},
-      login: true,
-      userLucas,
-      setUserLucas,
-    });
+    const result = await history_gym_complete({});
     try {
       setModalLoadVisible(false);
       if (result != null) {
-        setDatosAgendaEveryone(JSON.parse(result));
-        ret = JSON.parse(result);
+        setDatosAgendaEveryone(result);
       } else {
         Alert.alert('Error', 'Error de comunicación.');
       }
     } catch (e) {
       //console.warn(e.message);
     }
-    return ret;
+    return result;
   };
   const funHistory = async () => {
     if (admin) {

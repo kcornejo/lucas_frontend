@@ -1,13 +1,45 @@
-import React from 'react';
-import {View} from 'react-native';
+import React, {useEffect, useContext} from 'react';
+import {View, Alert} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingsScreen from './setting/SettingsScreen';
 import HomeScreen from './home/HomeScreen';
 import History from './history/History';
+import {LucasContext} from '../support/Contexts';
 const Tab = createBottomTabNavigator();
 
 const Index = () => {
+  const [userLucas, setUserLucas] = useContext(LucasContext);
+  useEffect(() => {
+    let contador = 0;
+    const max_time = 50;
+    const timer = setInterval(() => {
+      contador++;
+      if (contador >= max_time) {
+        clearInterval(timer);
+        Alert.alert('Cerrar sesión', 'Se cerrará la sesión por inactividad', [
+          {
+            text: 'Ok',
+            onPress: () => {
+              contador = 0;
+              setUserLucas({
+                firstName: '',
+                lastName: '',
+                email: '',
+                weight: '',
+                birthday: '',
+                active: false,
+                phone: '',
+                infoComplete: false,
+                auth: false,
+                token: '',
+              });
+            },
+          },
+        ]);
+      }
+    }, 1000);
+  }, [1]);
   const Historial = () => {
     return <History />;
   };

@@ -46,7 +46,6 @@ const login_firebase = async (contenido: {}) => {
               .getDownloadURL();
             data.photo = storageRef;
           } catch (e) {
-            console.log(e.message);
             data.photo = '';
           }
         }
@@ -58,7 +57,6 @@ const login_firebase = async (contenido: {}) => {
     .catch(error => {
       code = '999';
       message = error.message;
-      console.log(error.message);
     });
   const response = {code: code, message: message, token: token, data: data};
   ApiLog(contenido, response, 'validateUser');
@@ -97,7 +95,6 @@ const forgot_password = async (content: any) => {
     });
   const response = {code, message};
   ApiLog(content, response, 'changePasswordReact');
-  console.log(response);
   return response;
 };
 const new_user = async (content: any) => {

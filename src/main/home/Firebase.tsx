@@ -3,6 +3,8 @@ import {
   validationsObj,
   ApiLog,
   sanitizationString,
+  sendNotification,
+  sendNotificationAdmin,
 } from '../../support/Support';
 import moment from 'moment';
 import firestore from '@react-native-firebase/firestore';
@@ -73,15 +75,24 @@ const list_schedule_avail = async (content: any) => {
     .doc('general')
     .get();
   const max_reservation = max_reservation_q.get('max_reservation');
-
   let avail = true;
   for (let i = 0; i < 7; i++) {
+    const max_reservation_q = await firestore()
+      .collection('user_training')
+      .doc(moment().add(i, 'd').format().split('T')[0])
+      .collection('times')
+      .get();
     const day = calendar_db.find(o => o.key == day_today);
     let new_hour = [];
     for (let j = 0; j < day.times.length; j++) {
       if (day.times[j].Active == true) {
         //Reservaciones por hora
-        const reservations = 0;
+        let reservations = 0;
+        max_reservation_q.forEach(item => {
+          if (item.data().TimeStart == day.times[j].TimeStart) {
+            reservations++;
+          }
+        });
         avail = max_reservation - reservations == 0 ? false : true;
         //Horario de hoy
         if (i == 0) {
@@ -179,6 +190,7 @@ const new_exercise = async (content: any) => {
     TimeEnd,
     isCome: false,
     user: user.get('firstName') + ' ' + user.get('lastName'),
+    email: email,
   };
   await firestore()
     .collection('user')
@@ -189,22 +201,47 @@ const new_exercise = async (content: any) => {
   const delete_f = await firestore()
     .collection('user_training')
     .doc(date)
-    .collection(email)
+    .collection('times')
+    .where('email', '==', email)
     .get();
   delete_f.forEach(async item => {
     await firestore()
       .collection('user_training')
       .doc(date)
-      .collection(email)
+      .collection('times')
       .doc(item.id)
       .delete();
   });
   await firestore()
     .collection('user_training')
     .doc(date)
-    .collection(email)
+    .collection('times')
     .add(object_add);
-
+  sendNotification(
+    'Entreno registrado',
+    'Entreno registrado el dia ' +
+      date +
+      ' (' +
+      TimeStart +
+      '-' +
+      TimeEnd +
+      ')',
+    [user.get('phoneToken').toString()],
+  );
+  sendNotificationAdmin(
+    'Entreno registrado',
+    'El usuario ' +
+      user.get('firstName').toString() +
+      ' ' +
+      user.get('lastName').toString() +
+      ' se ha registrado para el dia ' +
+      date +
+      ' (' +
+      TimeStart +
+      '-' +
+      TimeEnd +
+      ')',
+  );
   const responseBody = {
     code,
     message,
@@ -252,17 +289,43 @@ const delete_exercise = async (content: any) => {
   const delete_f = await firestore()
     .collection('user_training')
     .doc(date)
-    .collection(email)
+    .collection('times')
+    .where('email', '==', email)
     .get();
   delete_f.forEach(async item => {
     await firestore()
       .collection('user_training')
       .doc(date)
-      .collection(email)
+      .collection('times')
       .doc(item.id)
       .delete();
   });
-
+  const user = await firestore().collection('user').doc(email).get();
+  sendNotification(
+    'Entreno eliminado',
+    'Entreno eliminado para el dia ' +
+      date +
+      ' (' +
+      TimeStart +
+      '-' +
+      TimeEnd +
+      ')',
+    [user.get('phoneToken').toString()],
+  );
+  sendNotificationAdmin(
+    'Entreno eliminado',
+    'El usuario ' +
+      user.get('firstName').toString() +
+      ' ' +
+      user.get('lastName').toString() +
+      ' ha eliminado el entreno para el dia ' +
+      date +
+      ' (' +
+      TimeStart +
+      '-' +
+      TimeEnd +
+      ')',
+  );
   const responseBody = {
     code,
     message,
