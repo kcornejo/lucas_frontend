@@ -25,7 +25,7 @@ const UserDetail = () => {
           {userLucas.photo !== undefined && userLucas.photo != '' ? (
             <Image
               source={{
-                uri: 'data:image/png;base64,' + userLucas.photo,
+                uri: userLucas.photo,
               }}
               style={{width: 80, height: 80}}
             />

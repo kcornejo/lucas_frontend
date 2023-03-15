@@ -5,7 +5,7 @@ import {styles} from './Styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import InputKC from '../support/InputKC';
 import {useForm} from 'react-hook-form';
-import {RequestApiAsync} from '../support/Support';
+import {new_user} from './Firebase';
 const RegisterUser = ({visible = false, setModalVisible}) => {
   const {
     control,
@@ -29,27 +29,19 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
       setModalLoadVisible(false);
       return 0;
     }
-    var raw = JSON.stringify({
+    var raw = {
       email: data.Correo.toString().toLowerCase().trim(),
       password: data.Clave.toString(),
-    });
-    const retorno = await RequestApiAsync({
-      method: 'POST',
-      url: '/api/newUser',
-      body: raw,
-      login: false,
-      userLucas: {},
-      setUserLucas: null,
-    });
+    };
+    const retorno = await new_user(raw);
     try {
-      let json_resp = JSON.parse(retorno);
-      if (json_resp['code'] == '999') {
-        if (json_resp['message'].toString().search('already-in-use') >= 0) {
+      if (retorno['code'] == '999') {
+        if (retorno['message'].toString().search('already-in-use') >= 0) {
           Alert.alert('Error con registro', 'Correo usado anteriormente');
         } else {
-          Alert.alert('Error con registro', json_resp['message']);
+          Alert.alert('Error con registro', retorno['message']);
         }
-      } else if (json_resp['code'] == '000') {
+      } else if (retorno['code'] == '000') {
         setModalVisible(false);
         reset();
         Alert.alert(

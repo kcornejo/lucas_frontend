@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.frontend</string>
+	<string>com.ocsolutions.lucasgym</string>
 	<key>PROJECT_ID</key>
 	<string>lucasgym-779e2</string>
 	<key>STORAGE_BUCKET</key>

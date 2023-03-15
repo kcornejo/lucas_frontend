@@ -8,12 +8,11 @@ import {
   View,
   Alert,
   StyleSheet,
-  Linking,
   Image,
   TouchableHighlight,
 } from 'react-native';
 import {requestUserPermission} from '../support/Notification';
-import {RequestApiAsync} from '../support/Support';
+import {login_firebase} from './Firebase';
 import RecoverPassword from './RecoverPassword';
 import RegisterUser from './RegisterUser';
 import {useForm} from 'react-hook-form';
@@ -38,19 +37,12 @@ const Login = () => {
   const [modalVisibleRegister, setModalVisibleRegister] = useState(false);
   const login_api = async (user: string, password: string) => {
     const tokenPhone = await requestUserPermission();
-    var raw = JSON.stringify({
+    var raw = {
       email: user.toLowerCase().toString().trim(),
       password: password,
       phoneToken: tokenPhone,
-    });
-    const retorno = await RequestApiAsync({
-      method: 'POST',
-      url: '/api/login',
-      body: raw,
-      login: false,
-      userLucas: {},
-      setUserLucas: null,
-    });
+    };
+    const retorno = await login_firebase(raw);
     return retorno;
   };
   const ValidateLogin = async (data: any) => {
@@ -69,61 +61,54 @@ const Login = () => {
   };
   const LoginApiScreen = (retorno: any, data: any) => {
     try {
-      let json_resp = JSON.parse(retorno);
-      if (json_resp['code'] == '999') {
+      if (retorno['code'] == '999') {
         Alert.alert(
           'Credenciales invalidas',
           'Ingrese sus credenciales correctamente',
         );
-      } else if (json_resp['code'] == '001') {
+      } else if (retorno['code'] == '001') {
         Alert.alert(
           'Error de usuario',
           'Usuario no validado, por favor revise su email',
         );
-      } else if (json_resp['code'] == '000') {
+      } else if (retorno['code'] == '000') {
         setUserLucas(userLucas => {
           return {
             ...userLucas,
             auth: true,
             email: data.Usuario.toString().toLowerCase().trim(),
-            token: json_resp['token'],
+            token: retorno['token'],
             firstName:
-              json_resp['data'] != null &&
-              Object.keys(json_resp['data']).length > 0
-                ? json_resp['data'].firstName
+              retorno['data'] != null && Object.keys(retorno['data']).length > 0
+                ? retorno['data'].firstName
                 : '',
             lastName:
-              json_resp['data'] != null &&
-              Object.keys(json_resp['data']).length > 0
-                ? json_resp['data'].lastName
+              retorno['data'] != null && Object.keys(retorno['data']).length > 0
+                ? retorno['data'].lastName
                 : '',
             weight:
-              json_resp['data'] != null &&
-              Object.keys(json_resp['data']).length > 0
-                ? json_resp['data'].weight
+              retorno['data'] != null && Object.keys(retorno['data']).length > 0
+                ? retorno['data'].weight
                 : '',
             birthday:
-              json_resp['data'] != null &&
-              Object.keys(json_resp['data']).length > 0
-                ? json_resp['data'].birthday
+              retorno['data'] != null && Object.keys(retorno['data']).length > 0
+                ? retorno['data'].birthday
                 : '',
             active:
-              json_resp['data'] != null &&
-              Object.keys(json_resp['data']).length > 0
-                ? json_resp['data'].active
+              retorno['data'] != null && Object.keys(retorno['data']).length > 0
+                ? retorno['data'].active
                 : false,
             phone:
-              json_resp['data'] != null &&
-              Object.keys(json_resp['data']).length > 0
-                ? json_resp['data'].phone
+              retorno['data'] != null && Object.keys(retorno['data']).length > 0
+                ? retorno['data'].phone
                 : true,
-            infoComplete: json_resp['data'].infoComplete,
-            admin: json_resp['data'].admin,
-            photo: json_resp['data'].photo,
+            infoComplete: retorno['data'].infoComplete,
+            admin: retorno['data'].admin,
+            photo: retorno['data'].photo,
           };
         });
       } else {
-        Alert.alert('Error', json_resp['message']);
+        Alert.alert('Error', retorno['message']);
       }
     } catch (e) {
       Alert.alert('Error', 'Error de comunicación ' + e.message);

@@ -12,7 +12,7 @@ import ModalNewExercise from './ModalNewExercise';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ModalLoad from '../../support/ModalLoad';
 import {LucasContext} from '../../support/Contexts';
-import {RequestApiAsync} from '../../support/Support';
+import {list_schedule_avail} from './Firebase';
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalLoadVisible, setModalLoadVisible] = useState(false);
@@ -21,18 +21,11 @@ const HomeScreen = () => {
 
   const newExercise = async () => {
     setModalLoadVisible(true);
-    const retorno = await RequestApiAsync({
-      method: 'GET',
-      url: '/api/calendar/list?email=' + userLucas.email,
-      body: {},
-      login: true,
-      userLucas,
-      setUserLucas,
-    });
+    const retorno = await list_schedule_avail({email: userLucas.email});
     try {
       setModalLoadVisible(false);
       if (retorno != null) {
-        setDatosAgenda(JSON.parse(retorno));
+        setDatosAgenda(retorno);
         setModalVisible(true);
       } else {
         Alert.alert('Error', 'Error de comunicación.');

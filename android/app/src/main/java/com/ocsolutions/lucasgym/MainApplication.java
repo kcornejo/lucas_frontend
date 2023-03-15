@@ -1,4 +1,4 @@
-package com.frontend;
+package com.ocsolutions.lucasgym;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

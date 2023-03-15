@@ -15,12 +15,13 @@ import InputKC from '../../support/InputKC';
 import {useForm} from 'react-hook-form';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {styles} from '../Styles';
-import Support from '../../support/Support';
 import {LucasContext} from '../../support/Contexts';
-import {RequestApiAsync} from '../../support/Support';
+import fill_info_user from '../../user/Firebase';
+import ModalLoad from '../../support/ModalLoad';
 const UserDetail = ({visible, setVisible}) => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
   const [photo, setPhoto] = useState(null);
+  const [modalLoadVisible, setModalLoadVisible] = useState(false);
   const {
     control,
     handleSubmit,
@@ -36,50 +37,46 @@ const UserDetail = ({visible, setVisible}) => {
       {mediaType: 'photo', includeBase64: true},
       response => {
         if (response) {
-          let photoTemp = response.assets[0];
-          photoTemp.uri =
-            Platform.OS === 'ios'
-              ? photoTemp.uri.replace('file://', '')
-              : photoTemp.uri;
-          setPhoto(photoTemp);
+          if (response.assets !== undefined) {
+            let photoTemp = response.assets[0];
+            photoTemp.uri =
+              Platform.OS === 'ios'
+                ? photoTemp.uri.replace('file://', '')
+                : photoTemp.uri;
+            setPhoto(photoTemp);
+          }
         }
       },
     );
   };
   const guardar = async (data: any) => {
-    const request_api = async () => {
+    const request_firebase = async () => {
       if (photo == null) {
-        var raw = JSON.stringify({
+        var raw = {
           ...userLucas,
           phone: data.Telefono,
-        });
+        };
       } else {
-        var raw = JSON.stringify({
+        var raw = {
           ...userLucas,
           phone: data.Telefono,
           photo: photo.base64,
-          photoType: photo.type,
-        });
+          uploadPhoto: true,
+        };
       }
-      const retorno = await RequestApiAsync({
-        method: 'POST',
-        url: '/api/user/updateUser',
-        body: raw,
-        login: true,
-        userLucas,
-        setUserLucas,
-      });
+      const retorno = await fill_info_user(raw);
       return retorno;
     };
-    const retorno = await request_api();
+    setModalLoadVisible(true);
+    const retorno = await request_firebase();
+    setModalLoadVisible(false);
     if (retorno != null) {
-      const resp_clean = JSON.parse(retorno);
-      if (resp_clean.code == '000') {
+      if (retorno.code == '000') {
         if (photo != null) {
           setUserLucas(userLucas => {
             return {
               ...userLucas,
-              photo: photo.base64,
+              photo: retorno.linkPhoto,
               phone: data.Telefono,
             };
           });
@@ -96,7 +93,7 @@ const UserDetail = ({visible, setVisible}) => {
         Alert.alert('Información cargada', 'Informacion cargada correctamente');
         setVisible(false);
       } else {
-        Alert.alert('Error', 'Error ' + resp_clean.message);
+        Alert.alert('Error', 'Error ' + retorno.message);
       }
     } else {
       Alert.alert('Error', 'Error de comunicación.');
@@ -105,6 +102,7 @@ const UserDetail = ({visible, setVisible}) => {
 
   return (
     <Modal visible={visible}>
+      <ModalLoad viewed={modalLoadVisible} />
       <SafeAreaView style={{backgroundColor: '#24263F'}}></SafeAreaView>
       <View
         style={{
@@ -212,7 +210,7 @@ const UserDetail = ({visible, setVisible}) => {
                 <>
                   <Image
                     source={{
-                      uri: 'data:image/png;base64,' + userLucas.photo,
+                      uri: userLucas.photo,
                     }}
                     style={{width: 150, height: 150}}
                   />

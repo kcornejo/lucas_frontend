@@ -1,79 +1,75 @@
 import React, {useContext} from 'react';
-import {Alert} from 'react-native';
-import {BASE_URL} from '@env';
-const ErrorToken = ({message, setUserLucas}) => {
-  if (
-    message.toString().search('Unexpected token') >= 0 ||
-    message.toString().search('Forbidden') >= 0
-  ) {
-    Alert.alert(
-      'Error de timeout',
-      'Se cerrara la sesión por exceder el tiempo limite de sesión',
-      [
-        {
-          onPress: () => {
-            setUserLucas({
-              firstName: '',
-              lastName: '',
-              email: '',
-              weight: '',
-              birthday: '',
-              active: false,
-              phone: '',
-              infoComplete: false,
-              auth: false,
-              token: '',
-            });
-          },
-        },
-      ],
-    );
-  } else {
-    //console.warn(message);
+import firestore from '@react-native-firebase/firestore';
+import messaging from '@react-native-firebase/messaging';
+const ApiLog = (req, res, method) => {
+  const event = new Date(Date.now());
+  const collection = firestore().collection('log');
+  let newReq = {};
+  let newRes = {};
+  for (const [key, value] of Object.entries(req)) {
+    if (typeof value === 'string' && value.toString().length < 1000) {
+      newReq[key] = value;
+    } else {
+      newReq[key] = '[BLOB]';
+    }
   }
-};
-
-const RequestApiAsync = async ({
-  method,
-  url,
-  body,
-  login,
-  userLucas,
-  setUserLucas,
-}) => {
-  var headers = new Headers();
-  if (login) {
-    headers.append('Authorization', 'Bearer ' + userLucas.token);
+  for (const [key, value] of Object.entries(res)) {
+    if (typeof value === 'string' && value.toString().length < 1000) {
+      newRes[key] = value;
+    } else {
+      newRes[key] = '[BLOB]';
+    }
   }
-  headers.append('Content-Type', 'application/json');
-  var requestOptions = {
-    headers,
-    redirect: 'follow',
-    method,
+  req = newReq;
+  res = newRes;
+  const data = {
+    req: req,
+    res: res,
+    time: event.toLocaleString(),
+    method: method,
   };
-  if (method == 'POST') {
-    requestOptions['body'] = body;
-  }
-
-  let ret = null;
-  let base_url = 'http://44.197.240.18:3000';
-  await fetch(base_url + url, requestOptions)
-    //await fetch(BASE_URL + url, requestOptions)
-    .then(response => response.text())
-    .then(retorno => {
-      ret = retorno;
-    })
-    .catch(error => {
-      if (login) {
-        ErrorToken({message: error.message, setUserLucas});
+  //get date format in javascript?
+  var timestamp = new Date().toISOString();
+  collection.doc(timestamp).set(data);
+};
+async function SaveObjectKey(data: any, collection_name: string, key: string) {
+  const collection = firestore().collection(collection_name).doc(key);
+  await collection.set(data);
+}
+const validationsObj = (data: any, validations: any) => {
+  for (let i = 0; i < validations.length; i++) {
+    const isRequired = validations[i].isRequired;
+    const regex = validations[i].regex;
+    const obj = validations[i].obj;
+    if (
+      isRequired &&
+      (data[obj] === undefined || data[obj].toString().trim() == '')
+    ) {
+      return {error: true, message: 'The field ' + obj + ' is required.'};
+    }
+    if (
+      data[obj].toString().trim() != '' &&
+      regex !== undefined &&
+      regex != '' &&
+      data[obj] !== undefined
+    ) {
+      if (!regex.test(data[obj])) {
+        return {error: true, message: 'The field ' + obj + ' is invalid.'};
       }
-    });
-  if (typeof ret === 'string' && ret == 'Forbidden') {
-    if (login) {
-      ErrorToken({message: 'Forbidden', setUserLucas});
+    }
+  }
+  return {error: false, message: ''};
+};
+function sanitizationString(obj: any) {
+  if (obj !== undefined) {
+    try {
+      return obj.toString().trim();
+    } catch (e) {
+      console.log(e);
+      return '';
     }
   } else {
-    return ret;
+    return '';
   }
-};
-export {RequestApiAsync, ErrorToken};
+}
+export {validationsObj, sanitizationString, SaveObjectKey, ApiLog};

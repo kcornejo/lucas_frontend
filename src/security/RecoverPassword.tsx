@@ -5,7 +5,7 @@ import {styles} from './Styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useForm} from 'react-hook-form';
 import InputKC from '../support/InputKC';
-import {RequestApiAsync} from '../support/Support';
+import {forgot_password} from './Firebase';
 const RecoverPassword = ({visible = false, setModalVisible}) => {
   const {
     control,
@@ -24,27 +24,19 @@ const RecoverPassword = ({visible = false, setModalVisible}) => {
   const RecuperarClave = async (data: any) => {
     reset();
     setModalLoadVisible(true);
-    var raw = JSON.stringify({
+    var raw = {
       email: data.Correo.toString().trim(),
-    });
-    const retorno = await RequestApiAsync({
-      method: 'POST',
-      url: '/api/changePasswordReact',
-      body: raw,
-      login: false,
-      userLucas: {},
-      setUserLucas: null,
-    });
+    };
+    const retorno = await forgot_password(raw);
     try {
       setModalLoadVisible(false);
-      let json_resp = JSON.parse(retorno);
-      if (json_resp['code'] == '000' || json_resp['code'] == '999') {
+      if (retorno['code'] == '000' || retorno['code'] == '999') {
         Alert.alert(
           'Clave enviada',
           'Clave enviada, por favor valide su email.',
         );
       } else {
-        Alert.alert('Error', json_resp['message']);
+        Alert.alert('Error', retorno['message']);
       }
       setModalVisible(false);
     } catch (e) {

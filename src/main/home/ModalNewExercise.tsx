@@ -3,7 +3,7 @@ import {Agenda} from 'react-native-calendars';
 import {Modal, View, Text, Pressable, Alert} from 'react-native';
 import {styles} from '../Styles';
 import {LucasContext} from '../../support/Contexts';
-import {RequestApiAsync} from '../../support/Support';
+import {new_exercise, delete_exercise} from './Firebase';
 const ModalNewExercise = ({visible, datosAgenda, setVisible}) => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
   const [retornoCalendary, setRetornoCalendary] = useState({});
@@ -36,25 +36,17 @@ const ModalNewExercise = ({visible, datosAgenda, setVisible}) => {
     }
   }, [visible]);
   const deleteExercise = async (TimeStart, TimeEnd, Date) => {
-    var raw = JSON.stringify({
+    var raw = {
       email: userLucas.email.toString().trim(),
       date: Date,
       timeStart: TimeStart,
       timeEnd: TimeEnd,
-    });
-    const result = await RequestApiAsync({
-      method: 'POST',
-      url: '/api/user/calendar/delete',
-      body: raw,
-      login: true,
-      userLucas,
-      setUserLucas,
-    });
+    };
+    const result = await delete_exercise(raw);
     try {
       if (result != null) {
-        const retorno = JSON.parse(result);
-        if (retorno['code'] != '000') {
-          console.warn(retorno['message']);
+        if (result['code'] != '000') {
+          console.warn(result['message']);
         }
         Alert.alert('Reserva liberada', 'La reserva fue liberada.', [
           {
@@ -77,25 +69,18 @@ const ModalNewExercise = ({visible, datosAgenda, setVisible}) => {
     }
   };
   const newExercise = async (TimeStart, TimeEnd, Date) => {
-    var raw = JSON.stringify({
+    var raw = {
       email: userLucas.email.toString().trim(),
       date: Date,
       timeStart: TimeStart,
       timeEnd: TimeEnd,
-    });
-    const result = await RequestApiAsync({
-      method: 'POST',
-      url: '/api/user/calendar',
-      body: raw,
-      login: true,
-      userLucas,
-      setUserLucas,
-    });
+    };
+    const result = await new_exercise(raw);
+    console.log(result);
     try {
       if (result != null) {
-        const retorno = JSON.parse(result);
-        if (retorno['code'] != '000') {
-          console.warn(retorno['message']);
+        if (result['code'] != '000') {
+          console.warn(result['message']);
         } else {
           Alert.alert('Horario Reservado', 'El horario fue reservado', [
             {

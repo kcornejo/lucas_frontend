@@ -7,7 +7,7 @@ import ModalLoad from '../support/ModalLoad';
 import {useState} from 'react';
 import {Alert} from 'react-native';
 import {LucasContext} from '../support/Contexts';
-import {RequestApiAsync} from '../support/Support';
+import fill_info_user from './Firebase';
 const FillInformation = () => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -20,29 +20,21 @@ const FillInformation = () => {
   } = useForm();
   const guardarInfo = async (data: any) => {
     setModalVisible(true);
-    var raw = JSON.stringify({
+    var raw = {
       firstName: data.Nombre.toString(),
       lastName: data.Apellido.toString(),
       birthday: data.FechaNacimiento.toString(),
       phone: data.Telefono.toString(),
       weight: data.Peso.toString(),
       email: userLucas.email.toString().trim(),
-    });
-    const result = await RequestApiAsync({
-      method: 'POST',
-      url: '/api/user/updateUser',
-      body: raw,
-      login: true,
-      userLucas,
-      setUserLucas,
-    });
+    };
+    const result = await fill_info_user(raw);
     try {
       setModalVisible(false);
-      let json_resp = JSON.parse(result);
 
-      if (json_resp['code'] == '999') {
-        Alert.alert('Error con actualización', json_resp['message']);
-      } else if (json_resp['code'] == '000') {
+      if (result['code'] == '999') {
+        Alert.alert('Error con actualización', result['message']);
+      } else if (result['code'] == '000') {
         reset();
         Alert.alert(
           'Usuario actualizado',
