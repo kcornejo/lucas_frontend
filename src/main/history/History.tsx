@@ -100,7 +100,7 @@ const History = () => {
     return result;
   };
   const funInfoHistoryEveryone = async () => {
-    setModalLoadVisible(true);
+    setModalLoadVisible(false);
     const result = await history_gym_complete({});
     try {
       setModalLoadVisible(false);

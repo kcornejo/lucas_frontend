@@ -198,6 +198,10 @@ const new_exercise = async (content: any) => {
     .collection('trainings')
     .doc(date)
     .set(object_add);
+  await firestore()
+    .collection('user_training')
+    .doc(date)
+    .set({dateValid: true});
   const delete_f = await firestore()
     .collection('user_training')
     .doc(date)
@@ -300,6 +304,15 @@ const delete_exercise = async (content: any) => {
       .doc(item.id)
       .delete();
   });
+  //validationObject user_training
+  const validationObj = await firestore()
+    .collection('user_training')
+    .doc(date)
+    .collection('times')
+    .get();
+  if (validationObj.size == 0) {
+    await firestore().collection('user_training').doc(date).delete();
+  }
   const user = await firestore().collection('user').doc(email).get();
   sendNotification(
     'Entreno eliminado',

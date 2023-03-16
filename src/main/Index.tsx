@@ -12,12 +12,12 @@ const Index = () => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
   useEffect(() => {
     let contador = 0;
-    const max_time = 50;
+    const max_time = 600;
     const timer = setInterval(() => {
       contador++;
       if (contador >= max_time) {
         clearInterval(timer);
-        Alert.alert('Cerrar sesión', 'Se cerrará la sesión por inactividad', [
+        Alert.alert('Cerrar sesión', 'Se cerrará la sesión por seguridad', [
           {
             text: 'Ok',
             onPress: () => {
