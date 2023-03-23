@@ -166,7 +166,7 @@ const UserDetail = ({visible, setVisible}) => {
               flex: 1,
               flexDirection: 'row',
             }}>
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, alignItems: 'center'}}>
               <TouchableHighlight
                 activeOpacity={0.85}
                 underlayColor={'#444876'}
@@ -197,7 +197,7 @@ const UserDetail = ({visible, setVisible}) => {
                 </>
               </TouchableHighlight>
             </View>
-            <View style={{flex: 1, marginLeft: 20}}>
+            <View style={{flex: 1, marginLeft: 20, alignItems: 'center'}}>
               {photo && (
                 <>
                   <Image

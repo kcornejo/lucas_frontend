@@ -193,7 +193,7 @@ const History = () => {
                 : 'Historial de los entrenos'}
             </Text>
           </View>
-          <View style={{flex: 6}}>
+          <View style={{flex: 6, alignItems: 'center'}}>
             <LineChart
               data={data}
               width={screenWidth}
@@ -206,13 +206,13 @@ const History = () => {
           </View>
           <View style={{flex: 4}}>
             <View style={{flex: 1, flexDirection: 'row', marginBottom: 30}}>
-              <View style={{flex: 1, marginRight: 10}}>
+              <View style={{flex: 1, marginRight: 10, alignItems: 'center'}}>
                 <TouchableHighlight
                   activeOpacity={0.85}
                   underlayColor={'#6166A8'}
                   onPress={funHistory}
                   style={{
-                    width: '100%',
+                    width: '80%',
                     borderRadius: 10,
                     borderColor: 'black',
                     backgroundColor: '#36395E',
@@ -239,13 +239,13 @@ const History = () => {
                 </TouchableHighlight>
               </View>
               {admin ? (
-                <View style={{flex: 1, marginLeft: 10}}>
+                <View style={{flex: 1, marginLeft: 10, alignItems: 'center'}}>
                   <TouchableHighlight
                     activeOpacity={0.85}
                     underlayColor={'#6166A8'}
                     onPress={funHistoryEveryone}
                     style={{
-                      width: '100%',
+                      width: '80%',
                       borderRadius: 10,
                       borderColor: 'black',
                       backgroundColor: '#36395E',

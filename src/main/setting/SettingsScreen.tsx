@@ -62,13 +62,13 @@ const SettingsScreen = () => {
         </View>
         <View style={{flex: 6}}>
           <View style={{flex: 1, flexDirection: 'column'}}>
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, alignItems: 'center'}}>
               <TouchableHighlight
                 activeOpacity={0.85}
                 underlayColor={'#6166A8'}
                 onPress={funEditUser}
                 style={{
-                  width: '100%',
+                  width: '80%',
                   borderRadius: 10,
                   borderColor: 'black',
                   backgroundColor: '#36395E',
@@ -94,13 +94,13 @@ const SettingsScreen = () => {
                 </View>
               </TouchableHighlight>
             </View>
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, alignItems: 'center'}}>
               <TouchableHighlight
                 activeOpacity={0.85}
                 underlayColor={'#6166A8'}
                 onPress={logout}
                 style={{
-                  width: '100%',
+                  width: '80%',
                   borderRadius: 10,
                   borderColor: 'black',
                   backgroundColor: '#36395E',

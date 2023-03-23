@@ -61,7 +61,7 @@ const HomeScreen = () => {
         }}>
         <View style={{flex: 1, flexDirection: 'column', width: '100%'}}>
           <View style={{flex: 1}}></View>
-          <View style={{flex: 1}}>
+          <View style={{flex: 1, alignItems: 'center'}}>
             <TouchableHighlight
               activeOpacity={0.85}
               underlayColor={'#98FFF6'}
@@ -74,6 +74,7 @@ const HomeScreen = () => {
                 padding: 10,
                 marginLeft: 20,
                 marginRight: 20,
+                width: '90%',
               }}>
               <>
                 <Icon name="plus" size={80} color="black" />
@@ -93,7 +94,7 @@ const HomeScreen = () => {
           </View>
           <View style={{flex: 1}}>
             <View style={{flex: 1, flexDirection: 'row'}}>
-              <View style={{flex: 1}}>
+              <View style={{flex: 1, alignItems: 'center'}}>
                 <TouchableHighlight
                   activeOpacity={0.85}
                   underlayColor={'#444876'}
@@ -110,7 +111,7 @@ const HomeScreen = () => {
                     alignItems: 'center',
                     padding: 10,
                     width: '80%',
-                    marginLeft: 20,
+                    marginHorizontal: 20,
                   }}>
                   <>
                     <Icon name="instagram" size={80} color="#6459D7" />
@@ -128,7 +129,7 @@ const HomeScreen = () => {
                   </>
                 </TouchableHighlight>
               </View>
-              <View style={{flex: 1}}>
+              <View style={{flex: 1, alignItems: 'center'}}>
                 <TouchableHighlight
                   activeOpacity={0.85}
                   underlayColor={'#444876'}
@@ -149,7 +150,7 @@ const HomeScreen = () => {
                     alignItems: 'center',
                     padding: 10,
                     width: '80%',
-                    marginLeft: 20,
+                    marginHorizontal: 20,
                   }}>
                   <>
                     <Icon name="whatsapp" size={80} color="#39D555" />

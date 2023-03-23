@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
     fontWeight: '700',
-    marginTop: '30%',
+    marginTop: '10%',
   },
   titleLogo: {
     fontSize: 32,

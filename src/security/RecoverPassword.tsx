@@ -46,18 +46,16 @@ const RecoverPassword = ({visible = false, setModalVisible}) => {
   return (
     <Modal animationType="slide" visible={visible}>
       <SafeAreaView style={styles.background}>
-        <View style={{flex: 1, flexDirection: 'column'}}>
-          <View style={{flex: 1}}>
-            <Pressable onPress={funRegresar} style={{width: '20%'}}>
-              <Icon
-                name={'arrow-circle-left'}
-                size={70}
-                color="white"
-                style={styles.inputIconBack}
-              />
-            </Pressable>
-          </View>
-          <View style={{flex: 7}}>
+        <View>
+          <Pressable onPress={funRegresar} style={{width: '20%'}}>
+            <Icon
+              name={'arrow-circle-left'}
+              size={70}
+              color="white"
+              style={styles.inputIconBack}
+            />
+          </Pressable>
+          <View>
             <Text style={styles.title}>Recuperar Clave</Text>
             <InputKC
               control={control}
