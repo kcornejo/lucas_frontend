@@ -45,7 +45,11 @@ const History = () => {
                 calendar[j].date >= date_inicio &&
                 calendar[j].date <= date_final
               ) {
-                find += calendar[j].list_user.length;
+                for (let k = 0; k < calendar[j].list_user.length; k++) {
+                  if (calendar[j].list_user[k].isCome == 'Si') {
+                    find += calendar[j].list_user.length;
+                  }
+                }
               }
             }
             new_array.push(find);
@@ -69,7 +73,8 @@ const History = () => {
             for (let j = 0; j < calendar.length; j++) {
               if (
                 calendar[j].Date >= date_inicio &&
-                calendar[j].Date <= date_final
+                calendar[j].Date <= date_final &&
+                calendar[j].IsCome == 'Si'
               ) {
                 find++;
               }
@@ -100,7 +105,7 @@ const History = () => {
     return result;
   };
   const funInfoHistoryEveryone = async () => {
-    setModalLoadVisible(false);
+    setModalLoadVisible(true);
     const result = await history_gym_complete({});
     try {
       setModalLoadVisible(false);
@@ -227,13 +232,12 @@ const History = () => {
                       style={{
                         color: 'white',
                         textAlign: 'center',
-                        height: 30,
                         fontWeight: '800',
                         fontSize: 13,
                         marginTop: 10,
                         width: '100%',
                       }}>
-                      Historial Completo
+                      Historial{'\n'}Completo
                     </Text>
                   </View>
                 </TouchableHighlight>
@@ -260,7 +264,6 @@ const History = () => {
                         style={{
                           color: 'white',
                           textAlign: 'center',
-                          height: 30,
                           fontWeight: '800',
                           fontSize: 13,
                           marginTop: 10,

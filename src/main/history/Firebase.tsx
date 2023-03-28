@@ -34,6 +34,9 @@ const history_gym_complete = async (content: any) => {
             timeEnd: detail_data.get('TimeEnd'),
             isCome: detail_data.get('isCome'),
             user: detail_data.get('user'),
+            date: days[i],
+            id: detail_data.id,
+            email: detail_data.get('email'),
           });
         });
         calendar.push({
@@ -90,4 +93,20 @@ const history_gym = async (content: any) => {
   ApiLog(content, responseBody, 'calendarListUser');
   return responseBody;
 };
-export {history_gym, history_gym_complete};
+const confirm_assitance = async (user, date, id, isCome) => {
+  //User
+  await firestore()
+    .collection('user')
+    .doc(user)
+    .collection('trainings')
+    .doc(date)
+    .update({isCome: isCome});
+  //User Trainings
+  await firestore()
+    .collection('user_training')
+    .doc(date)
+    .collection('times')
+    .doc(id)
+    .update({isCome: isCome});
+};
+export {history_gym, history_gym_complete, confirm_assitance};

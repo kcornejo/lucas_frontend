@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Modal, Pressable, Text, View} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
+import ItemHistorial from './ItemHistorial';
 import {Agenda} from 'react-native-calendars';
 import {styles} from '../Styles';
 import moment from 'moment';
@@ -143,57 +144,13 @@ const ModalHistoryEveryone = ({setVisible, data}) => {
               '-' +
               item['info'][i].user;
             const retorno = item['info'][i].user;
-            const estatus =
+            const time =
               item['info'][i].timeStart + '-' + item['info'][i].timeEnd;
-            retornoImpresion.push(
-              <View
-                key={key + '_view'}
-                style={{
-                  width: '95%',
-                  backgroundColor: 'white',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flex: 1,
-                  marginTop: 5,
-                  marginBottom: 5,
-                  height: 80,
-                  flexDirection: 'row',
-                }}>
-                <Text
-                  key={key + '_text'}
-                  style={{
-                    color: 'black',
-                    fontWeight: '500',
-                    fontSize: 25,
-                    flex: 2,
-                    marginLeft: 15,
-                  }}>
-                  {retorno}
-                </Text>
-                <View
-                  key={key + '_text_view_st'}
-                  style={{
-                    borderRadius: 100,
-                    backgroundColor: 'yellow',
-                    flex: 1,
-                    marginRight: 10,
-                    marginLeft: 5,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Text
-                    key={key + '_text_ag'}
-                    style={{
-                      color: 'black',
-                      fontWeight: '500',
-                      fontSize: 15,
-                      borderRadius: 50,
-                    }}>
-                    {estatus}
-                  </Text>
-                </View>
-              </View>,
-            );
+            const estatus =
+              item['info'][i].isCome == false
+                ? 'Pendiente'
+                : item['info'][i].isCome;
+            retornoImpresion.push(<ItemHistorial item={item['info'][i]} />);
           }
           return <>{retornoImpresion}</>;
         }}

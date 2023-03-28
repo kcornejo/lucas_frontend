@@ -188,7 +188,7 @@ const new_exercise = async (content: any) => {
   const object_add = {
     TimeStart,
     TimeEnd,
-    isCome: false,
+    isCome: 'Pendiente',
     user: user.get('firstName') + ' ' + user.get('lastName'),
     email: email,
   };

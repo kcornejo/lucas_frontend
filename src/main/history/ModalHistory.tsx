@@ -148,7 +148,10 @@ const ModalHistory = ({setVisible, data}) => {
           }
           const key = item.Date;
           const retorno = item.TimeStart + '-' + item.TimeEnd;
-          const estatus = 'Asistido';
+          const estatus =
+            item.IsCome == 'Si' || item.IsCome == 'No'
+              ? item.IsCome
+              : 'Pendiente';
           return (
             <View
               key={key + '_view'}
@@ -179,7 +182,12 @@ const ModalHistory = ({setVisible, data}) => {
                 key={key + '_text_view_st'}
                 style={{
                   borderRadius: 100,
-                  backgroundColor: estatus == 'Asistido' ? 'green' : 'red',
+                  backgroundColor:
+                    estatus == 'Si'
+                      ? 'green'
+                      : estatus == 'No'
+                      ? 'red'
+                      : '#C6AC00',
                   flex: 1,
                   marginRight: 10,
                   marginLeft: 5,
@@ -194,7 +202,11 @@ const ModalHistory = ({setVisible, data}) => {
                     fontSize: 15,
                     borderRadius: 50,
                   }}>
-                  {estatus}
+                  {estatus == 'Si'
+                    ? 'Asistido'
+                    : estatus == 'No'
+                    ? 'Ausente'
+                    : 'Pendiente'}
                 </Text>
               </View>
             </View>
