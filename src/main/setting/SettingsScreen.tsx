@@ -20,6 +20,7 @@ const SettingsScreen = () => {
       {
         text: 'Si',
         onPress: () => {
+          clearInterval(userLucas.timer);
           setUserLucas({
             firstName: '',
             lastName: '',

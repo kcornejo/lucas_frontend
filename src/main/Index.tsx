@@ -39,6 +39,9 @@ const Index = () => {
         ]);
       }
     }, 1000);
+    setUserLucas(userLucas => {
+      return {...userLucas, timer: timer};
+    });
   }, [1]);
   const Historial = () => {
     return <History />;

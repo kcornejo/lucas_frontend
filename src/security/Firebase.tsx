@@ -29,6 +29,9 @@ const login_firebase = async (contenido: {}) => {
   const email = sanitizationString(contenido.email);
   const password = contenido.password;
   const phoneToken = contenido.phoneToken;
+  try {
+    await auth().signOut();
+  } catch (e) {}
   await auth()
     .signInWithEmailAndPassword(email, password)
     .then(async userCredential => {
