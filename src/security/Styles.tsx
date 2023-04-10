@@ -6,13 +6,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 12,
     height: 50,
-    margin: 20,
+    marginHorizontal: '10%',
+    marginVertical: 20,
   },
   buttonRegistry: {
     backgroundColor: 'yellow',
     borderWidth: 1,
     borderRadius: 12,
-    margin: 70,
+    marginHorizontal: '10%',
+    marginTop: 70,
   },
   buttonForgot: {
     backgroundColor: 'red',

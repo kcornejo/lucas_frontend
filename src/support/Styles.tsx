@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     marginTop: 20,
-    marginRight: 20,
+    marginRight: '10%',
     backgroundColor: 'white',
     flex: 1,
     flexDirection: 'row',
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   inputIcon: {
-    marginLeft: 20,
+    marginLeft: '10%',
     marginTop: 20,
     width: 50,
     height: 50,

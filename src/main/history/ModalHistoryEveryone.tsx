@@ -150,7 +150,9 @@ const ModalHistoryEveryone = ({setVisible, data}) => {
               item['info'][i].isCome == false
                 ? 'Pendiente'
                 : item['info'][i].isCome;
-            retornoImpresion.push(<ItemHistorial item={item['info'][i]} />);
+            retornoImpresion.push(
+              <ItemHistorial key={key + '_item'} item={item['info'][i]} />,
+            );
           }
           return <>{retornoImpresion}</>;
         }}

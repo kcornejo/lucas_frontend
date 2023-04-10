@@ -43,14 +43,6 @@ const login_firebase = async (contenido: {}) => {
         if (reff.exists == true) {
           data = reff.data();
           await firestore().collection('user').doc(email).update({phoneToken});
-          try {
-            const storageRef = await storage()
-              .ref('/user_logo/' + email + '.png')
-              .getDownloadURL();
-            data.photo = storageRef;
-          } catch (e) {
-            data.photo = '';
-          }
         }
       } else {
         code = '001';

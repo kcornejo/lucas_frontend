@@ -105,7 +105,9 @@ const Login = () => {
                 : true,
             infoComplete: retorno['data'].infoComplete,
             admin: retorno['data'].admin,
-            photo: retorno['data'].photo,
+            photo: retorno['data'].image
+              ? 'data:image/png;base64,' + retorno['data'].image
+              : '',
           };
         });
       } else {

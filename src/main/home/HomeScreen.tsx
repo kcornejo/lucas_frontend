@@ -13,12 +13,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ModalLoad from '../../support/ModalLoad';
 import {LucasContext} from '../../support/Contexts';
 import {list_schedule_avail} from './Firebase';
+import RegisterWeights from './RegisterWeights';
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalLoadVisible, setModalLoadVisible] = useState(false);
   const [datosAgenda, setDatosAgenda] = useState([]);
   const [userLucas, setUserLucas] = useContext(LucasContext);
-
+  const [visibleWeight, setVisibleWeight] = useState(false);
+  const newWeights = async () => {
+    setVisibleWeight(true);
+  };
   const newExercise = async () => {
     setModalLoadVisible(true);
     const retorno = await list_schedule_avail({email: userLucas.email});
@@ -49,6 +53,7 @@ const HomeScreen = () => {
         setVisible={setModalVisible}
         datosAgenda={datosAgenda}
       />
+      <RegisterWeights setVisible={setVisibleWeight} visible={visibleWeight} />
       <UserDetail />
       <View
         style={{
@@ -61,36 +66,70 @@ const HomeScreen = () => {
         }}>
         <View style={{flex: 1, flexDirection: 'column', width: '100%'}}>
           <View style={{flex: 1}}></View>
-          <View style={{flex: 1, alignItems: 'center'}}>
-            <TouchableHighlight
-              activeOpacity={0.85}
-              underlayColor={'#98FFF6'}
-              onPress={newExercise}
-              style={{
-                borderRadius: 10,
-                borderColor: 'black',
-                backgroundColor: '#17e9d7',
-                alignItems: 'center',
-                padding: 10,
-                marginLeft: 20,
-                marginRight: 20,
-                width: '90%',
-              }}>
-              <>
-                <Icon name="plus" size={80} color="black" />
-                <Text
+          <View style={{flex: 1}}>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <View style={{flex: 1, alignItems: 'center'}}>
+                <TouchableHighlight
+                  activeOpacity={0.85}
+                  underlayColor={'#98FFF6'}
+                  onPress={newExercise}
                   style={{
-                    color: 'black',
-                    textAlign: 'center',
-                    height: 40,
-                    fontWeight: '800',
-                    fontSize: 15,
-                    padding: 12,
+                    borderRadius: 10,
+                    borderColor: 'black',
+                    backgroundColor: '#17e9d7',
+                    alignItems: 'center',
+                    marginLeft: 20,
+                    marginRight: 20,
+                    width: '80%',
                   }}>
-                  Nuevo Entreno
-                </Text>
-              </>
-            </TouchableHighlight>
+                  <>
+                    <Icon name="plus" size={80} color="black" />
+                    <Text
+                      style={{
+                        color: 'black',
+                        textAlign: 'center',
+                        height: 40,
+                        fontWeight: '800',
+                        fontSize: 15,
+                        padding: 8,
+                      }}>
+                      Nuevo Entreno
+                    </Text>
+                  </>
+                </TouchableHighlight>
+              </View>
+
+              <View style={{flex: 1, alignItems: 'center'}}>
+                <TouchableHighlight
+                  activeOpacity={0.85}
+                  underlayColor={'#98FFF6'}
+                  onPress={newWeights}
+                  style={{
+                    borderRadius: 10,
+                    borderColor: 'black',
+                    backgroundColor: '#17e9d7',
+                    alignItems: 'center',
+                    marginLeft: 20,
+                    marginRight: 20,
+                    width: '80%',
+                  }}>
+                  <>
+                    <Icon name="odnoklassniki" size={80} color="black" />
+                    <Text
+                      style={{
+                        color: 'black',
+                        textAlign: 'center',
+                        height: 40,
+                        fontWeight: '800',
+                        fontSize: 15,
+                        padding: 8,
+                      }}>
+                      Registrar Medidas
+                    </Text>
+                  </>
+                </TouchableHighlight>
+              </View>
+            </View>
           </View>
           <View style={{flex: 1}}>
             <View style={{flex: 1, flexDirection: 'row'}}>
@@ -129,6 +168,7 @@ const HomeScreen = () => {
                   </>
                 </TouchableHighlight>
               </View>
+
               <View style={{flex: 1, alignItems: 'center'}}>
                 <TouchableHighlight
                   activeOpacity={0.85}
