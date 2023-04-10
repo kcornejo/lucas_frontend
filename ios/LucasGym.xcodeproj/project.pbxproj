@@ -15,7 +15,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		BF8CFDD8BC49F8A9A4933282 /* Pods_LucasGym_LucasGymTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C06E7410F95463C165023627 /* Pods_LucasGym_LucasGymTests.framework */; };
 		D708031E299160AF0014B510 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = D708031D299160AF0014B510 /* fonts */; };
-		D7BBFE9029A7DF2900A897BA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7BBFE8F29A7DF2900A897BA /* GoogleService-Info.plist */; };
+		D715649129E46E59001810F5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D715649029E46E59001810F5 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +45,7 @@
 		96BFECF38C4FFD4E12960139 /* Pods-LucasGym-LucasGymTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LucasGym-LucasGymTests.debug.xcconfig"; path = "Target Support Files/Pods-LucasGym-LucasGymTests/Pods-LucasGym-LucasGymTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C06E7410F95463C165023627 /* Pods_LucasGym_LucasGymTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LucasGym_LucasGymTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D708031D299160AF0014B510 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
-		D7BBFE8F29A7DF2900A897BA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "LucasGym/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D715649029E46E59001810F5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D7D1992A29A8FBF4002FA18B /* LucasGym.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = LucasGym.entitlements; path = LucasGym/LucasGym.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FDE1B0AFCF604A1C89BC9EAC /* Pods-LucasGym.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LucasGym.release.xcconfig"; path = "Target Support Files/Pods-LucasGym/Pods-LucasGym.release.xcconfig"; sourceTree = "<group>"; };
@@ -122,7 +122,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				D7BBFE8F29A7DF2900A897BA /* GoogleService-Info.plist */,
+				D715649029E46E59001810F5 /* GoogleService-Info.plist */,
 				D708031D299160AF0014B510 /* fonts */,
 				13B07FAE1A68108700A75B9A /* LucasGym */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -193,6 +193,7 @@
 				6CABE3D0B87D0B8F77124DC8 /* [CP] Embed Pods Frameworks */,
 				4A892E1ED8588DF416AFE98B /* [CP] Copy Pods Resources */,
 				8040BB8C53EFE04B94F9E86E /* [CP-User] [RNFB] Core Configuration */,
+				0D31CAC2BD2967E0E5A39614 /* [CP-User] [RNFB] Crashlytics Configuration */,
 			);
 			buildRules = (
 			);
@@ -252,7 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D708031E299160AF0014B510 /* fonts in Resources */,
-				D7BBFE9029A7DF2900A897BA /* GoogleService-Info.plist in Resources */,
+				D715649129E46E59001810F5 /* GoogleService-Info.plist in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
@@ -276,6 +277,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		0D31CAC2BD2967E0E5A39614 /* [CP-User] [RNFB] Crashlytics Configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "[CP-User] [RNFB] Crashlytics Configuration";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
 		};
 		12ED2B8DE2F34AB31DFED07A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -458,12 +473,13 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = C3465QD996;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = LucasGymTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -487,8 +503,9 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = C3465QD996;
 				INFOPLIST_FILE = LucasGymTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -517,7 +534,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LucasGym/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LucasGym;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -551,7 +568,7 @@
 				DEVELOPMENT_TEAM = C3465QD996;
 				INFOPLIST_FILE = LucasGym/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LucasGym;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
