@@ -346,4 +346,37 @@ const delete_exercise = async (content: any) => {
   ApiLog(content, responseBody, 'UserCalendarDelete');
   return responseBody;
 };
-export {list_schedule_avail, new_exercise, delete_exercise};
+const get_weights = async (content: any) => {
+  const email = sanitizationString(content.email);
+  const user = (await firestore().collection('user').doc(email).get()).data();
+  return {
+    brazo: user.brazo !== undefined ? user.brazo : '0',
+    cintura: user.cintura !== undefined ? user.cintura : '0',
+    abdomen: user.abdomen !== undefined ? user.abdomen : '0',
+    cadera: user.cadera !== undefined ? user.cadera : '0',
+    pierna: user.pierna !== undefined ? user.pierna : '0',
+  };
+};
+const set_weights = async (content: any) => {
+  const email = sanitizationString(content.email);
+  const brazo = sanitizationString(content.brazo);
+  const cintura = sanitizationString(content.cintura);
+  const abdomen = sanitizationString(content.abdomen);
+  const cadera = sanitizationString(content.cadera);
+  const pierna = sanitizationString(content.pierna);
+  const update = {
+    brazo,
+    cintura,
+    abdomen,
+    cadera,
+    pierna,
+  };
+  await firestore().collection('user').doc(email).update(update);
+};
+export {
+  list_schedule_avail,
+  new_exercise,
+  delete_exercise,
+  get_weights,
+  set_weights,
+};
