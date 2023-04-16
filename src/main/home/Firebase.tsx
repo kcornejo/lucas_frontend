@@ -372,6 +372,11 @@ const set_weights = async (content: any) => {
     pierna,
   };
   await firestore().collection('user').doc(email).update(update);
+  await firestore()
+    .collection('user')
+    .doc(email)
+    .collection('weights')
+    .add(update);
 };
 export {
   list_schedule_avail,

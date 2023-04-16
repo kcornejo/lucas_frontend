@@ -287,7 +287,7 @@ const History = () => {
                     underlayColor={'#6166A8'}
                     onPress={funHistoryEveryone}
                     style={{
-                      width: '95%',
+                      width: '90%',
                       borderRadius: 10,
                       borderColor: 'black',
                       backgroundColor: '#36395E',
