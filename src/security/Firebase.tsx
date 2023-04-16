@@ -29,6 +29,7 @@ const login_firebase = async (contenido: {}) => {
   const email = sanitizationString(contenido.email);
   const password = contenido.password;
   const phoneToken = contenido.phoneToken;
+  let trainings = null;
   try {
     await auth().signOut();
   } catch (e) {}
@@ -43,6 +44,14 @@ const login_firebase = async (contenido: {}) => {
         if (reff.exists == true) {
           data = reff.data();
           await firestore().collection('user').doc(email).update({phoneToken});
+          //GetExercises
+          const trainings_list = await firestore()
+            .collection('user')
+            .doc(email)
+            .collection('trainings')
+            .where('isCome', '==', 'Si')
+            .get();
+          trainings = trainings_list.size;
         }
       } else {
         code = '001';
@@ -53,7 +62,13 @@ const login_firebase = async (contenido: {}) => {
       code = '999';
       message = error.message;
     });
-  const response = {code: code, message: message, token: token, data: data};
+  const response = {
+    code,
+    message,
+    token,
+    data,
+    trainings,
+  };
   ApiLog(contenido, response, 'validateUser');
   return response;
 };

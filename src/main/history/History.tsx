@@ -16,6 +16,7 @@ import {LineChart} from 'react-native-chart-kit';
 import moment from 'moment';
 import {LucasContext} from '../../support/Contexts';
 import {history_gym, history_gym_complete} from './Firebase';
+import HistoryWeights from './HistoryWeights';
 const History = () => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
   const [modalLoadVisible, setModalLoadVisible] = useState(false);
@@ -24,6 +25,7 @@ const History = () => {
   const [modalHistoryVisible, setModalHistoryVisible] = useState(false);
   const [modalHistoryEveryoneVisible, setModalHistoryEveryoneVisible] =
     useState(false);
+  const [modalHistoryWeights, setModalHistoryWeights] = useState(false);
   const [dataG, setDataG] = useState([0]);
   let admin = userLucas.admin;
   useEffect(() => {
@@ -181,8 +183,11 @@ const History = () => {
             data={datosAgendaEveryone}
           />
         </Modal>
+        <Modal visible={modalHistoryWeights} animationType="slide">
+          <HistoryWeights setVisible={setModalHistoryWeights} />
+        </Modal>
         <View style={{margin: 30, flex: 1, flexDirection: 'column'}}>
-          <View style={{flex: 2}}>
+          <View style={{flex: 6}}>
             <Text style={{fontWeight: '600', color: 'white', fontSize: 40}}>
               Historial
             </Text>
@@ -197,20 +202,17 @@ const History = () => {
                 ? 'Historial de tus entrenos'
                 : 'Historial de los entrenos'}
             </Text>
-          </View>
-          <View style={{flex: 6, alignItems: 'center'}}>
             <LineChart
               data={data}
+              style={{marginTop: 10}}
               width={screenWidth}
-              height={256}
+              height={200}
               chartConfig={chartConfig}
               bezier
               segments={4}
               yAxisInterval={1}
             />
-          </View>
-          <View style={{flex: 4}}>
-            <View style={{flex: 1, flexDirection: 'row', marginBottom: 30}}>
+            <View style={{flex: 1, flexDirection: 'row', marginTop: 30}}>
               <View style={{flex: 1, marginRight: 10, alignItems: 'center'}}>
                 <TouchableHighlight
                   activeOpacity={0.85}
@@ -227,7 +229,7 @@ const History = () => {
                       alignItems: 'center',
                       margin: 10,
                     }}>
-                    <Icon name="book" size={80} color="white" />
+                    <Icon name="book" size={50} color="white" />
                     <Text
                       style={{
                         color: 'white',
@@ -237,19 +239,55 @@ const History = () => {
                         marginTop: 10,
                         width: '100%',
                       }}>
-                      Historial{'\n'}Completo
+                      Historial de{'\n'}Asistencias
                     </Text>
                   </View>
                 </TouchableHighlight>
               </View>
+              <View style={{flex: 1, marginLeft: 10, alignItems: 'center'}}>
+                <TouchableHighlight
+                  activeOpacity={0.85}
+                  underlayColor={'#6166A8'}
+                  onPress={() => {
+                    setModalHistoryWeights(true);
+                  }}
+                  style={{
+                    width: '80%',
+                    borderRadius: 10,
+                    borderColor: 'black',
+                    backgroundColor: '#36395E',
+                  }}>
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      margin: 10,
+                    }}>
+                    <Icon name="odnoklassniki" size={50} color="white" />
+                    <Text
+                      style={{
+                        color: 'white',
+                        textAlign: 'center',
+                        fontWeight: '800',
+                        fontSize: 13,
+                        marginTop: 10,
+                        width: '100%',
+                      }}>
+                      Historial de Medidas
+                    </Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
+            </View>
+
+            <View style={{flex: 1, flexDirection: 'row'}}>
               {admin ? (
-                <View style={{flex: 1, marginLeft: 10, alignItems: 'center'}}>
+                <View style={{flex: 1, marginLeft: 0, alignItems: 'center'}}>
                   <TouchableHighlight
                     activeOpacity={0.85}
                     underlayColor={'#6166A8'}
                     onPress={funHistoryEveryone}
                     style={{
-                      width: '80%',
+                      width: '95%',
                       borderRadius: 10,
                       borderColor: 'black',
                       backgroundColor: '#36395E',
@@ -259,7 +297,7 @@ const History = () => {
                         alignItems: 'center',
                         margin: 10,
                       }}>
-                      <Icon name="user" size={80} color="white" />
+                      <Icon name="user" size={40} color="white" />
                       <Text
                         style={{
                           color: 'white',

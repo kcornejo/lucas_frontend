@@ -108,6 +108,7 @@ const Login = () => {
             photo: retorno['data'].image
               ? 'data:image/png;base64,' + retorno['data'].image
               : '',
+            trainings: retorno['trainings'],
           };
         });
       } else {

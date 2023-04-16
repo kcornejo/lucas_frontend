@@ -11,4 +11,7 @@
       ]
     }
   ]
+  ,  "react-native": {
+    "crashlytics_debug_enabled": true
+  }
 }

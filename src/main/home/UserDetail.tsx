@@ -18,7 +18,7 @@ const UserDetail = () => {
       <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
         <View
           style={{
-            flex: 1,
+            flex: 2,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
@@ -27,27 +27,40 @@ const UserDetail = () => {
               source={{
                 uri: userLucas.photo,
               }}
-              style={{width: 80, height: 80}}
+              style={{width: 90, height: 90, borderRadius: 45}}
             />
           ) : (
             <Icon name="user" size={80} color="black" />
           )}
         </View>
-        <View style={{flex: 3}}>
-          <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap'}}>
+        <View style={{flex: 4, width: '100%'}}>
+          <View style={{flex: 1, flexDirection: 'column'}}>
             <View style={{flex: 1}}></View>
-            <View style={{flex: 1}}>
+            <View
+              style={{
+                flex: 1,
+                marginLeft: 5,
+                width: '100%',
+              }}>
               <Text
                 style={{
                   fontSize: 25,
-                  textAlign: 'center',
-                  textAlignVertical: 'center',
                   color: 'black',
+                  fontWeight: 'bold',
                 }}>
                 {userLucas.firstName + ' ' + userLucas.lastName}
               </Text>
             </View>
-            <View style={{flex: 1}}></View>
+            <View style={{flex: 1, marginLeft: 5, width: '100%'}}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: 'grey',
+                  fontWeight: '500',
+                }}>
+                Entrenos finalizados: {userLucas.trainings}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
