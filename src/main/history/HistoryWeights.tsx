@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   ScrollView,
   NativeBaseProvider,
@@ -7,10 +7,98 @@ import {
   Stack,
   Center,
 } from 'native-base';
-import {Pressable, Text, SafeAreaView, Dimensions} from 'react-native';
+import {Text, SafeAreaView, Dimensions, TouchableHighlight} from 'react-native';
 import {styles} from '../Styles';
 import {LineChart} from 'react-native-chart-kit';
-const HistoryWeights = ({setVisible}) => {
+import {get_weights} from './Firebase';
+import ModalLoad from '../../support/ModalLoad';
+import {LucasContext} from '../../support/Contexts';
+const HistoryWeights = ({setVisible, visible}) => {
+  const [userLucas, setUserLucas] = useContext(LucasContext);
+  let labels_date = [];
+  const [load, setLoad] = useState(false);
+  const [dataBP, setDataBP] = useState({
+    labels: [],
+    datasets: [{data: [], color: null, strokeWidth: 2}],
+    legend: [],
+  });
+  const [dataCAC, setDataCAC] = useState({
+    labels: [],
+    datasets: [{data: [], color: null, strokeWidth: 2}],
+    legend: [],
+  });
+  useEffect(() => {
+    if (visible) {
+      setLoad(true);
+      get_weights(userLucas.email).then(weights => {
+        const weights_reverse = weights.reverse();
+        const legendBP = ['Brazo', 'Pierna'];
+        const legendCAC = ['Cintura', 'Abdomen', 'Cadera'];
+        let labels = [];
+        for (let i = 0; i < weights_reverse.length; i++) {
+          labels.push(weights_reverse[i].fecha);
+        }
+        let data_brazo = [];
+        for (let i = 0; i < weights_reverse.length; i++) {
+          data_brazo.push(weights_reverse[i].brazo);
+        }
+        let data_pierna = [];
+        for (let i = 0; i < weights_reverse.length; i++) {
+          data_pierna.push(weights_reverse[i].pierna);
+        }
+        let data_cintura = [];
+        for (let i = 0; i < weights_reverse.length; i++) {
+          data_cintura.push(weights_reverse[i].cintura);
+        }
+        let data_abdomen = [];
+        for (let i = 0; i < weights_reverse.length; i++) {
+          data_abdomen.push(weights_reverse[i].abdomen);
+        }
+        let data_cadera = [];
+        for (let i = 0; i < weights_reverse.length; i++) {
+          data_cadera.push(weights_reverse[i].cadera);
+        }
+        setDataBP({
+          labels,
+          datasets: [
+            {
+              data: data_brazo,
+              color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+              strokeWidth: 2,
+            },
+            {
+              data: data_pierna,
+              color: (opacity = 1) => `rgba(23, 65, 244, ${opacity})`,
+              strokeWidth: 2,
+            },
+          ],
+          legend: legendBP,
+        });
+        setDataCAC({
+          labels,
+          datasets: [
+            {
+              data: data_cintura,
+              color: (opacity = 1) => `rgba(12, 23, 244, ${opacity})`,
+              strokeWidth: 2,
+            },
+            {
+              data: data_abdomen,
+              color: (opacity = 1) => `rgba(10,240, 20, ${opacity})`,
+              strokeWidth: 2,
+            },
+            {
+              data: data_cadera,
+              color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+              strokeWidth: 2,
+            },
+          ],
+          legend: legendCAC,
+        });
+      });
+      setLoad(false);
+    }
+  }, [visible]);
   const screenWidth = Dimensions.get('window').width * 0.9;
   const chartConfig = {
     backgroundGradientFrom: '#FFF',
@@ -86,6 +174,7 @@ const HistoryWeights = ({setVisible}) => {
   };
   return (
     <NativeBaseProvider>
+      <ModalLoad viewed={load} />
       <SafeAreaView style={{backgroundColor: '#23263E', height: '100%'}}>
         <ScrollView w="100%">
           <VStack alignItems="center" mt={5}>
@@ -96,7 +185,7 @@ const HistoryWeights = ({setVisible}) => {
           <Stack mx="5%" my={5}>
             <Center>
               <LineChart
-                data={data}
+                data={dataBP}
                 style={{marginTop: 10}}
                 width={screenWidth}
                 height={200}
@@ -115,7 +204,7 @@ const HistoryWeights = ({setVisible}) => {
           <Stack mx="5%" my={5}>
             <Center>
               <LineChart
-                data={dataCin}
+                data={dataCAC}
                 style={{marginTop: 10}}
                 width={screenWidth}
                 height={200}
@@ -126,13 +215,21 @@ const HistoryWeights = ({setVisible}) => {
               />
             </Center>
           </Stack>
-          <Pressable
-            style={styles.button}
+          <TouchableHighlight
+            activeOpacity={0.85}
+            underlayColor={'#6166A8'}
+            style={{
+              backgroundColor: '#36395E',
+              borderWidth: 1,
+              borderRadius: 12,
+              height: 50,
+              margin: 20,
+            }}
             onPress={() => {
               setVisible(false);
             }}>
             <Text style={styles.textButton}>Regresar</Text>
-          </Pressable>
+          </TouchableHighlight>
         </ScrollView>
       </SafeAreaView>
     </NativeBaseProvider>

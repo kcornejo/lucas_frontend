@@ -109,4 +109,30 @@ const confirm_assitance = async (user, date, id, isCome) => {
     .doc(id)
     .update({isCome: isCome});
 };
-export {history_gym, history_gym_complete, confirm_assitance};
+const get_weights = async (user: '') => {
+  let retorno = [];
+  //User
+  await firestore()
+    .collection('user')
+    .doc(user)
+    .collection('weights')
+    .orderBy('fecha', 'desc')
+    .limit(4)
+    .get()
+    .then(data => {
+      data.forEach(row => {
+        const data = row.data();
+        retorno.push({
+          abdomen: data.abdomen,
+          cintura: data.cintura,
+          cadera: data.cadera,
+          pierna: data.pierna,
+          brazo: data.brazo,
+          fecha: data.fecha,
+        });
+      });
+    })
+    .catch();
+  return retorno;
+};
+export {history_gym, history_gym_complete, confirm_assitance, get_weights};

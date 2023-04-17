@@ -184,7 +184,10 @@ const History = () => {
           />
         </Modal>
         <Modal visible={modalHistoryWeights} animationType="slide">
-          <HistoryWeights setVisible={setModalHistoryWeights} />
+          <HistoryWeights
+            visible={modalHistoryWeights}
+            setVisible={setModalHistoryWeights}
+          />
         </Modal>
         <View style={{margin: 30, flex: 1, flexDirection: 'column'}}>
           <View style={{flex: 6}}>
@@ -272,7 +275,7 @@ const History = () => {
                         marginTop: 10,
                         width: '100%',
                       }}>
-                      Historial de Medidas
+                      Historial de {'\n'}Medidas
                     </Text>
                   </View>
                 </TouchableHighlight>
