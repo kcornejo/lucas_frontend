@@ -21,23 +21,38 @@ const HistoryWeights = ({setVisible, visible}) => {
     labels: [],
     datasets: [
       {
-        data: [],
+        data: [0],
         color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
         strokeWidth: 2,
       },
+      {
+        data: [0],
+        color: (opacity = 1) => `rgba(23, 65, 244, ${opacity})`,
+        strokeWidth: 2,
+      },
     ],
-    legend: [],
+    legend: ['Brazo', 'Pierna'],
   });
   const [dataCAC, setDataCAC] = useState({
     labels: [],
     datasets: [
       {
-        data: [],
+        data: [0],
+        color: (opacity = 1) => `rgba(12, 23, 244, ${opacity})`,
+        strokeWidth: 2,
+      },
+      {
+        data: [0],
+        color: (opacity = 1) => `rgba(10,240, 20, ${opacity})`,
+        strokeWidth: 2,
+      },
+      {
+        data: [0],
         color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
         strokeWidth: 2,
       },
     ],
-    legend: [],
+    legend: ['Cintura', 'Abdomen', 'Cadera'],
   });
   useEffect(() => {
     if (visible) {
@@ -45,69 +60,72 @@ const HistoryWeights = ({setVisible, visible}) => {
       get_weights(userLucas.email).then(weights => {
         setValueCharge(false);
         const weights_reverse = weights.reverse();
-        const legendBP = ['Brazo', 'Pierna'];
-        const legendCAC = ['Cintura', 'Abdomen', 'Cadera'];
-        let labels = [];
-        for (let i = 0; i < weights_reverse.length; i++) {
-          labels.push(weights_reverse[i].fecha);
+        if (weights_reverse.length > 0) {
+          const legendBP = ['Brazo', 'Pierna'];
+          const legendCAC = ['Cintura', 'Abdomen', 'Cadera'];
+          let labels = [];
+          for (let i = 0; i < weights_reverse.length; i++) {
+            labels.push(weights_reverse[i].fecha);
+          }
+          let data_brazo = [];
+          for (let i = 0; i < weights_reverse.length; i++) {
+            data_brazo.push(weights_reverse[i].brazo);
+          }
+          let data_pierna = [];
+          for (let i = 0; i < weights_reverse.length; i++) {
+            data_pierna.push(weights_reverse[i].pierna);
+          }
+          let data_cintura = [];
+          for (let i = 0; i < weights_reverse.length; i++) {
+            data_cintura.push(weights_reverse[i].cintura);
+          }
+          let data_abdomen = [];
+          for (let i = 0; i < weights_reverse.length; i++) {
+            data_abdomen.push(weights_reverse[i].abdomen);
+          }
+          let data_cadera = [];
+          for (let i = 0; i < weights_reverse.length; i++) {
+            data_cadera.push(weights_reverse[i].cadera);
+          }
+          setDataBP({
+            labels,
+            datasets: [
+              {
+                data: data_brazo,
+                color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+                strokeWidth: 2,
+              },
+              {
+                data: data_pierna,
+                color: (opacity = 1) => `rgba(23, 65, 244, ${opacity})`,
+                strokeWidth: 2,
+              },
+            ],
+            legend: legendBP,
+          });
+          setDataCAC({
+            labels,
+            datasets: [
+              {
+                data: data_cintura,
+                color: (opacity = 1) => `rgba(12, 23, 244, ${opacity})`,
+                strokeWidth: 2,
+              },
+              {
+                data: data_abdomen,
+                color: (opacity = 1) => `rgba(10,240, 20, ${opacity})`,
+                strokeWidth: 2,
+              },
+              {
+                data: data_cadera,
+                color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+                strokeWidth: 2,
+              },
+            ],
+            legend: legendCAC,
+          });
         }
-        let data_brazo = [];
-        for (let i = 0; i < weights_reverse.length; i++) {
-          data_brazo.push(weights_reverse[i].brazo);
-        }
-        let data_pierna = [];
-        for (let i = 0; i < weights_reverse.length; i++) {
-          data_pierna.push(weights_reverse[i].pierna);
-        }
-        let data_cintura = [];
-        for (let i = 0; i < weights_reverse.length; i++) {
-          data_cintura.push(weights_reverse[i].cintura);
-        }
-        let data_abdomen = [];
-        for (let i = 0; i < weights_reverse.length; i++) {
-          data_abdomen.push(weights_reverse[i].abdomen);
-        }
-        let data_cadera = [];
-        for (let i = 0; i < weights_reverse.length; i++) {
-          data_cadera.push(weights_reverse[i].cadera);
-        }
-        setDataBP({
-          labels,
-          datasets: [
-            {
-              data: data_brazo,
-              color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
-              strokeWidth: 2,
-            },
-            {
-              data: data_pierna,
-              color: (opacity = 1) => `rgba(23, 65, 244, ${opacity})`,
-              strokeWidth: 2,
-            },
-          ],
-          legend: legendBP,
-        });
-        setDataCAC({
-          labels,
-          datasets: [
-            {
-              data: data_cintura,
-              color: (opacity = 1) => `rgba(12, 23, 244, ${opacity})`,
-              strokeWidth: 2,
-            },
-            {
-              data: data_abdomen,
-              color: (opacity = 1) => `rgba(10,240, 20, ${opacity})`,
-              strokeWidth: 2,
-            },
-            {
-              data: data_cadera,
-              color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
-              strokeWidth: 2,
-            },
-          ],
-          legend: legendCAC,
-        });
+
         setLoad(false);
         setValueCharge(true);
       });
