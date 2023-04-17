@@ -69,5 +69,7 @@
 	<false/>
 	<key>UIRequiresFullScreen</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Uso para subir fotografias</string>
 </dict>
 </plist>
