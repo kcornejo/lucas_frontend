@@ -48,7 +48,7 @@ const ModalHistoryEveryone = ({setVisible, data}) => {
         minDate={minDate}
         items={items}
         maxDate={maxDate}
-        selected={minDate}
+        selected={maxDate}
         markedDates={marked}
         renderEmptyData={() => {
           return (

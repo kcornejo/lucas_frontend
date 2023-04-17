@@ -15,22 +15,35 @@ import ModalLoad from '../../support/ModalLoad';
 import {LucasContext} from '../../support/Contexts';
 const HistoryWeights = ({setVisible, visible}) => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
-  let labels_date = [];
+  const [valueCharge, setValueCharge] = useState(false);
   const [load, setLoad] = useState(false);
   const [dataBP, setDataBP] = useState({
     labels: [],
-    datasets: [{data: [], color: null, strokeWidth: 2}],
+    datasets: [
+      {
+        data: [],
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+        strokeWidth: 2,
+      },
+    ],
     legend: [],
   });
   const [dataCAC, setDataCAC] = useState({
     labels: [],
-    datasets: [{data: [], color: null, strokeWidth: 2}],
+    datasets: [
+      {
+        data: [],
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+        strokeWidth: 2,
+      },
+    ],
     legend: [],
   });
   useEffect(() => {
     if (visible) {
       setLoad(true);
       get_weights(userLucas.email).then(weights => {
+        setValueCharge(false);
         const weights_reverse = weights.reverse();
         const legendBP = ['Brazo', 'Pierna'];
         const legendCAC = ['Cintura', 'Abdomen', 'Cadera'];
@@ -95,8 +108,9 @@ const HistoryWeights = ({setVisible, visible}) => {
           ],
           legend: legendCAC,
         });
+        setLoad(false);
+        setValueCharge(true);
       });
-      setLoad(false);
     }
   }, [visible]);
   const screenWidth = Dimensions.get('window').width * 0.9;
@@ -184,16 +198,18 @@ const HistoryWeights = ({setVisible, visible}) => {
           </VStack>
           <Stack mx="5%" my={5}>
             <Center>
-              <LineChart
-                data={dataBP}
-                style={{marginTop: 10}}
-                width={screenWidth}
-                height={200}
-                chartConfig={chartConfig}
-                bezier
-                segments={4}
-                yAxisInterval={1}
-              />
+              {valueCharge && (
+                <LineChart
+                  data={dataBP}
+                  style={{marginTop: 10}}
+                  width={screenWidth}
+                  height={200}
+                  chartConfig={chartConfig}
+                  bezier
+                  segments={4}
+                  yAxisInterval={1}
+                />
+              )}
             </Center>
           </Stack>
           <VStack alignItems="center" mt={5}>
@@ -203,16 +219,18 @@ const HistoryWeights = ({setVisible, visible}) => {
           </VStack>
           <Stack mx="5%" my={5}>
             <Center>
-              <LineChart
-                data={dataCAC}
-                style={{marginTop: 10}}
-                width={screenWidth}
-                height={200}
-                chartConfig={chartConfig}
-                bezier
-                segments={4}
-                yAxisInterval={1}
-              />
+              {valueCharge && (
+                <LineChart
+                  data={dataCAC}
+                  style={{marginTop: 10}}
+                  width={screenWidth}
+                  height={200}
+                  chartConfig={chartConfig}
+                  bezier
+                  segments={4}
+                  yAxisInterval={1}
+                />
+              )}
             </Center>
           </Stack>
           <TouchableHighlight
