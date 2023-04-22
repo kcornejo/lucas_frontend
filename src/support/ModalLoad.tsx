@@ -1,9 +1,9 @@
 import React from 'react';
-import {Modal, SafeAreaView, StyleSheet, Image} from 'react-native';
-
+import {SafeAreaView, StyleSheet, Image} from 'react-native';
+import {Modal} from 'native-base';
 const ModalLoad = ({viewed = true}) => {
   return (
-    <Modal transparent={true} animationType="fade" visible={viewed}>
+    <Modal isOpen={viewed}>
       <SafeAreaView style={styles_modal.principal}>
         <Image
           style={{

@@ -2,13 +2,10 @@ import React, {useState, useContext} from 'react';
 import ModalLoad from '../support/ModalLoad';
 import {styles} from './Styles';
 import {
-  Pressable,
   SafeAreaView,
-  Text,
   View,
   Alert,
   StyleSheet,
-  Image,
   TouchableHighlight,
 } from 'react-native';
 import {requestUserPermission} from '../support/Notification';
@@ -18,24 +15,28 @@ import RegisterUser from './RegisterUser';
 import {useForm} from 'react-hook-form';
 import InputKC from '../support/InputKC';
 import {LucasContext} from '../support/Contexts';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import PasswordKC from '../components/PasswordKC';
+import {
+  Box,
+  Input,
+  FormControl,
+  Image,
+  ScrollView,
+  Text,
+  VStack,
+  Pressable,
+  Checkbox,
+  HStack,
+} from 'native-base';
 const Login = () => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-    reset,
-  } = useForm({
-    defaultValues: {
-      Usuario: '',
-      Clave: '',
-    },
-  });
   const [bloqueo, setBloqueo] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleRecuperar, setModalVisibleRecuperar] = useState(false);
   const [modalVisibleRegister, setModalVisibleRegister] = useState(false);
-
+  const [form, setForm] = useState({Usuario: '', Clave: ''});
+  const [error, setError] = useState({});
   const login_api = async (user: string, password: string) => {
     const tokenPhone = await requestUserPermission();
     var raw = {
@@ -49,7 +50,6 @@ const Login = () => {
   const ValidateLogin = async (data: any) => {
     setBloqueo(true);
     setModalVisible(true);
-
     //Login
     const retorno = await login_api(data.Usuario, data.Clave);
     setModalVisible(false);
@@ -121,15 +121,13 @@ const Login = () => {
     setBloqueo(false);
   };
   const RecuperarClave = () => {
-    reset();
     setModalVisibleRecuperar(true);
   };
   const Registrarse = () => {
-    reset();
     setModalVisibleRegister(true);
   };
   return (
-    <SafeAreaView style={styles.background}>
+    <>
       <RecoverPassword
         visible={modalVisibleRecuperar}
         setModalVisible={setModalVisibleRecuperar}
@@ -139,76 +137,135 @@ const Login = () => {
         setModalVisible={setModalVisibleRegister}
       />
       <ModalLoad viewed={modalVisible} />
-      <View style={{alignItems: 'center'}}>
-        <Image
-          style={{width: 150, height: 130, resizeMode: 'stretch'}}
-          source={require('../resources/images/logo-invertido.png')}
-        />
-      </View>
-      <Text style={styles.titleLogo}>Acceso</Text>
-      <InputKC
-        control={control}
-        icon="user"
-        rules={{
-          required: {value: true, message: 'Correo requerido'},
-          pattern: {
-            value: /\S+@\S+\.\S+/,
-            message: 'Ingrese un correo valido',
-          },
-        }}
-        placeholder="Correo"
-        name="Usuario"
-        secureTextEntry={false}
-        error={errors.Usuario}></InputKC>
-      <InputKC
-        control={control}
-        icon="lock"
-        rules={{
-          required: {value: true, message: 'Clave requerida.'},
-          pattern: {
-            value: /[0-9a-zA-Z]{6,}/,
-            message: 'Ingrese una clave segura',
-          },
-        }}
-        placeholder="Clave"
-        name="Clave"
-        secureTextEntry={true}
-        error={errors.Clave}></InputKC>
-      <TouchableHighlight
-        activeOpacity={0.85}
-        underlayColor={'#98FFF6'}
-        style={styles.button}
-        onPress={handleSubmit(ValidateLogin)}
-        disabled={bloqueo}>
-        <Text style={styles.textButton}>Acceder</Text>
-      </TouchableHighlight>
-      <View
-        style={{
-          borderBottomColor: 'grey',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          marginTop: 20,
-        }}
-      />
-      <View style={{flexDirection: 'row'}}>
-        <View style={{flex: 1}}></View>
-        <View style={{flex: 1}}>
-          <Pressable onPressIn={RecuperarClave} disabled={bloqueo}>
-            <Text style={styles.textForgotPassword}>Olvide mi contraseña</Text>
-          </Pressable>
-        </View>
-      </View>
-      <View style={styles.bottom}>
-        <Pressable
-          style={styles.buttonRegistry}
-          onPressIn={Registrarse}
-          disabled={bloqueo}>
-          <Text style={styles.textButton}>Registrarse</Text>
-        </Pressable>
-        <View>
-          <Text style={styles.powered}>Powered by KC</Text>
-        </View>
-      </View>
-    </SafeAreaView>
+      <Box w={'100%'} h={'100%'} safeAreaTop bg="white">
+        <Box flex={1} alignItems={'center'} p={5}>
+          <Image
+            flex={1}
+            w="50%"
+            resizeMode="stretch"
+            source={require('../resources/images/logo-limpio.png')}
+            alt="Lucas Gym"
+          />
+        </Box>
+        <Box flex={4} roundedTop={'2xl'} bg={'info.900'}>
+          <ScrollView>
+            <VStack alignItems={'center'} space={'5'} mx="10%">
+              <Text color={'white'} fontSize={'2xl'} bold mt={'5'}>
+                Acceder
+              </Text>
+              <FormControl isRequired isInvalid={'Usuario' in error}>
+                <FormControl.Label _text={{color: 'white', fontWeight: 'bold'}}>
+                  Correo
+                </FormControl.Label>
+                <Input
+                  rounded={10}
+                  height={10}
+                  bgColor={'white'}
+                  value={form.Usuario}
+                  placeholder="Correo"
+                  onChangeText={value => setForm({...form, Usuario: value})}
+                  InputLeftElement={
+                    <Pressable onPress={() => setShow(!show)} pl={3}>
+                      <Icon name="user" size={30} color="grey"></Icon>
+                    </Pressable>
+                  }
+                />
+                {'Usuario' in error && (
+                  <FormControl.ErrorMessage>
+                    {error.Usuario}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
+              <FormControl isRequired isInvalid={'Clave' in error}>
+                <FormControl.Label _text={{color: 'white', fontWeight: 'bold'}}>
+                  Password
+                </FormControl.Label>
+                <PasswordKC
+                  value={form.Clave}
+                  placeholder={'Password'}
+                  setValue={value => {
+                    setForm({...form, Clave: value});
+                  }}
+                />
+                {'Clave' in error && (
+                  <FormControl.ErrorMessage>
+                    {error.Clave}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
+              <Box w="100%">
+                <HStack>
+                  <Box flex={1}>
+                    <Checkbox value={form.rememberme}>
+                      <Text color={'white'} bold>
+                        Recuerdame
+                      </Text>
+                    </Checkbox>
+                  </Box>
+                  <Box>
+                    <Pressable onPress={RecuperarClave}>
+                      <Text bold color={'tertiary.500'} fontSize={'md'}>
+                        ¿Clave olvidada?
+                      </Text>
+                    </Pressable>
+                  </Box>
+                </HStack>
+              </Box>
+              <Pressable
+                w={'90%'}
+                rounded={'2xl'}
+                mt={5}
+                onPress={() => {
+                  ValidateLogin(form);
+                }}>
+                {({isHovered, isFocused, isPressed}) => {
+                  return (
+                    <Box
+                      bg={
+                        isPressed
+                          ? 'tertiary.500'
+                          : isHovered
+                          ? 'tertiary.500'
+                          : 'tertiary.400'
+                      }
+                      style={{
+                        transform: [
+                          {
+                            scale: isPressed ? 0.96 : 1,
+                          },
+                        ],
+                      }}
+                      p="2"
+                      rounded={'2xl'}
+                      shadow={3}
+                      borderWidth="1"
+                      borderColor="coolGray.300">
+                      <Text
+                        color="coolGray.800"
+                        fontWeight="medium"
+                        fontSize="xl"
+                        textAlign={'center'}>
+                        Acceder
+                      </Text>
+                    </Box>
+                  );
+                }}
+              </Pressable>
+            </VStack>
+          </ScrollView>
+          <Box safeAreaBottom alignItems={'center'} w="100%" mb={10}>
+            <Text fontSize={'md'} color="white">
+              ¿No estas registrado?
+            </Text>
+            <Pressable onPress={Registrarse}>
+              <Text fontSize={'md'} bold color="tertiary.500">
+                ¡Registrate!
+              </Text>
+            </Pressable>
+          </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 

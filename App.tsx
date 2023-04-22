@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Index from './src/main/Index';
 import FillInformation from './src/user/FillInformation';
 import {requestUserPermission, Listener} from './src/support/Notification';
-
+import {NativeBaseProvider} from 'native-base';
 import {LucasContext} from './src/support/Contexts';
 const App = () => {
   useEffect(() => {
@@ -25,19 +25,21 @@ const App = () => {
   });
   return (
     <LucasContext.Provider value={[userLucas, setUserLucas]}>
-      {userLucas.auth ? (
-        <>
-          {userLucas.infoComplete ? (
-            <NavigationContainer>
-              <Index />
-            </NavigationContainer>
-          ) : (
-            <FillInformation />
-          )}
-        </>
-      ) : (
-        <Login />
-      )}
+      <NativeBaseProvider>
+        {userLucas.auth ? (
+          <>
+            {userLucas.infoComplete ? (
+              <NavigationContainer>
+                <Index />
+              </NavigationContainer>
+            ) : (
+              <FillInformation />
+            )}
+          </>
+        ) : (
+          <Login />
+        )}
+      </NativeBaseProvider>
     </LucasContext.Provider>
   );
 };
