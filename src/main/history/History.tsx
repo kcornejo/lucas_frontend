@@ -219,23 +219,23 @@ const History = () => {
               <View style={{flex: 1, marginRight: 10, alignItems: 'center'}}>
                 <TouchableHighlight
                   activeOpacity={0.85}
-                  underlayColor={'#6166A8'}
+                  underlayColor={'#10b981'}
                   onPress={funHistory}
                   style={{
                     width: '80%',
                     borderRadius: 10,
                     borderColor: 'black',
-                    backgroundColor: '#36395E',
+                    backgroundColor: '#34d399',
                   }}>
                   <View
                     style={{
                       alignItems: 'center',
                       margin: 10,
                     }}>
-                    <Icon name="book" size={50} color="white" />
+                    <Icon name="book" size={50} color="black" />
                     <Text
                       style={{
-                        color: 'white',
+                        color: 'black',
                         textAlign: 'center',
                         fontWeight: '800',
                         fontSize: 13,
@@ -250,7 +250,7 @@ const History = () => {
               <View style={{flex: 1, marginLeft: 10, alignItems: 'center'}}>
                 <TouchableHighlight
                   activeOpacity={0.85}
-                  underlayColor={'#6166A8'}
+                  underlayColor={'#10b981'}
                   onPress={() => {
                     setModalHistoryWeights(true);
                   }}
@@ -258,17 +258,17 @@ const History = () => {
                     width: '80%',
                     borderRadius: 10,
                     borderColor: 'black',
-                    backgroundColor: '#36395E',
+                    backgroundColor: '#34d399',
                   }}>
                   <View
                     style={{
                       alignItems: 'center',
                       margin: 10,
                     }}>
-                    <Icon name="odnoklassniki" size={50} color="white" />
+                    <Icon name="odnoklassniki" size={50} color="black" />
                     <Text
                       style={{
-                        color: 'white',
+                        color: 'black',
                         textAlign: 'center',
                         fontWeight: '800',
                         fontSize: 13,
@@ -287,23 +287,23 @@ const History = () => {
                 <View style={{flex: 1, marginLeft: 0, alignItems: 'center'}}>
                   <TouchableHighlight
                     activeOpacity={0.85}
-                    underlayColor={'#6166A8'}
+                    underlayColor={'#10b981'}
                     onPress={funHistoryEveryone}
                     style={{
                       width: '90%',
                       borderRadius: 10,
                       borderColor: 'black',
-                      backgroundColor: '#36395E',
+                      backgroundColor: '#34d399',
                     }}>
                     <View
                       style={{
                         alignItems: 'center',
                         margin: 10,
                       }}>
-                      <Icon name="user" size={40} color="white" />
+                      <Icon name="user" size={40} color="black" />
                       <Text
                         style={{
-                          color: 'white',
+                          color: 'black',
                           textAlign: 'center',
                           fontWeight: '800',
                           fontSize: 13,

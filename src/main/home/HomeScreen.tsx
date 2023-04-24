@@ -138,7 +138,10 @@ const HomeScreen = () => {
                       shadow={3}
                       borderWidth="1"
                       borderColor="coolGray.300">
-                      <Box alignItems={'center'} my="10%">
+                      <Box
+                        alignItems={'center'}
+                        flex={1}
+                        justifyContent={'center'}>
                         <Icon name="plus" size={80} color="black" />
                         <Text
                           style={{
@@ -179,7 +182,10 @@ const HomeScreen = () => {
                       borderWidth="1"
                       h={'100%'}
                       borderColor="coolGray.300">
-                      <Box alignItems={'center'} my="10%">
+                      <Box
+                        alignItems={'center'}
+                        flex={1}
+                        justifyContent={'center'}>
                         <Icon name="odnoklassniki" size={80} color="black" />
                         <Text
                           style={{
@@ -231,7 +237,10 @@ const HomeScreen = () => {
                       h={'100%'}
                       borderWidth="1"
                       borderColor="coolGray.300">
-                      <Box alignItems={'center'} my="10%">
+                      <Box
+                        alignItems={'center'}
+                        flex={1}
+                        justifyContent={'center'}>
                         <Icon name="instagram" size={80} color="#6459D7" />
                         <Text
                           style={{
@@ -285,7 +294,10 @@ const HomeScreen = () => {
                       borderWidth="1"
                       h={'100%'}
                       borderColor="coolGray.300">
-                      <Box alignItems={'center'} my="10%">
+                      <Box
+                        alignItems={'center'}
+                        flex={1}
+                        justifyContent={'center'}>
                         <Icon name="whatsapp" size={80} color="#39D555" />
                         <Text
                           style={{

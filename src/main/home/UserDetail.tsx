@@ -12,14 +12,14 @@ const UserDetail = () => {
   return (
     <>
       <Box flex={1} alignItems={'center'}>
-        <Box marginBottom={'10%'} marginTop={'auto'}>
-          <Box alignItems="center" p={5}>
+        <Box marginBottom={'10%'} marginTop={'auto'} justifyContent={'center'}>
+          <Box alignItems="center">
             {userLucas.photo !== undefined && userLucas.photo != '' ? (
               <Image
                 source={{
                   uri: userLucas.photo,
                 }}
-                style={{width: 100, height: 100, borderRadius: 50}}
+                style={{width: 120, height: 120, borderRadius: 60}}
               />
             ) : (
               <Icon name="user" size={80} color="black" />

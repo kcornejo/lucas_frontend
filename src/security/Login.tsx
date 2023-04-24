@@ -188,9 +188,9 @@ const Login = () => {
                   placeholder="Correo"
                   onChangeText={value => setForm({...form, Usuario: value})}
                   InputLeftElement={
-                    <Pressable onPress={() => setShow(!show)} pl={3}>
+                    <Box ml={3}>
                       <Icon name="user" size={30} color="grey"></Icon>
-                    </Pressable>
+                    </Box>
                   }
                 />
                 {'Usuario' in error && (
