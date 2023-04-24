@@ -3,12 +3,12 @@ import {
   Modal,
   Pressable,
   Text,
-  Image,
   SafeAreaView,
   Platform,
   View,
   TouchableHighlight,
   Alert,
+  Image,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import InputKC from '../../support/InputKC';
@@ -101,7 +101,7 @@ const UserDetail = ({visible, setVisible}) => {
   };
 
   return (
-    <Modal visible={visible}>
+    <Modal visible={visible} animationType="slide">
       <ModalLoad viewed={modalLoadVisible} />
       <SafeAreaView style={{backgroundColor: '#24263F'}}></SafeAreaView>
       <View
@@ -202,7 +202,7 @@ const UserDetail = ({visible, setVisible}) => {
                 <>
                   <Image
                     source={{uri: photo.uri}}
-                    style={{width: 150, height: 150}}
+                    style={{width: 150, height: 150, borderRadius: 75}}
                   />
                 </>
               )}
@@ -212,7 +212,7 @@ const UserDetail = ({visible, setVisible}) => {
                     source={{
                       uri: userLucas.photo,
                     }}
-                    style={{width: 150, height: 150}}
+                    style={{width: 150, height: 150, borderRadius: 75}}
                   />
                 </>
               )}

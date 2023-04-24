@@ -101,7 +101,6 @@ const Index = () => {
       })}>
       <Tab.Screen name="Historial" component={Historial} />
       <Tab.Screen name="Inicio" component={HomeScreenIndex} />
-      <Tab.Screen name="Configuración" component={SettingsScreenIndex} />
     </Tab.Navigator>
   );
 };

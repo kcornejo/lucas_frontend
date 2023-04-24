@@ -1,19 +1,10 @@
 import React, {useState, useContext} from 'react';
 import ModalLoad from '../support/ModalLoad';
-import {styles} from './Styles';
-import {
-  SafeAreaView,
-  View,
-  Alert,
-  StyleSheet,
-  TouchableHighlight,
-} from 'react-native';
+import {Alert, Platform} from 'react-native';
 import {requestUserPermission} from '../support/Notification';
 import {login_firebase} from './Firebase';
 import RecoverPassword from './RecoverPassword';
 import RegisterUser from './RegisterUser';
-import {useForm} from 'react-hook-form';
-import InputKC from '../support/InputKC';
 import {LucasContext} from '../support/Contexts';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PasswordKC from '../components/PasswordKC';
@@ -22,13 +13,15 @@ import {
   Input,
   FormControl,
   Image,
-  ScrollView,
   Text,
   VStack,
   Pressable,
   Checkbox,
   HStack,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'native-base';
+import {validationsObjV2} from '../support/Support';
 const Login = () => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
   const [bloqueo, setBloqueo] = useState(false);
@@ -37,6 +30,45 @@ const Login = () => {
   const [modalVisibleRegister, setModalVisibleRegister] = useState(false);
   const [form, setForm] = useState({Usuario: '', Clave: ''});
   const [error, setError] = useState({});
+  const ValidateLogin = async (data: any) => {
+    setError(error => {
+      return {};
+    });
+    const validation = validationsObjV2(data, [
+      {
+        isRequired: true,
+        obj: 'Usuario',
+        regex: /\S+@\S+\.\S+/,
+      },
+      {
+        isRequired: true,
+        obj: 'Clave',
+        regex: /[0-9a-zA-Z]{6,}/,
+      },
+    ]);
+    if (validation.error) {
+      for (let i = 0; i < validation.list.length; i++) {
+        setError(error => {
+          return {
+            ...error,
+            [validation.list[i].obj]: validation.list[i].message,
+          };
+        });
+      }
+    } else {
+      setBloqueo(true);
+      setModalVisible(true);
+      //Login
+      const retorno = await login_api(data.Usuario, data.Clave);
+      setModalVisible(false);
+      setBloqueo(false);
+      if (retorno != null) {
+        LoginApiScreen(retorno, data);
+      } else {
+        Alert.alert('Error', 'Error de comunicación.');
+      }
+    }
+  };
   const login_api = async (user: string, password: string) => {
     const tokenPhone = await requestUserPermission();
     var raw = {
@@ -47,19 +79,7 @@ const Login = () => {
     const retorno = await login_firebase(raw);
     return retorno;
   };
-  const ValidateLogin = async (data: any) => {
-    setBloqueo(true);
-    setModalVisible(true);
-    //Login
-    const retorno = await login_api(data.Usuario, data.Clave);
-    setModalVisible(false);
-    setBloqueo(false);
-    if (retorno != null) {
-      LoginApiScreen(retorno, data);
-    } else {
-      Alert.alert('Error', 'Error de comunicación.');
-    }
-  };
+
   const LoginApiScreen = (retorno: any, data: any) => {
     try {
       if (retorno['code'] == '999') {
@@ -127,22 +147,25 @@ const Login = () => {
     setModalVisibleRegister(true);
   };
   return (
-    <>
-      <RecoverPassword
-        visible={modalVisibleRecuperar}
-        setModalVisible={setModalVisibleRecuperar}
-      />
-      <RegisterUser
-        visible={modalVisibleRegister}
-        setModalVisible={setModalVisibleRegister}
-      />
+    <KeyboardAvoidingView
+      style={{flex: Platform.OS === 'ios' ? 1 : undefined}}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ModalLoad viewed={modalVisible} />
+
       <Box w={'100%'} h={'100%'} safeAreaTop bg="white">
+        <RecoverPassword
+          visible={modalVisibleRecuperar}
+          setModalVisible={setModalVisibleRecuperar}
+        />
+        <RegisterUser
+          visible={modalVisibleRegister}
+          setModalVisible={setModalVisibleRegister}
+        />
         <Box flex={1} alignItems={'center'} p={5}>
           <Image
             flex={1}
             w="50%"
-            resizeMode="stretch"
+            resizeMode="contain"
             source={require('../resources/images/logo-limpio.png')}
             alt="Lucas Gym"
           />
@@ -253,7 +276,7 @@ const Login = () => {
               </Pressable>
             </VStack>
           </ScrollView>
-          <Box safeAreaBottom alignItems={'center'} w="100%" mb={10}>
+          <Box alignItems={'center'} w="100%" mb={6}>
             <Text fontSize={'md'} color="white">
               ¿No estas registrado?
             </Text>
@@ -265,7 +288,7 @@ const Login = () => {
           </Box>
         </Box>
       </Box>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 

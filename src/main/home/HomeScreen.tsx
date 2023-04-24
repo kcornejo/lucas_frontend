@@ -14,14 +14,42 @@ import ModalLoad from '../../support/ModalLoad';
 import {LucasContext} from '../../support/Contexts';
 import {list_schedule_avail} from './Firebase';
 import RegisterWeights from './RegisterWeights';
+import {Box, Pressable, Menu, VStack, HStack} from 'native-base';
+import UserEdit from '../setting/UserEdit';
 const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalLoadVisible, setModalLoadVisible] = useState(false);
   const [datosAgenda, setDatosAgenda] = useState([]);
   const [userLucas, setUserLucas] = useContext(LucasContext);
   const [visibleWeight, setVisibleWeight] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
   const newWeights = async () => {
     setVisibleWeight(true);
+  };
+  const logout = () => {
+    Alert.alert('Cerrar sesión', '¿Desea cerrar la sesión?', [
+      {
+        text: 'Si',
+        onPress: () => {
+          clearInterval(userLucas.timer);
+          setUserLucas({
+            firstName: '',
+            lastName: '',
+            email: '',
+            weight: '',
+            birthday: '',
+            active: false,
+            phone: '',
+            infoComplete: false,
+            auth: false,
+            token: '',
+          });
+        },
+      },
+      {
+        text: 'No',
+      },
+    ]);
   };
   const newExercise = async () => {
     setModalLoadVisible(true);
@@ -39,181 +67,248 @@ const HomeScreen = () => {
     }
   };
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        flexWrap: 'wrap',
-        backgroundColor: 'white',
-        marginTop: 15,
-      }}>
-      <ModalLoad viewed={modalLoadVisible} />
-      <ModalNewExercise
-        visible={modalVisible}
-        setVisible={setModalVisible}
-        datosAgenda={datosAgenda}
-      />
-      <RegisterWeights setVisible={setVisibleWeight} visible={visibleWeight} />
-      <UserDetail />
-      <View
-        style={{
-          width: '100%',
-          flex: 6,
-          alignItems: 'center',
-          borderTopStartRadius: 30,
-          borderTopEndRadius: 30,
-          backgroundColor: '#23263E',
-        }}>
-        <View style={{flex: 1, flexDirection: 'column', width: '100%'}}>
-          <View style={{flex: 1}}></View>
-          <View style={{flex: 1}}>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <View style={{flex: 1, alignItems: 'center'}}>
-                <TouchableHighlight
-                  activeOpacity={0.85}
-                  underlayColor={'#98FFF6'}
-                  onPress={newExercise}
-                  style={{
-                    borderRadius: 10,
-                    borderColor: 'black',
-                    backgroundColor: '#17e9d7',
-                    alignItems: 'center',
-                    marginLeft: 20,
-                    marginRight: 20,
-                    width: '80%',
-                  }}>
-                  <>
-                    <Icon name="plus" size={80} color="black" />
-                    <Text
+    <>
+      <Box w={'100%'} h={'100%'} safeAreaTop bg="white">
+        <ModalLoad viewed={modalLoadVisible} />
+        <ModalNewExercise
+          visible={modalVisible}
+          setVisible={setModalVisible}
+          datosAgenda={datosAgenda}
+        />
+        <RegisterWeights
+          setVisible={setVisibleWeight}
+          visible={visibleWeight}
+        />
+        <UserEdit
+          visible={modalEdit}
+          setVisible={setModalEdit}
+          userLucas={userLucas}
+          setUserLucas={setUserLucas}
+        />
+        <Box flex={3}>
+          <Box
+            safeAreaTop
+            marginRight={'5'}
+            marginTop={'5'}
+            marginLeft={'auto'}>
+            <Menu
+              trigger={triggerProps => {
+                return (
+                  <Pressable
+                    accessibilityLabel="More options menu"
+                    {...triggerProps}>
+                    <Icon name="cogs" size={25} />
+                  </Pressable>
+                );
+              }}>
+              <Menu.Item
+                onPress={() => {
+                  setModalEdit(!modalEdit);
+                }}>
+                Editar Perfil
+              </Menu.Item>
+              <Menu.Item onPress={logout}>Cerrar Sesión</Menu.Item>
+            </Menu>
+          </Box>
+          <UserDetail />
+        </Box>
+        <Box flex={5} roundedTop={'2xl'} bg={'info.900'}>
+          <Box flex={1} flexDirection={'column'}>
+            <Box flex={3} flexDirection={'row'}>
+              <Pressable flex={1} m={3} rounded={'2xl'} onPress={newExercise}>
+                {({isHovered, isFocused, isPressed}) => {
+                  return (
+                    <Box
+                      bg={
+                        isPressed
+                          ? 'tertiary.500'
+                          : isHovered
+                          ? 'tertiary.500'
+                          : 'tertiary.400'
+                      }
                       style={{
-                        color: 'black',
-                        textAlign: 'center',
-                        height: 40,
-                        fontWeight: '800',
-                        fontSize: 15,
-                        padding: 8,
-                      }}>
-                      Nuevo Entreno
-                    </Text>
-                  </>
-                </TouchableHighlight>
-              </View>
-
-              <View style={{flex: 1, alignItems: 'center'}}>
-                <TouchableHighlight
-                  activeOpacity={0.85}
-                  underlayColor={'#98FFF6'}
-                  onPress={newWeights}
-                  style={{
-                    borderRadius: 10,
-                    borderColor: 'black',
-                    backgroundColor: '#17e9d7',
-                    alignItems: 'center',
-                    marginLeft: 20,
-                    marginRight: 20,
-                    width: '80%',
-                  }}>
-                  <>
-                    <Icon name="odnoklassniki" size={80} color="black" />
-                    <Text
+                        transform: [
+                          {
+                            scale: isPressed ? 0.96 : 1,
+                          },
+                        ],
+                      }}
+                      rounded={'2xl'}
+                      h={'100%'}
+                      shadow={3}
+                      borderWidth="1"
+                      borderColor="coolGray.300">
+                      <Box alignItems={'center'} my="10%">
+                        <Icon name="plus" size={80} color="black" />
+                        <Text
+                          style={{
+                            color: 'black',
+                            textAlign: 'center',
+                            height: 40,
+                            fontWeight: '800',
+                            fontSize: 15,
+                            padding: 8,
+                          }}>
+                          Nuevo Entreno
+                        </Text>
+                      </Box>
+                    </Box>
+                  );
+                }}
+              </Pressable>
+              <Pressable flex={1} m={3} rounded={'2xl'} onPress={newWeights}>
+                {({isHovered, isFocused, isPressed}) => {
+                  return (
+                    <Box
+                      bg={
+                        isPressed
+                          ? 'tertiary.500'
+                          : isHovered
+                          ? 'tertiary.500'
+                          : 'tertiary.400'
+                      }
                       style={{
-                        color: 'black',
-                        textAlign: 'center',
-                        height: 40,
-                        fontWeight: '800',
-                        fontSize: 15,
-                        padding: 8,
-                      }}>
-                      Registrar Medidas
-                    </Text>
-                  </>
-                </TouchableHighlight>
-              </View>
-            </View>
-          </View>
-          <View style={{flex: 1}}>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <View style={{flex: 1, alignItems: 'center'}}>
-                <TouchableHighlight
-                  activeOpacity={0.85}
-                  underlayColor={'#444876'}
-                  onPress={async () => {
-                    const url = 'https://www.instagram.com/lucasgymgt/';
-                    await Linking.openURL(url).catch(e => {
-                      Alert.alert('Error', 'Error al abrir instagram.');
-                    });
-                  }}
-                  style={{
-                    borderRadius: 10,
-                    borderColor: 'black',
-                    backgroundColor: '#36395E',
-                    alignItems: 'center',
-                    padding: 10,
-                    width: '80%',
-                    marginHorizontal: 20,
-                  }}>
-                  <>
-                    <Icon name="instagram" size={80} color="#6459D7" />
-                    <Text
+                        transform: [
+                          {
+                            scale: isPressed ? 0.96 : 1,
+                          },
+                        ],
+                      }}
+                      rounded={'2xl'}
+                      shadow={3}
+                      borderWidth="1"
+                      h={'100%'}
+                      borderColor="coolGray.300">
+                      <Box alignItems={'center'} my="10%">
+                        <Icon name="odnoklassniki" size={80} color="black" />
+                        <Text
+                          style={{
+                            color: 'black',
+                            textAlign: 'center',
+                            height: 40,
+                            fontWeight: '800',
+                            fontSize: 15,
+                            padding: 8,
+                          }}>
+                          Registrar Medidas
+                        </Text>
+                      </Box>
+                    </Box>
+                  );
+                }}
+              </Pressable>
+            </Box>
+            <Box flex={3} flexDirection={'row'}>
+              <Pressable
+                flex={1}
+                m={3}
+                rounded={'2xl'}
+                onPress={async () => {
+                  const url = 'https://www.instagram.com/lucasgymgt/';
+                  await Linking.openURL(url).catch(e => {
+                    Alert.alert('Error', 'Error al abrir instagram.');
+                  });
+                }}>
+                {({isHovered, isFocused, isPressed}) => {
+                  return (
+                    <Box
+                      bg={
+                        isPressed
+                          ? 'coolGray.800'
+                          : isHovered
+                          ? 'coolGray.800'
+                          : 'coolGray.700'
+                      }
                       style={{
-                        color: 'white',
-                        textAlign: 'center',
-                        height: 40,
-                        fontWeight: '800',
-                        fontSize: 15,
-                        padding: 8,
-                      }}>
-                      Instagram
-                    </Text>
-                  </>
-                </TouchableHighlight>
-              </View>
-
-              <View style={{flex: 1, alignItems: 'center'}}>
-                <TouchableHighlight
-                  activeOpacity={0.85}
-                  underlayColor={'#444876'}
-                  onPress={async () => {
-                    const url =
-                      'https://chat.whatsapp.com/FeTvB3EUnPG7QA8YUi7rpi';
-                    await Linking.openURL(url).catch(e => {
-                      Alert.alert(
-                        'Error',
-                        'Error al buscar el grupo de whatsapp.',
-                      );
-                    });
-                  }}
-                  style={{
-                    borderRadius: 10,
-                    borderColor: 'black',
-                    backgroundColor: '#36395E',
-                    alignItems: 'center',
-                    padding: 10,
-                    width: '80%',
-                    marginHorizontal: 20,
-                  }}>
-                  <>
-                    <Icon name="whatsapp" size={80} color="#39D555" />
-                    <Text
+                        transform: [
+                          {
+                            scale: isPressed ? 0.96 : 1,
+                          },
+                        ],
+                      }}
+                      rounded={'2xl'}
+                      shadow={3}
+                      h={'100%'}
+                      borderWidth="1"
+                      borderColor="coolGray.300">
+                      <Box alignItems={'center'} my="10%">
+                        <Icon name="instagram" size={80} color="#6459D7" />
+                        <Text
+                          style={{
+                            color: 'white',
+                            textAlign: 'center',
+                            height: 40,
+                            fontWeight: '800',
+                            fontSize: 15,
+                            padding: 8,
+                          }}>
+                          Instagram
+                        </Text>
+                      </Box>
+                    </Box>
+                  );
+                }}
+              </Pressable>
+              <Pressable
+                flex={1}
+                m={3}
+                rounded={'2xl'}
+                onPress={async () => {
+                  const url =
+                    'https://chat.whatsapp.com/FeTvB3EUnPG7QA8YUi7rpi';
+                  await Linking.openURL(url).catch(e => {
+                    Alert.alert(
+                      'Error',
+                      'Error al buscar el grupo de whatsapp.',
+                    );
+                  });
+                }}>
+                {({isHovered, isFocused, isPressed}) => {
+                  return (
+                    <Box
+                      bg={
+                        isPressed
+                          ? 'coolGray.800'
+                          : isHovered
+                          ? 'coolGray.800'
+                          : 'coolGray.700'
+                      }
                       style={{
-                        color: 'white',
-                        textAlign: 'center',
-                        height: 40,
-                        fontWeight: '800',
-                        fontSize: 15,
-                        padding: 8,
-                      }}>
-                      Whatsapp
-                    </Text>
-                  </>
-                </TouchableHighlight>
-              </View>
-            </View>
-          </View>
-          <View style={{flex: 1}}></View>
-        </View>
-      </View>
-    </SafeAreaView>
+                        transform: [
+                          {
+                            scale: isPressed ? 0.96 : 1,
+                          },
+                        ],
+                      }}
+                      rounded={'2xl'}
+                      shadow={3}
+                      borderWidth="1"
+                      h={'100%'}
+                      borderColor="coolGray.300">
+                      <Box alignItems={'center'} my="10%">
+                        <Icon name="whatsapp" size={80} color="#39D555" />
+                        <Text
+                          style={{
+                            color: 'white',
+                            textAlign: 'center',
+                            height: 40,
+                            fontWeight: '800',
+                            fontSize: 15,
+                            padding: 8,
+                          }}>
+                          Whatsapp
+                        </Text>
+                      </Box>
+                    </Box>
+                  );
+                }}
+              </Pressable>
+            </Box>
+            <Box flex={1}></Box>
+          </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 export default HomeScreen;
