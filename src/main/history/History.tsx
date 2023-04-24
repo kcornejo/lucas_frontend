@@ -12,7 +12,7 @@ import ModalLoad from '../../support/ModalLoad';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ModalHistory from './ModalHistory';
 import ModalHistoryEveryone from './ModalHistoryEveryone';
-import {LineChart} from 'react-native-chart-kit';
+import {LineChart, BarChart} from 'react-native-chart-kit';
 import moment from 'moment';
 import {LucasContext} from '../../support/Contexts';
 import {history_gym, history_gym_complete} from './Firebase';
@@ -168,7 +168,7 @@ const History = () => {
   };
   return (
     <>
-      <SafeAreaView style={{backgroundColor: '#23263E', height: '100%'}}>
+      <SafeAreaView style={{backgroundColor: '#0B4566', height: '100%'}}>
         <ModalLoad viewed={modalLoadVisible} />
         <Modal visible={modalHistoryVisible} animationType="slide">
           <ModalHistory

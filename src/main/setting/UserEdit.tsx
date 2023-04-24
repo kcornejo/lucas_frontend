@@ -103,10 +103,10 @@ const UserDetail = ({visible, setVisible}) => {
   return (
     <Modal visible={visible} animationType="slide">
       <ModalLoad viewed={modalLoadVisible} />
-      <SafeAreaView style={{backgroundColor: '#24263F'}}></SafeAreaView>
+      <SafeAreaView style={{backgroundColor: '#0B4566'}}></SafeAreaView>
       <View
         style={{
-          backgroundColor: '#24263F',
+          backgroundColor: '#0B4566',
           flex: 1,
           flexDirection: 'column',
         }}>
@@ -174,7 +174,7 @@ const UserDetail = ({visible, setVisible}) => {
                 style={{
                   borderRadius: 10,
                   borderColor: 'black',
-                  backgroundColor: '#36395E',
+                  backgroundColor: '#666666',
                   alignItems: 'center',
                   padding: 10,
                   width: 150,
