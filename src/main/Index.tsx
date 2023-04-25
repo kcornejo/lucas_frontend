@@ -12,7 +12,7 @@ const Index = () => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
   useEffect(() => {
     let contador = 0;
-    const max_time = 600;
+    const max_time = 6000000;
     const timer = setInterval(() => {
       contador++;
       if (contador >= max_time) {

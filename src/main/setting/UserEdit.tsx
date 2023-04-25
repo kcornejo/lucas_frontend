@@ -10,7 +10,7 @@ import {validationsObjV2} from '../../support/Support';
 const UserDetail = ({visible, setVisible}) => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
   const [photo, setPhoto] = useState(null);
-  const [modalLoadVisible, setModalLoadVisible] = useState(false);
+  const [modalLoadVisible, setModalLoadVisible] = useState(true);
   const [form, setForm] = useState({Telefono: userLucas.phone});
   const [error, setError] = useState({});
   const cargarImagen = async () => {
@@ -107,6 +107,7 @@ const UserDetail = ({visible, setVisible}) => {
   return (
     <Modal visible={visible} animationType="slide">
       <Box safeAreaTop h={'100%'} bg="info.900">
+        <ModalLoad viewed={true} />
         <VStack w={'90%'} space={5} mx={'5%'}>
           <Text
             textAlign={'center'}
@@ -289,7 +290,6 @@ const UserDetail = ({visible, setVisible}) => {
           </Box>
         </VStack>
       </Box>
-      <ModalLoad viewed={modalLoadVisible} />
     </Modal>
   );
 };
