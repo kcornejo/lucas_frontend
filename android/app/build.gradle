@@ -100,8 +100,8 @@ android {
         applicationId "com.ocsolutions.lucasgym"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 12
-        versionName "Alpha"
+        versionCode 14
+        versionName "Beta"
     }
 
     splits {
