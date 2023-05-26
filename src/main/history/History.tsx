@@ -265,7 +265,7 @@ const History = () => {
                       alignItems: 'center',
                       margin: 10,
                     }}>
-                    <Icon name="odnoklassniki" size={50} color="black" />
+                    <Icon name="sliders" size={50} color="black" />
                     <Text
                       style={{
                         color: 'black',

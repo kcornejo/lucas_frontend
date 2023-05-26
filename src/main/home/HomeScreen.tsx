@@ -94,10 +94,8 @@ const HomeScreen = () => {
             <Menu
               trigger={triggerProps => {
                 return (
-                  <Pressable
-                    accessibilityLabel="More options menu"
-                    {...triggerProps}>
-                    <Icon name="cogs" size={25} />
+                  <Pressable {...triggerProps}>
+                    <Icon name="cogs" color={'black'} size={25} />
                   </Pressable>
                 );
               }}>
@@ -141,8 +139,9 @@ const HomeScreen = () => {
                       <Box
                         alignItems={'center'}
                         flex={1}
-                        justifyContent={'center'}>
-                        <Icon name="plus" size={80} color="black" />
+                        justifyContent={'center'}
+                        mt={2}>
+                        <Icon name="child" size={50} color="black" />
                         <Text
                           style={{
                             color: 'black',
@@ -152,7 +151,7 @@ const HomeScreen = () => {
                             fontSize: 15,
                             padding: 8,
                           }}>
-                          Nuevo Entreno
+                          Challenge
                         </Text>
                       </Box>
                     </Box>
@@ -185,8 +184,9 @@ const HomeScreen = () => {
                       <Box
                         alignItems={'center'}
                         flex={1}
-                        justifyContent={'center'}>
-                        <Icon name="odnoklassniki" size={80} color="black" />
+                        justifyContent={'center'}
+                        mt={2}>
+                        <Icon name="sliders" size={50} color="black" />
                         <Text
                           style={{
                             color: 'black',
@@ -196,7 +196,54 @@ const HomeScreen = () => {
                             fontSize: 15,
                             padding: 8,
                           }}>
-                          Registrar Medidas
+                          Medidas
+                        </Text>
+                      </Box>
+                    </Box>
+                  );
+                }}
+              </Pressable>
+            </Box>
+            <Box flex={3} alignItems={'center'}>
+              <Pressable w={200} m={3} rounded={'2xl'} onPress={newExercise}>
+                {({isHovered, isFocused, isPressed}) => {
+                  return (
+                    <Box
+                      bg={
+                        isPressed
+                          ? 'tertiary.500'
+                          : isHovered
+                          ? 'tertiary.500'
+                          : 'tertiary.400'
+                      }
+                      style={{
+                        transform: [
+                          {
+                            scale: isPressed ? 0.96 : 1,
+                          },
+                        ],
+                      }}
+                      rounded={'2xl'}
+                      h={'100%'}
+                      shadow={3}
+                      borderWidth="1"
+                      borderColor="coolGray.300">
+                      <Box
+                        alignItems={'center'}
+                        flex={1}
+                        justifyContent={'center'}
+                        mt={2}>
+                        <Icon name="plus" size={50} color="black" />
+                        <Text
+                          style={{
+                            color: 'black',
+                            textAlign: 'center',
+                            height: 40,
+                            fontWeight: '800',
+                            fontSize: 15,
+                            padding: 8,
+                          }}>
+                          Nuevo Entreno
                         </Text>
                       </Box>
                     </Box>
@@ -240,8 +287,9 @@ const HomeScreen = () => {
                       <Box
                         alignItems={'center'}
                         flex={1}
+                        mt={2}
                         justifyContent={'center'}>
-                        <Icon name="instagram" size={80} color="#6459D7" />
+                        <Icon name="instagram" size={50} color="#6459D7" />
                         <Text
                           style={{
                             color: 'white',
@@ -297,8 +345,9 @@ const HomeScreen = () => {
                       <Box
                         alignItems={'center'}
                         flex={1}
+                        mt={2}
                         justifyContent={'center'}>
-                        <Icon name="whatsapp" size={80} color="#39D555" />
+                        <Icon name="whatsapp" size={50} color="#39D555" />
                         <Text
                           style={{
                             color: 'white',
