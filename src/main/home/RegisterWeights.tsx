@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {Alert, Modal, Pressable, SafeAreaView, Text} from 'react-native';
+import {Alert, Modal, SafeAreaView, TouchableHighlight} from 'react-native';
 import {styles} from '../Styles';
 import {
   FormControl,
@@ -7,7 +7,10 @@ import {
   Heading,
   Input,
   NativeBaseProvider,
+  Box,
+  Text,
   VStack,
+  Pressable,
   ScrollView,
 } from 'native-base';
 import {validationsObjV2} from '../../support/Support';
@@ -177,27 +180,46 @@ const RegisterWeights = ({setVisible, visible = false}) => {
                 )}
               </FormControl>
             </Stack>
-            <Pressable
-              style={styles.buttonNew}
+            <TouchableHighlight
+              activeOpacity={0.85}
+              underlayColor={'#10b981'}
+              style={{
+                backgroundColor: '#34d399',
+                borderWidth: 1,
+                borderRadius: 12,
+                height: 50,
+                margin: 20,
+              }}
               onPress={() => {
                 registryWeights(form);
               }}>
               <Text style={styles.textButton}>Guardar</Text>
-            </Pressable>
-            <Pressable
-              style={styles.button}
+            </TouchableHighlight>
+            <TouchableHighlight
+              activeOpacity={0.85}
+              underlayColor={'#374151'}
+              style={{
+                backgroundColor: '#4b5563',
+                borderWidth: 1,
+                borderRadius: 12,
+                height: 50,
+                margin: 20,
+              }}
               onPress={() => {
-                setForm({
-                  brazo: '0',
-                  cintura: '0',
-                  abdomen: '0',
-                  cadera: '0',
-                  pierna: '0',
-                });
                 setVisible(false);
               }}>
-              <Text style={styles.textButton}>Regresar</Text>
-            </Pressable>
+              <Text
+                style={{
+                  color: 'white',
+                  textAlign: 'center',
+                  height: 40,
+                  fontWeight: '800',
+                  fontSize: 20,
+                  marginTop: 10,
+                }}>
+                Regresar
+              </Text>
+            </TouchableHighlight>
           </ScrollView>
         </SafeAreaView>
       </NativeBaseProvider>

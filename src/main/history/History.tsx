@@ -189,7 +189,13 @@ const History = () => {
             setVisible={setModalHistoryWeights}
           />
         </Modal>
-        <View style={{margin: 30, flex: 1, flexDirection: 'column'}}>
+        <View
+          style={{
+            marginHorizontal: 30,
+            marginTop: 15,
+            flex: 1,
+            flexDirection: 'column',
+          }}>
           <View style={{flex: 6}}>
             <Text style={{fontWeight: '600', color: 'white', fontSize: 40}}>
               Historial
@@ -209,7 +215,7 @@ const History = () => {
               data={data}
               style={{marginTop: 10}}
               width={screenWidth}
-              height={200}
+              height={(Dimensions.get('screen').height / 100) * 24}
               chartConfig={chartConfig}
               bezier
               segments={4}

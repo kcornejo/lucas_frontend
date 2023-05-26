@@ -19,13 +19,13 @@ const UserDetail = () => {
                 source={{
                   uri: userLucas.photo,
                 }}
-                style={{width: 120, height: 120, borderRadius: 60}}
+                style={{width: 70, height: 70, borderRadius: 35}}
               />
             ) : (
               <Icon name="user" size={80} color="black" />
             )}
           </Box>
-          <Text fontSize={'2xl'} bold textAlign={'center'}>
+          <Text fontSize={'xl'} bold textAlign={'center'}>
             {userLucas.firstName + ' ' + userLucas.lastName}
           </Text>
           <Text

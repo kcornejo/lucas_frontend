@@ -207,7 +207,7 @@ const HistoryWeights = ({setVisible, visible}) => {
   return (
     <NativeBaseProvider>
       <ModalLoad viewed={load} />
-      <SafeAreaView style={{backgroundColor: '#23263E', height: '100%'}}>
+      <SafeAreaView style={{backgroundColor: '#114156', height: '100%'}}>
         <ScrollView w="100%">
           <VStack alignItems="center" mt={5}>
             <Heading size="lg" color="white">
@@ -253,9 +253,9 @@ const HistoryWeights = ({setVisible, visible}) => {
           </Stack>
           <TouchableHighlight
             activeOpacity={0.85}
-            underlayColor={'#6166A8'}
+            underlayColor={'#10b981'}
             style={{
-              backgroundColor: '#36395E',
+              backgroundColor: '#34d399',
               borderWidth: 1,
               borderRadius: 12,
               height: 50,

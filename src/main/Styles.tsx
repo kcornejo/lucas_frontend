@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     marginRight: 30,
   },
   textButton: {
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
     height: 40,
     fontWeight: '800',

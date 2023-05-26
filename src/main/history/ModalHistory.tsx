@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Modal, Pressable, Text, View} from 'react-native';
+import {Modal, Pressable, Text, TouchableHighlight, View} from 'react-native';
 import {Agenda} from 'react-native-calendars';
 import {styles} from '../Styles';
 import moment from 'moment';
@@ -214,9 +214,21 @@ const ModalHistory = ({setVisible, data}) => {
         }}
         refreshing={false}></Agenda>
 
-      <Pressable style={styles.button} onPress={regresar}>
+      <TouchableHighlight
+        activeOpacity={0.85}
+        underlayColor={'#10b981'}
+        style={{
+          backgroundColor: '#34d399',
+          borderWidth: 1,
+          borderRadius: 12,
+          height: 50,
+          margin: 20,
+        }}
+        onPress={() => {
+          setVisible(false);
+        }}>
         <Text style={styles.textButton}>Regresar</Text>
-      </Pressable>
+      </TouchableHighlight>
     </>
   );
 };

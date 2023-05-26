@@ -3,7 +3,7 @@ import {
   View,
   TouchableHighlight,
   Text,
-  SafeAreaView,
+  Dimensions,
   Linking,
   Alert,
 } from 'react-native';
@@ -85,12 +85,8 @@ const HomeScreen = () => {
           userLucas={userLucas}
           setUserLucas={setUserLucas}
         />
-        <Box flex={3}>
-          <Box
-            safeAreaTop
-            marginRight={'5'}
-            marginTop={'5'}
-            marginLeft={'auto'}>
+        <Box h={'25%'}>
+          <Box mt={5} marginRight={'5'} marginLeft={'auto'}>
             <Menu
               trigger={triggerProps => {
                 return (
@@ -113,99 +109,119 @@ const HomeScreen = () => {
         <Box flex={5} roundedTop={'2xl'} bg={'info.900'}>
           <Box flex={1} flexDirection={'column'}>
             <Box flex={3} flexDirection={'row'}>
-              <Pressable flex={1} m={3} rounded={'2xl'} onPress={newExercise}>
-                {({isHovered, isFocused, isPressed}) => {
-                  return (
-                    <Box
-                      bg={
-                        isPressed
-                          ? 'tertiary.500'
-                          : isHovered
-                          ? 'tertiary.500'
-                          : 'tertiary.400'
-                      }
-                      style={{
-                        transform: [
-                          {
-                            scale: isPressed ? 0.96 : 1,
-                          },
-                        ],
-                      }}
-                      rounded={'2xl'}
-                      h={'100%'}
-                      shadow={3}
-                      borderWidth="1"
-                      borderColor="coolGray.300">
+              <HStack flex={1}>
+                <Pressable
+                  h={(Dimensions.get('window').height / 100) * 20}
+                  maxH={140}
+                  m={3}
+                  rounded={'2xl'}
+                  onPress={newExercise}
+                  flex={1}>
+                  {({isHovered, isFocused, isPressed}) => {
+                    return (
                       <Box
-                        alignItems={'center'}
-                        flex={1}
-                        justifyContent={'center'}
-                        mt={2}>
-                        <Icon name="child" size={50} color="black" />
-                        <Text
-                          style={{
-                            color: 'black',
-                            textAlign: 'center',
-                            height: 40,
-                            fontWeight: '800',
-                            fontSize: 15,
-                            padding: 8,
-                          }}>
-                          Challenge
-                        </Text>
+                        bg={
+                          isPressed
+                            ? 'tertiary.500'
+                            : isHovered
+                            ? 'tertiary.500'
+                            : 'tertiary.400'
+                        }
+                        style={{
+                          transform: [
+                            {
+                              scale: isPressed ? 0.96 : 1,
+                            },
+                          ],
+                        }}
+                        rounded={'2xl'}
+                        h={'100%'}
+                        shadow={3}
+                        borderWidth="1"
+                        borderColor="coolGray.300">
+                        <Box
+                          alignItems={'center'}
+                          flex={1}
+                          justifyContent={'center'}
+                          mt={2}>
+                          <Icon name="child" size={50} color="black" />
+                          <Text
+                            style={{
+                              color: 'black',
+                              textAlign: 'center',
+                              height: 40,
+                              fontWeight: '800',
+                              fontSize: 15,
+                              padding: 8,
+                            }}>
+                            Challenge
+                          </Text>
+                        </Box>
                       </Box>
-                    </Box>
-                  );
-                }}
-              </Pressable>
-              <Pressable flex={1} m={3} rounded={'2xl'} onPress={newWeights}>
-                {({isHovered, isFocused, isPressed}) => {
-                  return (
-                    <Box
-                      bg={
-                        isPressed
-                          ? 'tertiary.500'
-                          : isHovered
-                          ? 'tertiary.500'
-                          : 'tertiary.400'
-                      }
-                      style={{
-                        transform: [
-                          {
-                            scale: isPressed ? 0.96 : 1,
-                          },
-                        ],
-                      }}
-                      rounded={'2xl'}
-                      shadow={3}
-                      borderWidth="1"
-                      h={'100%'}
-                      borderColor="coolGray.300">
+                    );
+                  }}
+                </Pressable>
+                <Pressable
+                  flex={1}
+                  h={(Dimensions.get('window').height / 100) * 20}
+                  maxH={140}
+                  m={3}
+                  rounded={'2xl'}
+                  onPress={newWeights}>
+                  {({isHovered, isFocused, isPressed}) => {
+                    return (
                       <Box
-                        alignItems={'center'}
-                        flex={1}
-                        justifyContent={'center'}
-                        mt={2}>
-                        <Icon name="sliders" size={50} color="black" />
-                        <Text
-                          style={{
-                            color: 'black',
-                            textAlign: 'center',
-                            height: 40,
-                            fontWeight: '800',
-                            fontSize: 15,
-                            padding: 8,
-                          }}>
-                          Medidas
-                        </Text>
+                        bg={
+                          isPressed
+                            ? 'tertiary.500'
+                            : isHovered
+                            ? 'tertiary.500'
+                            : 'tertiary.400'
+                        }
+                        style={{
+                          transform: [
+                            {
+                              scale: isPressed ? 0.96 : 1,
+                            },
+                          ],
+                        }}
+                        rounded={'2xl'}
+                        shadow={3}
+                        borderWidth="1"
+                        h={'100%'}
+                        borderColor="coolGray.300">
+                        <Box
+                          alignItems={'center'}
+                          flex={1}
+                          justifyContent={'center'}
+                          mt={2}>
+                          <Icon name="sliders" size={50} color="black" />
+                          <Text
+                            style={{
+                              color: 'black',
+                              textAlign: 'center',
+                              height: 40,
+                              fontWeight: '800',
+                              fontSize: 15,
+                              padding: 8,
+                            }}>
+                            Medidas
+                          </Text>
+                        </Box>
                       </Box>
-                    </Box>
-                  );
-                }}
-              </Pressable>
+                    );
+                  }}
+                </Pressable>
+              </HStack>
             </Box>
-            <Box flex={3} alignItems={'center'}>
-              <Pressable w={200} m={3} rounded={'2xl'} onPress={newExercise}>
+            <Box flex={3} my={5} alignItems={'center'}>
+              <Pressable
+                w={180}
+                h={(Dimensions.get('window').height / 100) * 20}
+                maxH={140}
+                m={3}
+                rounded={'2xl'}
+                onPress={newExercise}>
                 {({isHovered, isFocused, isPressed}) => {
                   return (
                     <Box
@@ -255,6 +271,9 @@ const HomeScreen = () => {
               <Pressable
                 flex={1}
                 m={3}
+                w={200}
+                h={(Dimensions.get('window').height / 100) * 20}
+                maxH={140}
                 rounded={'2xl'}
                 onPress={async () => {
                   const url = 'https://www.instagram.com/lucasgymgt/';
@@ -309,6 +328,9 @@ const HomeScreen = () => {
               <Pressable
                 flex={1}
                 m={3}
+                w={200}
+                h={(Dimensions.get('window').height / 100) * 20}
+                maxH={140}
                 rounded={'2xl'}
                 onPress={async () => {
                   const url =
