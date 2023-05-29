@@ -27,15 +27,7 @@ const App = () => {
     <LucasContext.Provider value={[userLucas, setUserLucas]}>
       <NativeBaseProvider>
         {userLucas.auth ? (
-          <>
-            {userLucas.infoComplete ? (
-              <NavigationContainer>
-                <Index />
-              </NavigationContainer>
-            ) : (
-              <FillInformation />
-            )}
-          </>
+          <>{userLucas.infoComplete ? <Index /> : <FillInformation />}</>
         ) : (
           <Login />
         )}
