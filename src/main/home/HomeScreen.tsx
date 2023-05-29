@@ -14,6 +14,7 @@ import ModalLoad from '../../support/ModalLoad';
 import {LucasContext} from '../../support/Contexts';
 import {list_schedule_avail} from './Firebase';
 import RegisterWeights from './RegisterWeights';
+import RegisterChallenge from './RegisterChallenge';
 import {Box, Pressable, Menu, VStack, HStack} from 'native-base';
 import UserEdit from '../setting/UserEdit';
 const HomeScreen = () => {
@@ -22,6 +23,7 @@ const HomeScreen = () => {
   const [datosAgenda, setDatosAgenda] = useState([]);
   const [userLucas, setUserLucas] = useContext(LucasContext);
   const [visibleWeight, setVisibleWeight] = useState(false);
+  const [visibleChallenge, setVisibleChallenge] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const newWeights = async () => {
     setVisibleWeight(true);
@@ -79,6 +81,10 @@ const HomeScreen = () => {
           setVisible={setVisibleWeight}
           visible={visibleWeight}
         />
+        <RegisterChallenge
+          setVisible={setVisibleChallenge}
+          visible={visibleChallenge}
+        />
         <UserEdit
           visible={modalEdit}
           setVisible={setModalEdit}
@@ -115,7 +121,9 @@ const HomeScreen = () => {
                   maxH={140}
                   m={3}
                   rounded={'2xl'}
-                  onPress={newExercise}
+                  onPress={() => {
+                    setVisibleChallenge(true);
+                  }}
                   flex={1}>
                   {({isHovered, isFocused, isPressed}) => {
                     return (

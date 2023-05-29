@@ -7,10 +7,8 @@ import {
   Heading,
   Input,
   NativeBaseProvider,
-  Box,
   Text,
   VStack,
-  Pressable,
   ScrollView,
 } from 'native-base';
 import {validationsObjV2} from '../../support/Support';

@@ -379,10 +379,36 @@ const set_weights = async (content: any) => {
     .collection('weights')
     .add(weights);
 };
+const get_challenge = async (content: any) => {
+  const email = sanitizationString(content.email);
+  const user = (await firestore().collection('user').doc(email).get()).data();
+  return {
+    tiempo: user?.tiempoChallenge !== undefined ? user.tiempoChallenge : '',
+    detalle: user?.detalleChallenge !== undefined ? user.detalleChallenge : '',
+  };
+};
+const set_challenge = async (content: any) => {
+  const email = sanitizationString(content.email);
+  const tiempoChallenge = sanitizationString(content.tiempo);
+  const detalleChallenge = sanitizationString(content.detalle);
+  const update = {
+    tiempoChallenge,
+    detalleChallenge,
+  };
+  await firestore().collection('user').doc(email).update(update);
+  const challenge = {...update, fecha: moment().toISOString().split('T')[0]};
+  await firestore()
+    .collection('user')
+    .doc(email)
+    .collection('challenge')
+    .add(challenge);
+};
 export {
   list_schedule_avail,
   new_exercise,
   delete_exercise,
   get_weights,
   set_weights,
+  set_challenge,
+  get_challenge,
 };

@@ -17,12 +17,14 @@ import moment from 'moment';
 import {LucasContext} from '../../support/Contexts';
 import {history_gym, history_gym_complete} from './Firebase';
 import HistoryWeights from './HistoryWeights';
+import HistoryChallenge from './HistoryChallenge';
 const History = () => {
   const [userLucas, setUserLucas] = useContext(LucasContext);
   const [modalLoadVisible, setModalLoadVisible] = useState(false);
   const [datosAgendaHistory, setDatosAgendaHistory] = useState();
   const [datosAgendaEveryone, setDatosAgendaEveryone] = useState();
   const [modalHistoryVisible, setModalHistoryVisible] = useState(false);
+  const [modalHistoryChallenge, setModalHistoryChallenge] = useState(false);
   const [modalHistoryEveryoneVisible, setModalHistoryEveryoneVisible] =
     useState(false);
   const [modalHistoryWeights, setModalHistoryWeights] = useState(false);
@@ -189,6 +191,12 @@ const History = () => {
             setVisible={setModalHistoryWeights}
           />
         </Modal>
+        <HistoryChallenge
+          visible={modalHistoryChallenge}
+          setVisible={setModalHistoryChallenge}
+          admin={admin}
+          user_email={userLucas.email}
+        />
         <View
           style={{
             marginHorizontal: 30,
@@ -290,39 +298,110 @@ const History = () => {
 
             <View style={{flex: 1, flexDirection: 'row'}}>
               {admin ? (
-                <View style={{flex: 1, marginLeft: 0, alignItems: 'center'}}>
-                  <TouchableHighlight
-                    activeOpacity={0.85}
-                    underlayColor={'#10b981'}
-                    onPress={funHistoryEveryone}
-                    style={{
-                      width: '90%',
-                      borderRadius: 10,
-                      borderColor: 'black',
-                      backgroundColor: '#34d399',
-                    }}>
-                    <View
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  <View
+                    style={{flex: 1, marginRight: 10, alignItems: 'center'}}>
+                    <TouchableHighlight
+                      activeOpacity={0.85}
+                      underlayColor={'#10b981'}
+                      onPress={funHistoryEveryone}
                       style={{
-                        alignItems: 'center',
-                        margin: 10,
+                        width: '80%',
+                        borderRadius: 10,
+                        borderColor: 'black',
+                        backgroundColor: '#34d399',
                       }}>
-                      <Icon name="user" size={40} color="black" />
-                      <Text
+                      <View
                         style={{
-                          color: 'black',
-                          textAlign: 'center',
-                          fontWeight: '800',
-                          fontSize: 13,
-                          marginTop: 10,
-                          width: '100%',
+                          alignItems: 'center',
+                          margin: 10,
                         }}>
-                        Historial de Todos
-                      </Text>
-                    </View>
-                  </TouchableHighlight>
+                        <Icon name="user" size={50} color="black" />
+                        <Text
+                          style={{
+                            color: 'black',
+                            textAlign: 'center',
+                            fontWeight: '800',
+                            fontSize: 13,
+                            marginTop: 10,
+                            width: '100%',
+                          }}>
+                          Historial de{'\n'}Todos
+                        </Text>
+                      </View>
+                    </TouchableHighlight>
+                  </View>
+                  <View style={{flex: 1, marginLeft: 10, alignItems: 'center'}}>
+                    <TouchableHighlight
+                      activeOpacity={0.85}
+                      underlayColor={'#10b981'}
+                      onPress={() => {
+                        setModalHistoryChallenge(true);
+                      }}
+                      style={{
+                        width: '80%',
+                        borderRadius: 10,
+                        borderColor: 'black',
+                        backgroundColor: '#34d399',
+                      }}>
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          margin: 10,
+                        }}>
+                        <Icon name="child" size={50} color="black" />
+                        <Text
+                          style={{
+                            color: 'black',
+                            textAlign: 'center',
+                            fontWeight: '800',
+                            fontSize: 13,
+                            marginTop: 10,
+                            width: '100%',
+                          }}>
+                          Historial de {'\n'}Challenges
+                        </Text>
+                      </View>
+                    </TouchableHighlight>
+                  </View>
                 </View>
               ) : (
-                <></>
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  <View
+                    style={{flex: 1, marginRight: 10, alignItems: 'center'}}>
+                    <TouchableHighlight
+                      activeOpacity={0.85}
+                      underlayColor={'#10b981'}
+                      onPress={() => {
+                        setModalHistoryChallenge(true);
+                      }}
+                      style={{
+                        width: '90%',
+                        borderRadius: 10,
+                        borderColor: 'black',
+                        backgroundColor: '#34d399',
+                      }}>
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          margin: 10,
+                        }}>
+                        <Icon name="child" size={50} color="black" />
+                        <Text
+                          style={{
+                            color: 'black',
+                            textAlign: 'center',
+                            fontWeight: '800',
+                            fontSize: 13,
+                            marginTop: 10,
+                            width: '100%',
+                          }}>
+                          Historial de {'\n'}Challenges
+                        </Text>
+                      </View>
+                    </TouchableHighlight>
+                  </View>
+                </View>
               )}
             </View>
           </View>

@@ -135,4 +135,52 @@ const get_weights = async (user: '') => {
     .catch();
   return retorno;
 };
-export {history_gym, history_gym_complete, confirm_assitance, get_weights};
+const get_list_user = async () => {
+  let retorno = [];
+  //User
+  await firestore()
+    .collection('user')
+    .get()
+    .then(data => {
+      data.forEach(row => {
+        const data = row.data();
+        retorno.push({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+        });
+      });
+    })
+    .catch();
+  return retorno;
+};
+const get_list_challenge = async email => {
+  let retorno = [];
+  //User
+  await firestore()
+    .collection('user')
+    .doc(email)
+    .collection('challenge')
+    .orderBy('fecha')
+    .get()
+    .then(data => {
+      data.forEach(row => {
+        const data = row.data();
+        retorno.push({
+          tiempo: data.tiempoChallenge,
+          detalle: data.detalleChallenge,
+          fecha: data.fecha,
+        });
+      });
+    })
+    .catch();
+  return retorno;
+};
+export {
+  history_gym,
+  history_gym_complete,
+  confirm_assitance,
+  get_weights,
+  get_list_user,
+  get_list_challenge,
+};
