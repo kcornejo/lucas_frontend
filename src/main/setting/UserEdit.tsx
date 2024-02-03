@@ -262,7 +262,6 @@ const UserDetail = ({visible, setVisible}) => {
                     borderWidth="1"
                     borderColor="coolGray.300">
                     <Text
-                      color="coolGray.800"
                       fontWeight="medium"
                       fontSize="xl"
                       textAlign={'center'}
@@ -303,7 +302,6 @@ const UserDetail = ({visible, setVisible}) => {
                     borderWidth="1"
                     borderColor="coolGray.300">
                     <Text
-                      color="coolGray.800"
                       fontWeight="medium"
                       fontSize="xl"
                       textAlign={'center'}
