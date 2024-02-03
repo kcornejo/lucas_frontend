@@ -1,10 +1,19 @@
 import React, {useState, useContext} from 'react';
 import {Modal, Platform, Alert, Image} from 'react-native';
-import {Box, VStack, Text, FormControl, Input, Pressable} from 'native-base';
+import {
+  Box,
+  VStack,
+  Text,
+  FormControl,
+  Input,
+  Pressable,
+  Popover,
+  Button,
+} from 'native-base';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {LucasContext} from '../../support/Contexts';
-import fill_info_user from '../../user/Firebase';
+import {delete_user, fill_info_user} from '../../user/Firebase';
 import ModalLoad from '../../support/ModalLoad';
 import {validationsObjV2} from '../../support/Support';
 const UserDetail = ({visible, setVisible}) => {
@@ -102,6 +111,24 @@ const UserDetail = ({visible, setVisible}) => {
         Alert.alert('Error', 'Error de comunicación.');
       }
     }
+  };
+  const eliminarCuenta = async () => {
+    //Delete User Training
+    await delete_user(userLucas);
+    //Logout
+    clearInterval(userLucas.timer);
+    setUserLucas({
+      firstName: '',
+      lastName: '',
+      email: '',
+      weight: '',
+      birthday: '',
+      active: false,
+      phone: '',
+      infoComplete: false,
+      auth: false,
+      token: '',
+    });
   };
 
   return (
@@ -287,6 +314,63 @@ const UserDetail = ({visible, setVisible}) => {
                 );
               }}
             </Pressable>
+            <Box w={'90%'} mt={10}>
+              <Popover
+                trigger={triggerProps => {
+                  return (
+                    <Pressable {...triggerProps}>
+                      {({isHovered, isFocused, isPressed}) => {
+                        return (
+                          <Box
+                            bg={
+                              isPressed
+                                ? 'red.700'
+                                : isHovered
+                                ? 'red.700'
+                                : 'red.600'
+                            }
+                            style={{
+                              transform: [
+                                {
+                                  scale: isPressed ? 0.96 : 1,
+                                },
+                              ],
+                            }}
+                            p="2"
+                            rounded={'2xl'}
+                            shadow={3}
+                            borderWidth="1"
+                            borderColor="coolGray.300">
+                            <Text
+                              fontWeight="medium"
+                              fontSize="xl"
+                              textAlign={'center'}
+                              color="white">
+                              Borrar Cuenta
+                            </Text>
+                          </Box>
+                        );
+                      }}
+                    </Pressable>
+                  );
+                }}>
+                <Popover.Content accessibilityLabel="Borrar Cuenta" mb={10}>
+                  <Popover.CloseButton />
+                  <Popover.Header>Eliminación de Cuenta</Popover.Header>
+                  <Popover.Body>
+                    Si continuas, considera que tus datos de usuario no se
+                    podrán recuperar. ¿Deseas continuar?
+                  </Popover.Body>
+                  <Popover.Footer justifyContent="flex-end">
+                    <Button.Group space={2}>
+                      <Button onPress={eliminarCuenta} colorScheme="red">
+                        Continuar
+                      </Button>
+                    </Button.Group>
+                  </Popover.Footer>
+                </Popover.Content>
+              </Popover>
+            </Box>
           </Box>
         </VStack>
       </Box>

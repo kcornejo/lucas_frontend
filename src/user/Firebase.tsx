@@ -3,6 +3,75 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {sanitizationString, validationsObj} from '../support/Support';
 import {ApiLog} from '../support/Support';
+import {firebase} from '@react-native-firebase/auth';
+
+const delete_user = async (content: any) => {
+  //Obtencion Usuario
+  await firestore()
+    .collection('user')
+    .doc(content.email)
+    .collection('trainings')
+    .get()
+    .then(trainigs => {
+      trainigs.forEach(async deta => {
+        const date = deta.id;
+        await firestore()
+          .collection('user_training')
+          .doc(date)
+          .collection('times')
+          .where('email', '==', content.email)
+          .get()
+          .then(det => {
+            det.forEach(async detRow => {
+              await firestore()
+                .collection('user_training')
+                .doc(date)
+                .collection('times')
+                .doc(detRow.id)
+                .delete();
+            });
+          });
+        await firestore()
+          .collection('user')
+          .doc(content.email)
+          .collection('trainings')
+          .doc(deta.id)
+          .delete();
+      });
+    });
+  await firestore()
+    .collection('user')
+    .doc(content.email)
+    .collection('challenge')
+    .get()
+    .then(async challenge => {
+      challenge.forEach(async challengeRow => {
+        await firestore()
+          .collection('user')
+          .doc(content.email)
+          .collection('challenge')
+          .doc(challengeRow.id)
+          .delete();
+      });
+    });
+  await firestore()
+    .collection('user')
+    .doc(content.email)
+    .collection('weights')
+    .get()
+    .then(async challenge => {
+      challenge.forEach(async challengeRow => {
+        await firestore()
+          .collection('user')
+          .doc(content.email)
+          .collection('weights')
+          .doc(challengeRow.id)
+          .delete();
+      });
+    });
+  await firestore().collection('user').doc(content.email).delete();
+  await firebase.auth().currentUser?.delete();
+};
 
 const fill_info_user = async (content: any) => {
   let code = '999';
@@ -90,4 +159,4 @@ const fill_info_user = async (content: any) => {
   ApiLog(content, responseBody, 'UpdateUser');
   return responseBody;
 };
-export default fill_info_user;
+export {fill_info_user, delete_user};

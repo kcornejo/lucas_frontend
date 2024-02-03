@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useState} from 'react';
 import {Alert, Platform} from 'react-native';
 import {LucasContext} from '../support/Contexts';
-import fill_info_user from './Firebase';
+import {fill_info_user} from './Firebase';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {
   Box,
@@ -288,102 +288,5 @@ const FillInformation = () => {
       </Box>
     </KeyboardAvoidingView>
   );
-
-  /*<SafeAreaView style={{flex: 1, backgroundColor: '#24253d'}}>
-      <ModalLoad viewed={modalVisible} />
-      <View style={{flex: 1, alignItems: 'center', width: '100%'}}>
-        <Text style={styles.title}>Más Información</Text>
-        <Text style={styles.subtitle}>
-          Por favor llene las siguientes casillas con su información
-        </Text>
-      </View>
-      <FlatList
-        data={[
-          {
-            icon: 'user',
-            placeholder: 'Nombre',
-            name: 'Nombre',
-            rule: {
-              required: {value: true, message: 'Nombre requerido.'},
-            },
-            error: errors.Nombre,
-            setValue,
-          },
-          {
-            icon: 'user',
-            placeholder: 'Apellido',
-            name: 'Apellido',
-            rule: {
-              required: {value: true, message: 'Apellido requerido.'},
-            },
-            error: errors.Apellido,
-          },
-          {
-            icon: 'phone',
-            placeholder: 'Telefono',
-            name: 'Telefono',
-            rule: {
-              required: {value: true, message: 'Telefono requerido.'},
-              pattern: {
-                value: /[0-9]{8}/,
-                message: 'Ingrese un telefono valido',
-              },
-            },
-            error: errors.Telefono,
-            keyboardType: 'phone-pad',
-          },
-          {
-            icon: 'calendar',
-            placeholder: 'Fecha de Nacimiento',
-            name: 'FechaNacimiento',
-            rule: {
-              required: {
-                value: true,
-                message: 'Fecha de Nacimiento requerido.',
-              },
-              pattern: {
-                value: /^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/,
-                message: 'Ingrese una fecha de nacimiento valida',
-              },
-            },
-            error: errors.FechaNacimiento,
-            date: true,
-            setValue,
-          },
-          {
-            icon: 'balance-scale',
-            placeholder: 'Peso (lbs)',
-            name: 'Peso',
-            rule: {
-              required: {value: true, message: 'Peso requerido.'},
-              pattern: {
-                value: /^[0-9]{2,3}(\.[0-9]{1,2})?$/,
-                message: 'Ingrese un peso valido',
-              },
-            },
-            error: errors.Peso,
-            keyboardType: 'decimal-pad',
-          },
-        ]}
-        renderItem={({item}) => (
-          <InputKC
-            control={control}
-            icon={item.icon}
-            rules={item.rule}
-            placeholder={item.placeholder}
-            name={item.name}
-            date={item.date}
-            setValue={item.setValue}
-            secureTextEntry={false}
-            keyboardType={item.keyboardType}
-            error={item.error}></InputKC>
-        )}
-      />
-      <View style={{flex: 3}}>
-        <Pressable style={styles.button} onPress={handleSubmit(guardarInfo)}>
-          <Text style={styles.textButton}>Guardar</Text>
-        </Pressable>
-      </View>
-        </SafeAreaView>*/
 };
 export default FillInformation;

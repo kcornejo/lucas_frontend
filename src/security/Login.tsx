@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import ModalLoad from '../support/ModalLoad';
-import {Alert, Platform} from 'react-native';
+import {Alert, Platform, Linking} from 'react-native';
 import {requestUserPermission} from '../support/Notification';
 import {login_firebase} from './Firebase';
 import RecoverPassword from './RecoverPassword';
@@ -68,6 +68,11 @@ const Login = () => {
         Alert.alert('Error', 'Error de comunicación.');
       }
     }
+  };
+  const openURL = () => {
+    Linking.openURL('https://www.softwaredatos.com/').catch(err => {
+      console.log('error al abrir ', err);
+    });
   };
   const login_api = async (user: string, password: string) => {
     const tokenPhone = await requestUserPermission();
@@ -161,7 +166,7 @@ const Login = () => {
           visible={modalVisibleRegister}
           setModalVisible={setModalVisibleRegister}
         />
-        <Box flex={1} alignItems={'center'} p={5}>
+        <Box flex={4} alignItems={'center'} p={5}>
           <Image
             flex={1}
             w="50%"
@@ -170,123 +175,141 @@ const Login = () => {
             alt="Lucas Gym"
           />
         </Box>
-        <Box flex={4} roundedTop={'2xl'} bg={'info.900'}>
-          <ScrollView>
-            <VStack alignItems={'center'} space={'5'} mx="10%">
-              <Text color={'white'} fontSize={'2xl'} bold mt={'5'}>
-                Acceder
-              </Text>
-              <FormControl isRequired isInvalid={'Usuario' in error}>
-                <FormControl.Label _text={{color: 'white', fontWeight: 'bold'}}>
-                  Correo
-                </FormControl.Label>
-                <Input
-                  rounded={10}
-                  height={10}
-                  bgColor={'white'}
-                  value={form.Usuario}
-                  placeholder="Correo"
-                  onChangeText={value => setForm({...form, Usuario: value})}
-                  InputLeftElement={
-                    <Box ml={3}>
-                      <Icon name="user" size={30} color="grey"></Icon>
+        <>
+          <Box flex={16} roundedTop={'2xl'} bg={'info.900'}>
+            <ScrollView>
+              <VStack alignItems={'center'} space={'5'} mx="10%">
+                <Text color={'white'} fontSize={'2xl'} bold mt={'5'}>
+                  Acceder
+                </Text>
+                <FormControl isRequired isInvalid={'Usuario' in error}>
+                  <FormControl.Label
+                    _text={{color: 'white', fontWeight: 'bold'}}>
+                    Correo
+                  </FormControl.Label>
+                  <Input
+                    rounded={10}
+                    height={10}
+                    bgColor={'white'}
+                    value={form.Usuario}
+                    placeholder="Correo"
+                    onChangeText={value => setForm({...form, Usuario: value})}
+                    InputLeftElement={
+                      <Box ml={3}>
+                        <Icon name="user" size={30} color="grey"></Icon>
+                      </Box>
+                    }
+                  />
+                  {'Usuario' in error && (
+                    <FormControl.ErrorMessage>
+                      {error.Usuario}
+                    </FormControl.ErrorMessage>
+                  )}
+                </FormControl>
+                <FormControl isRequired isInvalid={'Clave' in error}>
+                  <FormControl.Label
+                    _text={{color: 'white', fontWeight: 'bold'}}>
+                    Password
+                  </FormControl.Label>
+                  <PasswordKC
+                    value={form.Clave}
+                    placeholder={'Password'}
+                    setValue={value => {
+                      setForm({...form, Clave: value});
+                    }}
+                  />
+                  {'Clave' in error && (
+                    <FormControl.ErrorMessage>
+                      {error.Clave}
+                    </FormControl.ErrorMessage>
+                  )}
+                </FormControl>
+                <Box w="100%">
+                  <HStack>
+                    <Box flex={1}>
+                      <Checkbox value={form.rememberme}>
+                        <Text color={'white'} bold>
+                          Recuerdame
+                        </Text>
+                      </Checkbox>
                     </Box>
-                  }
-                />
-                {'Usuario' in error && (
-                  <FormControl.ErrorMessage>
-                    {error.Usuario}
-                  </FormControl.ErrorMessage>
-                )}
-              </FormControl>
-              <FormControl isRequired isInvalid={'Clave' in error}>
-                <FormControl.Label _text={{color: 'white', fontWeight: 'bold'}}>
-                  Password
-                </FormControl.Label>
-                <PasswordKC
-                  value={form.Clave}
-                  placeholder={'Password'}
-                  setValue={value => {
-                    setForm({...form, Clave: value});
+                    <Box>
+                      <Pressable onPress={RecuperarClave}>
+                        <Text bold color={'tertiary.500'} fontSize={'md'}>
+                          ¿Clave olvidada?
+                        </Text>
+                      </Pressable>
+                    </Box>
+                  </HStack>
+                </Box>
+                <Pressable
+                  w={'90%'}
+                  rounded={'2xl'}
+                  mt={5}
+                  onPress={() => {
+                    ValidateLogin(form);
+                  }}>
+                  {({isHovered, isFocused, isPressed}) => {
+                    return (
+                      <Box
+                        bg={
+                          isPressed
+                            ? 'tertiary.500'
+                            : isHovered
+                            ? 'tertiary.500'
+                            : 'tertiary.400'
+                        }
+                        style={{
+                          transform: [
+                            {
+                              scale: isPressed ? 0.96 : 1,
+                            },
+                          ],
+                        }}
+                        p="2"
+                        rounded={'2xl'}
+                        shadow={3}
+                        borderWidth="1"
+                        borderColor="coolGray.300">
+                        <Text
+                          color="coolGray.800"
+                          fontWeight="medium"
+                          fontSize="xl"
+                          textAlign={'center'}>
+                          Acceder
+                        </Text>
+                      </Box>
+                    );
                   }}
-                />
-                {'Clave' in error && (
-                  <FormControl.ErrorMessage>
-                    {error.Clave}
-                  </FormControl.ErrorMessage>
-                )}
-              </FormControl>
-              <Box w="100%">
-                <HStack>
-                  <Box flex={1}>
-                    <Checkbox value={form.rememberme}>
-                      <Text color={'white'} bold>
-                        Recuerdame
-                      </Text>
-                    </Checkbox>
-                  </Box>
-                  <Box>
-                    <Pressable onPress={RecuperarClave}>
-                      <Text bold color={'tertiary.500'} fontSize={'md'}>
-                        ¿Clave olvidada?
-                      </Text>
-                    </Pressable>
-                  </Box>
-                </HStack>
-              </Box>
-              <Pressable
-                w={'90%'}
-                rounded={'2xl'}
-                mt={5}
-                onPress={() => {
-                  ValidateLogin(form);
-                }}>
-                {({isHovered, isFocused, isPressed}) => {
-                  return (
-                    <Box
-                      bg={
-                        isPressed
-                          ? 'tertiary.500'
-                          : isHovered
-                          ? 'tertiary.500'
-                          : 'tertiary.400'
-                      }
-                      style={{
-                        transform: [
-                          {
-                            scale: isPressed ? 0.96 : 1,
-                          },
-                        ],
-                      }}
-                      p="2"
-                      rounded={'2xl'}
-                      shadow={3}
-                      borderWidth="1"
-                      borderColor="coolGray.300">
-                      <Text
-                        color="coolGray.800"
-                        fontWeight="medium"
-                        fontSize="xl"
-                        textAlign={'center'}>
-                        Acceder
-                      </Text>
-                    </Box>
-                  );
-                }}
-              </Pressable>
-            </VStack>
-          </ScrollView>
-          <Box alignItems={'center'} w="100%" mb={6}>
-            <Text fontSize={'md'} color="white">
-              ¿No estas registrado?
-            </Text>
-            <Pressable onPress={Registrarse}>
-              <Text fontSize={'md'} bold color="tertiary.500">
-                ¡Registrate!
+                </Pressable>
+              </VStack>
+            </ScrollView>
+            <Box alignItems={'center'} w="100%" mb={6}>
+              <Text fontSize={'md'} color="white">
+                ¿No estas registrado?
               </Text>
-            </Pressable>
+              <Pressable onPress={Registrarse}>
+                <Text fontSize={'md'} bold color="tertiary.500">
+                  ¡Registrate!
+                </Text>
+              </Pressable>
+            </Box>
           </Box>
-        </Box>
+          <Box flex={1} bg={'#008080'}>
+            <ScrollView my={1}>
+              <Box alignItems={'center'} w="100%">
+                <Pressable onPress={openURL}>
+                  <Text fontSize={'md'} color="white">
+                    Powered by{' '}
+                    <Text fontSize={'md'} bold color="white">
+                      SoftwareDatos
+                    </Text>
+                  </Text>
+                </Pressable>
+              </Box>
+            </ScrollView>
+          </Box>
+        </>
       </Box>
     </KeyboardAvoidingView>
   );

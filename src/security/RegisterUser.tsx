@@ -75,7 +75,6 @@ const RegisterUser = ({visible = false, setModalVisible}) => {
           }
         } else if (retorno['code'] == '000') {
           setModalVisible(false);
-          reset();
           Alert.alert(
             'Usuario registrado',
             'Usuario registrado, por favor valide su email.',
